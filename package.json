@@ -1,0 +1,32 @@
+{
+  "name": "node-registry",
+  "version": "1.0.0",
+  "description": "Node.js Module Registry and loader",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm prune",
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vladaspasic/express-route-control.git"
+  },
+  "keywords": [
+    "Node",
+    "Modules"
+  ],
+  "dependencies": {
+    "async": "~0.9.0",
+    "basejs": "1.1.1"
+  },
+  "devDependencies": {
+    "chai": "1.9.1",
+    "chai-as-promised": "4.1.1",
+    "supertest": "0.13.0",
+    "mocha": "1.20.1"
+  },
+  "author": "Vladimir Spasic",
+  "license": "GPL",
+  "readmeFilename": "README.md",
+  "gitHead": "d3e9a2a1b21231cd7d76f6643eed55acb936512a"
+}
