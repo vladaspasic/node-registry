@@ -1,6 +1,6 @@
 module.exports = {
 	needs: 'needed',
-	load: function(cb) {
+	load: function(opts, cb) {
 		return cb(null, {
 			value: 'Db connection'
 		});

@@ -1,7 +1,7 @@
 module.exports = {
 	needs: 'needed',
-	load: function(cb) {
-		console.log('Testing module loading process');
+	load: function(opts, cb) {
+		console.log('Module "testing" loading process');
 
 		return cb(null, {
 			value: 'Some testeable data',
@@ -16,9 +16,6 @@ module.exports = {
 		});
 	},
 	onAfterLoad: function(data, cb) {
-
-		console.log('Data after', data);
-
 		return cb(null, data);
 	}
 };

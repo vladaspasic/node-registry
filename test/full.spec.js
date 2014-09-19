@@ -49,4 +49,44 @@ describe('Registry spec', function() {
 
 	});
 
+	describe('#start', function() {
+
+		it('should load all modules', function(done) {
+			Registry.start(function(err, modules) {
+				expect(modules).to.have.property('testing');
+				expect(modules).to.have.property('needed');
+				expect(modules).to.have.property('db');
+
+				done(err, modules);
+			});
+		});
+
+	});
+
+	describe('#reopen', function() {
+
+		it('should reopen a module', function(done) {
+
+			Registry.reopen('testing', function(err, data) {
+				expect(data).to.have.property('value');
+				expect(data).to.have.property('fun');
+				expect(data).to.have.property('notFun');
+
+				done(err, data);
+			});
+
+		});
+
+		it('should throw an error', function(done) {
+
+			Registry.reopen('unknown', function(e, data) {
+				assert.equal(e.message, 'No module with name: unknown found');
+
+				done(null, e);
+			});
+
+		});
+
+	});
+
 });

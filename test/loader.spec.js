@@ -62,7 +62,7 @@ describe('Loader specs', function() {
 			onBeforeLoad: function(cb) {
 				return cb(null);
 			},
-			load: function(cb) {
+			load: function(data, cb) {
 				return cb(null, {loaded: 'loaded'});
 			},
 			onAfterLoad: function(data, cb) {
@@ -87,7 +87,7 @@ describe('Loader specs', function() {
 		});
 
 		it('should throw lyfecycle error because loaded value is not present', function(done) {
-			module.load = function(cb) {
+			module.load = function(opts, cb) {
 				return cb(null);
 			};
 
