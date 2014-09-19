@@ -109,8 +109,18 @@ describe('Loader specs', function() {
 		it('should load all modules from the directory', function(done) {
 			loader.initialize({
 				location: __dirname + '/modules'
+			}, done);
+		});
+
+		it('should load children modules', function(done) {
+			loader.initialize({
+				location: __dirname + '/modules'
 			}, function(err, modules) {
-				console.log('Loaded modules', modules);
+
+				var children = modules['parent'].module.getChildren();
+
+				expect(children).to.have.property('child-one');
+				expect(children).to.have.property('child-two');
 
 				return done(err, modules);
 			});

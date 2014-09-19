@@ -1,5 +1,5 @@
 module.exports = {
-	needs: 'needed',
+	needs: ['db', 'needed'],
 	load: function(opts, cb) {
 		console.log('Module "testing" loading process');
 

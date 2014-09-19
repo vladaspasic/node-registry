@@ -30,6 +30,16 @@ describe('Registry spec', function() {
 			assert(typeof Registry.get('testing.notFun') === 'function');
 		});
 
+		it('should access children modules', function() {
+			expect(Registry.get('parent:child-one')).to.have.property('value');
+			expect(Registry.get('parent:child-two')).to.have.property('value');
+		});
+
+		it('should access children module values', function() {
+			expect(Registry.get('parent:child-one.value')).to.equal('child-one');
+			expect(Registry.get('parent:child-two.value')).to.equal('child-two');
+		});
+
 		it('should not get the a function', function() {
 			assert(typeof Registry.get('testing.notFun.nope') !== 'function');
 		});
@@ -46,6 +56,14 @@ describe('Registry spec', function() {
 			}
 			
 		});
+
+		// it('should get not supported argument error for fetching children', function() {
+		// 	try {
+		// 		Registry.get('parent:');
+		// 	} catch(e) {
+		// 		assert.equal(e.message, "Bad syntax for getting a child module, it should be parent:child");
+		// 	}
+		// });
 
 	});
 
