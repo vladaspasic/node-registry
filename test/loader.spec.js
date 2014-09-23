@@ -36,14 +36,11 @@ describe('Loader specs', function() {
 
 	describe('#scanModuleDirectory', function() {
 
-		it('should load all registrations', function(done) {
+		it('should load all registrations', function() {
 
-			loader.scanModuleDirectory(Registry, '/test/modules', function(err, modules) {
-				expect(modules.length).to.be.at.least(6);
-
-				done();
-			});
-
+			var modules = loader.scanModuleDirectory('/test/modules');
+				
+			expect(modules.length).to.be.at.least(6);
 		});
 
 	});

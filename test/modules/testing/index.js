@@ -1,19 +1,17 @@
 module.exports = {
 	requires: ['db', 'needed'],
-	load: function(opts, cb) {
-		return cb(null, {
-			value: 'Some testeable data',
-			fun: function() {
-				return {
-					anotherFun: 'function value'
-				};
-			},
-			notFun: function(arg) {
-				return 'a value';
-			}
-		});
+	initialize: function(db, needed, cb) {
+
+		this.value = 'Some testeable data';
+
+		return cb();
 	},
-	onAfterLoad: function(data, cb) {
-		return cb(null, data);
-	}
+	notFun: function(arg) {
+		return 'a value';
+	},
+	fun: function() {
+		return {
+			anotherFun: 'function value'
+		};
+	},
 };

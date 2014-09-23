@@ -24,24 +24,20 @@ describe('Registry spec', function() {
 
 		it('should get the right module', function() {
 			expect(Registry.get('errors')).to.have.property('errors');
+			expect(Registry.get('exception')).to.have.property('exception');
 		});
 
 		it('should get the right module value', function() {
 			expect(Registry.get('needed.configuration.defaults')).to.equal('defaults');
 		});
 
-		// it('should get the a right function return value', function() {
-		// 	expect(Registry.get('testing.fun.anotherFun')).to.equal('function value');
-		// });
+		it('should get the a right function return value', function() {
+			expect(Registry.get('testing.fun.anotherFun')).to.equal('function value');
+		});
 
-		// it('should get the a function', function() {
-		// 	assert(typeof Registry.get('testing.notFun') === 'function');
-		// });
-
-		// it('should access children modules', function() {
-		// 	expect(Registry.get('parent:child-one')).to.have.property('value');
-		// 	expect(Registry.get('parent:child-two')).to.have.property('value');
-		// });
+		it('should get the a function', function() {
+			assert(typeof Registry.get('testing.notFun') === 'function');
+		});
 
 		it('should get null value', function() {
 			expect(Registry.get('no.defined.property')).to.equal(null);
@@ -102,29 +98,70 @@ describe('Registry spec', function() {
 
 	});
 
-	describe('#reopen', function() {
+	describe('#scanDirectories', function() {
 
-		// it('should reopen a module', function(done) {
+		before(function() {
+			Registry.clear();
+		});
 
-		// 	Registry.reopen('testing', function(err, data) {
-		// 		expect(data).to.have.property('value');
-		// 		expect(data).to.have.property('fun');
-		// 		expect(data).to.have.property('notFun');
+		it('should scan all modules', function() {
+			var registrations = Registry.scanDirectories('/test/modules');
 
-		// 		done(err, data);
-		// 	});
+			expect(registrations).to.have.length(6);
+		});
 
-		// });
+	});
 
-		// it('should throw an error', function(done) {
+	describe('#reconfigure', function() {
 
-		// 	Registry.reopen('unknown', function(e, data) {
-		// 		assert.equal(e.message, 'No module with name: unknown found');
+		before(function() {
+			Registry.clear();
 
-		// 		done(null, e);
-		// 	});
+			Registry.registerModule('someName', {}, {value: 'testing'});
+		});
 
-		// });
+		it('should reconfigure module', function() {
+
+			var registration = Registry.reconfigure('someName', {
+				newValue: 'new value'
+			});
+
+
+			expect(registration.getConfiguration()).to.have.property('newValue');
+			expect(registration.getConfiguration()).not.to.have.property('value');
+		});
+
+		it('should reconfigure module with an object argument', function() {
+
+			var registration = Registry.reconfigure({
+				someName: {
+					brandNew: 'testing'
+				}
+			});
+
+			expect(registration).to.have.length(1);
+			expect(registration[0].getConfiguration()).to.have.property('brandNew');
+			expect(registration[0].getConfiguration()).not.to.have.property('newValue');
+			expect(registration[0].getConfiguration()).not.to.have.property('value');
+		});
+
+		it('should throw unkown module error', function() {
+
+			try {
+				Registry.reconfigure('no name', {});
+			} catch(e) {
+				assert.equal(e.message, 'Can not find module "no name".');
+			}
+		});
+
+		it('should throw illegal argument error', function() {
+
+			try {
+				Registry.reconfigure('someName');
+			} catch(e) {
+				assert.equal(e.message, "You must define a module name and a configuration object.");
+			}
+		});
 
 	});
 
