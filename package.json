@@ -1,6 +1,6 @@
 {
   "name": "node-registry",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Node.js Module Registry and loader",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,10 @@
   ],
   "dependencies": {
     "async": "~0.9.0",
-    "basejs": "1.1.1"
+    "basejs": "1.1.1",
+    "exception": "1.0.1",
+    "fusing": "^0.3.2",
+    "lodash": "2.4.1"
   },
   "devDependencies": {
     "chai": "1.9.1",
