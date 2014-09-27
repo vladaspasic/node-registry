@@ -23,6 +23,7 @@ describe('Loader specs', function() {
 		it('should load registrations', function(done) {
 
 			loader.loadModules(Registry, registrations, function(err, modules) {
+				
 				expect(modules).to.have.property('needed');
 				expect(modules).to.have.property('db');
 				expect(modules).to.have.property('testing');
@@ -38,7 +39,7 @@ describe('Loader specs', function() {
 
 		it('should load all registrations', function() {
 
-			var modules = loader.scanModuleDirectory('/test/modules');
+			var modules = loader.scanModuleDirectory(__dirname + '/modules');
 				
 			expect(modules.length).to.be.at.least(6);
 		});

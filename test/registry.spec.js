@@ -15,7 +15,7 @@ describe('Registry spec', function() {
 	this.timeout(10000);
 
 	before(function(done) {
-		Registry.scanDirectories('/test/modules');
+		Registry.scanDirectories(__dirname + '/modules');
 
 		utils.createServer(port, done);
 	});
@@ -23,8 +23,8 @@ describe('Registry spec', function() {
 	describe("#get", function() {
 
 		it('should get the right module', function() {
-			expect(Registry.get('errors')).to.have.property('errors');
-			expect(Registry.get('exception')).to.have.property('exception');
+			expect(Registry.get('testing')).to.have.property('name');
+			expect(Registry.get('testing')).to.have.property('name');
 		});
 
 		it('should get the right module value', function() {
@@ -105,7 +105,7 @@ describe('Registry spec', function() {
 		});
 
 		it('should scan all modules', function() {
-			var registrations = Registry.scanDirectories('/test/modules');
+			var registrations = Registry.scanDirectories(__dirname + '/modules');
 
 			expect(registrations).to.have.length(6);
 		});
