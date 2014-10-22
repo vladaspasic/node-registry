@@ -1,6 +1,6 @@
 {
   "name": "node-registry",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Node.js Module Registry and loader",
   "main": "index.js",
   "scripts": {
