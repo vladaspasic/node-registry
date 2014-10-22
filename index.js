@@ -1,1 +1,1 @@
-module.exports = require('./lib/registry').getInstance();
+module.exports = require('./lib');

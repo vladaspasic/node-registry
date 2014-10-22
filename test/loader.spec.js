@@ -1,55 +1,57 @@
 var chai = require('chai'),
-	loader = require('../lib/loader'),
-	Registration = require('../lib/registration'),
-	Registry = require('../index');
+	container = require('./mocks/container'),
+	loader = require('../lib/registry/loader');
 
 var assert = chai.assert,
 	expect = chai.expect;
 
-var testingModule = new Registration('testing', require('./modules/testing'));
-var neededModule = new Registration('needed', require('./modules/needed'));
-var dbModule = new Registration('db', require('./modules/db'));
-
-var registrations = {
-	testing: testingModule,
-	needed: neededModule,
-	db: dbModule
-};
-
 describe('Loader specs', function() {
 
-	describe('#loadModules', function() {
+	describe('#scanDirectoryForModules', function() {
 
-		it('should load registrations', function(done) {
+		it('should load all modules', function() {
+			var list = loader.scanDirectoryForModules(container, __dirname + '/modules');
 
-			loader.loadModules(Registry, registrations, function(err, modules) {
-				
-				expect(modules).to.have.property('needed');
-				expect(modules).to.have.property('db');
-				expect(modules).to.have.property('testing');
+			expect(list).to.have.length(6);
 
-				done();
+		});
+
+		it('should throw bad location error', function() {
+			var bad = function() {
+				return loader.scanDirectoryForModules(container, './modules');
+			};
+
+			expect(bad).to.throw(Error, "Folder 'modules' does not exist.");
+		});
+
+	});
+
+	describe('#loadModuleFactory', function() {
+
+		it('should load module factory class', function() {
+
+			var factory = loader.loadModuleFactory(__dirname + '/modules', 'db');
+
+			expect(factory).to.have.property('create');
+			expect(factory).to.have.property('extend');
+
+			var value = factory.create({
+				newProp: 'new prop'
 			});
 
+			expect(value).to.have.property('name').and.equal('db');
+			expect(value).to.have.property('newProp').and.equal('new prop');
+
 		});
 
-	});
+		it('should throw error for unknown module', function() {
+			var bad = function() {
+				return loader.loadModuleFactory(__dirname + '/mocks', 'module.js');
+			};
 
-	describe('#scanModuleDirectory', function() {
-
-		it('should load all registrations', function() {
-
-			var modules = loader.scanModuleDirectory(__dirname + '/modules');
-				
-			expect(modules.length).to.be.at.least(6);
+			expect(bad).to.throw(TypeError, /Can not load module 'module.js'/);
 		});
 
-	});
-
-
-
-	afterEach(function() {
-		Registry.clear();
 	});
 
 });

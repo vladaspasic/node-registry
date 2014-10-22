@@ -42,41 +42,4 @@ describe('Utils specs', function() {
 
 	});
 
-	describe('#loadConfigurationFile', function() {
-
-		it('should locate .js file config', function() {
-			var config = utils.loadConfigurationFile(configLocation, 'test');
-
-			expect(config).to.have.property('value');
-			expect(config.value).to.equal('Testing value');
-		});
-
-		it('should locate .json file config', function() {
-			var config = utils.loadConfigurationFile(configLocation, 'json');
-
-			expect(config).to.have.property('value');
-			expect(config.value).to.equal('Testing value');
-		});
-
-		it('should return empty file config', function() {
-			var config = utils.loadConfigurationFile(configLocation, 'missing');
-
-			assert.ok(config, 'Empty config is not returned');
-		});
-
-		it('should throw error for 2 same config files with different extensions', function() {
-			
-			try {
-				utils.loadConfigurationFile(configLocation, 'module');
-			} catch(e) {
-				expect(e.message).to.equal('2 same configuration files detected for module: module. You can only use one file extension per module config file.');
-			}
-		});
-
-	});
-
-	describe('#defineProperty', function() {
-
-	});
-
 });
