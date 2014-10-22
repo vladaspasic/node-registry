@@ -172,7 +172,9 @@ describe('Application', function() {
 	describe('#startServer', function() {
 
 		it('Should start HTTP server', function(done) {
-			Application.startServer(function(server) {
+			Application.startServer(function(error, server) {
+				if(error) return done(error);
+				
 				makeRequest(false, done);
 			});
 		});
