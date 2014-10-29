@@ -156,15 +156,34 @@ describe('Registry spec', function() {
 
 			var App = Registry.createApplication({
 				listener: function(){}
-			});
+			}), value;
 
 			Registry.registerInitializer({
-				name: 'initializer',
+				name: 'second',
 				initializer: function(container, app, callback) {
 					assert.deepEqual(container, Registry.__container, 'container is not the same');
 					assert.deepEqual(app, App, 'Application is not the same.');
 					assert.typeOf(callback, 'function', 'callback is not a function');
+					assert.deepEqual(value, 'loaded', 'initializer ran before the first initializer');
 
+					callback();
+				}
+			});
+
+			Registry.registerInitializer({
+				name: 'first',
+				before: 'second',
+				initializer: function(container, app, callback) {
+					value = 'loaded';
+
+					callback();
+				}
+			});
+
+			Registry.registerInitializer({
+				name: 'thrid',
+				before: 'nonExisting',
+				initializer: function(container, app, callback) {
 					callback();
 				}
 			});
