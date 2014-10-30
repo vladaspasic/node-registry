@@ -17,6 +17,29 @@ var get = function(name) {
 
 describe('Registry spec', function() {
 
+	it('should be able to construct an Object with new', function() {
+		var Ctor = Registry.Object.extend({
+			init: function(ctorProperty) {
+				this.ctorProperty = ctorProperty;
+			},
+			method: function() {
+				return this.ctorProperty;
+			},
+			property: 'property'
+		}, {
+			staticProperty: 'staticProperty'
+		});
+
+		assert.doesNotThrow(function() {
+			var ctor = new Ctor('ctorProperty');
+
+			assert.deepEqual(ctor.property, 'property');
+			assert.deepEqual(ctor.staticProperty, 'staticProperty');
+			assert.deepEqual(ctor.ctorProperty, 'ctorProperty');
+			assert.deepEqual(ctor.method(), 'ctorProperty');
+		});
+	});
+
 	describe('#get', function() {
 		
 		it('Should return right module', function() {
