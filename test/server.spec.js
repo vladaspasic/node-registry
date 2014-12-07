@@ -1,6 +1,6 @@
 var chai = require('chai'),
 	Registry = require('../lib');
-Application = require('../lib/application');
+Server = require('../lib/server');
 http = require('http');
 
 var assert = chai.assert,
@@ -13,70 +13,70 @@ var app = function(req, res) {
 	res.end('Hello, world!\n');
 };
 
-var Application = Registry.createApplication({
+var Server = Registry.createServer({
 	listener: app
 });
 
 var Instance = false;
 
-describe('Application', function() {
+describe('Server', function() {
 
 	it('shoud not share the same container', function() {
-		assert.notEqual(Application.container, Registry.__container);
+		assert.notEqual(Server.container, Registry.__container);
 	});
 
 	it('shoud have the registry Instance', function() {
-		assert.deepEqual(Application.registry, Registry);
+		assert.deepEqual(Server.registry, Registry);
 	});
 
 	describe('#get', function() {
 
 		it('Should return right module', function() {
 			Registry.registerFolder(__dirname + '/modules');
-			var db = Application.get('db');
+			var db = Server.get('db');
 
 			expect(db).to.be.an('object');
 
-			assert.deepEqual(db, Application.get('db'));
+			assert.deepEqual(db, Server.get('db'));
 		});
 
 	});
 
 	describe('#getListener', function() {
 		it('Should return a listener', function() {
-			assert.deepEqual(Application.getListener(), app, "listener is not equal");
+			assert.deepEqual(Server.getListener(), app, "listener is not equal");
 		});
 
 		it('Should throw error for missing/wrong type listener', function() {
-			Application.listener = 'listener';
+			Server.listener = 'listener';
 
 			assert.throw(function() {
-				Application.getListener();
+				Server.getListener();
 			}, 'Listener must be a fuction.');
 
-			Application.listener = {};
+			Server.listener = {};
 
 			assert.throw(function() {
-				Application.getListener();
+				Server.getListener();
 			}, 'Listener must be a fuction.');
 
-			Application.listener = 1;
+			Server.listener = 1;
 
 			assert.throw(function() {
-				Application.getListener();
+				Server.getListener();
 			}, 'Listener must be a fuction.');
 
-			Application.listener = null;
+			Server.listener = null;
 
 			assert.throw(function() {
-				Application.getListener();
+				Server.getListener();
 			}, 'Listener must be a fuction.');
 
-			Application.listener = undefined;
+			Server.listener = undefined;
 
 			assert.throw(function() {
-				Application.getListener();
-			}, 'No listener has been defined for the Application.');
+				Server.getListener();
+			}, 'No listener has been defined for the Server.');
 		});
 
 	});
@@ -84,26 +84,26 @@ describe('Application', function() {
 	describe('#setListener', function() {
 		it('Should set a listener', function() {
 			assert.doesNotThrow(function() {
-				Application.setListener(app);
+				Server.setListener(app);
 			});
 		});
 
 		it('Should throw error for missing/wrong type listener', function() {
 			assert.throw(function() {
-				Application.setListener('listener');
+				Server.setListener('listener');
 			}, 'Listener must be a fuction.');
 
 			assert.throw(function() {
-				Application.setListener(1);
+				Server.setListener(1);
 			}, 'Listener must be a fuction.');
 
 			assert.throw(function() {
-				Application.setListener({});
+				Server.setListener({});
 			}, 'Listener must be a fuction.');
 
 			assert.throw(function() {
-				Application.setListener();
-			}, 'No listener has been defined for the Application.');
+				Server.setListener();
+			}, 'No listener has been defined for the Server.');
 		});
 
 	});
@@ -111,24 +111,24 @@ describe('Application', function() {
 	describe('#getPort', function() {
 
 		it('shoud return the right port', function() {
-			assert.equal(Application.getPort(), 8000, 'Default port not equal');
+			assert.equal(Server.getPort(), 8000, 'Default port not equal');
+
+			Server.port = 1234;
+			assert.equal(Server.getPort(), 1234, 'Default port not equal');
 
 			Registry.environment.set('port', 8080);
-			assert.equal(Application.getPort(), 8080, 'Environment port not equal');
+			assert.equal(Server.getPort(), 8080, 'Environment port not equal');
 
-			Application.port = 1234;
-			assert.equal(Application.getPort(), 1234, 'Default port not equal');
-
-			Application.port = undefined;
-			assert.equal(Application.getPort(), 8080, 'Did not used the environment port');
+			Server.port = undefined;
+			assert.equal(Server.getPort(), 8080, 'Did not used the environment port');
 
 			Registry.environment.remove('port');
-			assert.equal(Application.getPort(), 8000, 'Did not used the default port');
+			assert.equal(Server.getPort(), 8000, 'Did not used the default port');
 
-			Application.ssl = {};
-			assert.equal(Application.getPort(), 443, 'SSL port not is not used');
+			Server.ssl = {};
+			assert.equal(Server.getPort(), 443, 'SSL port not is not used');
 
-			Application.ssl = undefined;
+			Server.ssl = undefined;
 		});
 
 	});
@@ -136,7 +136,7 @@ describe('Application', function() {
 	describe('#createServer', function() {
 
 		it('Should create a server', function() {
-			var server = Application.createServer();
+			var server = Server.createServer();
 
 			assert.ok(server, "Server is not created");
 			expect(server).to.be.an('object');
@@ -144,27 +144,27 @@ describe('Application', function() {
 		});
 
 		it('Should throw SSL not found error', function() {
-			Application.ssl = {
+			Server.ssl = {
 				key: 'not-found',
 				cert: 'not-found'
 			};
 
 			assert.throw(function() {
-				Application.createServer();
+				Server.createServer();
 			}, "ENOENT, no such file or directory 'not-found'");
 		});
 
 		it('Should load HTTPS server', function() {
-			Application.ssl = {
+			Server.ssl = {
 				key: __dirname + '/mocks/keys.txt',
 				cert: __dirname + '/mocks/keys.txt'
 			};
 
 			assert.doesNotThrow(function() {
-				Application.createServer();
+				Server.createServer();
 			}, "Error occured while creating HTTPS server");
 
-			Application.ssl = undefined;
+			Server.ssl = undefined;
 		});
 
 	});
@@ -172,7 +172,11 @@ describe('Application', function() {
 	describe('#startServer', function() {
 
 		it('Should start HTTP server', function(done) {
-			Application.startServer(function(error, server) {
+			Server = Registry.createServer({
+				listener: app
+			});
+
+			Server.start(function(error, server) {
 				if(error) return done(error);
 				
 				makeRequest(false, done);

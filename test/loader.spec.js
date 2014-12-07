@@ -13,9 +13,23 @@ describe('Loader specs', function() {
 		registry = {
 			inits: [],
 			__container: container,
+			/**
+			 * Description
+			 * @method registerModule
+			 * @param {} name
+			 * @param {} module
+			 * @param {} options
+			 * @return 
+			 */
 			registerModule: function(name, module, options) {
 				container.register(name, module, options);
 			},
+			/**
+			 * Description
+			 * @method registerInitializer
+			 * @param {} init
+			 * @return 
+			 */
 			registerInitializer: function(init) {
 				registry.inits.push(init);
 			}
@@ -43,6 +57,11 @@ describe('Loader specs', function() {
 		});
 
 		it('should throw bad location error', function() {
+			/**
+			 * Description
+			 * @method bad
+			 * @return CallExpression
+			 */
 			var bad = function() {
 				return loader.scanDirectoryForModules(registry, './modules');
 			};
@@ -71,6 +90,11 @@ describe('Loader specs', function() {
 		});
 
 		it('should throw error for unknown module', function() {
+			/**
+			 * Description
+			 * @method bad
+			 * @return CallExpression
+			 */
 			var bad = function() {
 				return loader.loadModuleFactory(__dirname + '/mocks', 'module.js');
 			};

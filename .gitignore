@@ -47,4 +47,8 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+#Docs
+docs
+yuidoc.json
+
 .DS_Store

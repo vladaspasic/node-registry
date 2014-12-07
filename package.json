@@ -17,9 +17,10 @@
   ],
   "dependencies": {
     "async": "~0.9.0",
-    "lodash": "2.4.1",
     "eventemitter2": "0.4.14",
-    "node-env-file": "0.1.4"
+    "lodash": "2.4.1",
+    "node-env-file": "0.1.4",
+    "to-markdown": "0.0.2"
   },
   "devDependencies": {
     "chai": "1.9.1",

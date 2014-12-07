@@ -11,6 +11,12 @@ var assert = chai.assert,
 	expect = chai.expect,
 	port = 1234;
 
+/**
+ * Description
+ * @method get
+ * @param {} name
+ * @return CallExpression
+ */
 var get = function(name) {
 	return Registry.get(name);
 };
@@ -19,9 +25,20 @@ describe('Registry spec', function() {
 
 	it('should be able to construct an Object with new', function() {
 		var Ctor = Registry.Object.extend({
+			/**
+			 * Description
+			 * @method init
+			 * @param {} ctorProperty
+			 * @return 
+			 */
 			init: function(ctorProperty) {
 				this.ctorProperty = ctorProperty;
 			},
+			/**
+			 * Description
+			 * @method method
+			 * @return MemberExpression
+			 */
 			method: function() {
 				return this.ctorProperty;
 			},
@@ -148,6 +165,11 @@ describe('Registry spec', function() {
 		it('should register initializer', function() {
 			var initializer = {
 				name: 'init',
+				/**
+				 * Description
+				 * @method initializer
+				 * @return 
+				 */
 				initializer: function() {}
 			};
 
@@ -177,15 +199,28 @@ describe('Registry spec', function() {
 
 		it('should invoke callback after all initializers are initialized', function(done) {
 
-			var App = Registry.createApplication({
+			var App = Registry.createServer({
+				/**
+				 * Description
+				 * @method listener
+				 * @return 
+				 */
 				listener: function(){}
 			}), value;
 
 			Registry.registerInitializer({
 				name: 'second',
+				/**
+				 * Description
+				 * @method initializer
+				 * @param {} container
+				 * @param {} app
+				 * @param {} callback
+				 * @return 
+				 */
 				initializer: function(container, app, callback) {
 					assert.deepEqual(container, Registry.__container, 'container is not the same');
-					assert.deepEqual(app, App, 'Application is not the same.');
+					assert.deepEqual(app, App, 'Server is not the same.');
 					assert.typeOf(callback, 'function', 'callback is not a function');
 					assert.deepEqual(value, 'loaded', 'initializer ran before the first initializer');
 
@@ -196,6 +231,14 @@ describe('Registry spec', function() {
 			Registry.registerInitializer({
 				name: 'first',
 				before: 'second',
+				/**
+				 * Description
+				 * @method initializer
+				 * @param {} container
+				 * @param {} app
+				 * @param {} callback
+				 * @return 
+				 */
 				initializer: function(container, app, callback) {
 					value = 'loaded';
 
@@ -206,6 +249,14 @@ describe('Registry spec', function() {
 			Registry.registerInitializer({
 				name: 'thrid',
 				before: 'nonExisting',
+				/**
+				 * Description
+				 * @method initializer
+				 * @param {} container
+				 * @param {} app
+				 * @param {} callback
+				 * @return 
+				 */
 				initializer: function(container, app, callback) {
 					callback();
 				}
@@ -216,12 +267,25 @@ describe('Registry spec', function() {
 
 		it('should invoke callback with an error', function() {
 
-			var App = Registry.createApplication({
+			var App = Registry.createServer({
+				/**
+				 * Description
+				 * @method listener
+				 * @return 
+				 */
 				listener: function(){}
 			});
 
 			Registry.registerInitializer({
 				name: 'initializer',
+				/**
+				 * Description
+				 * @method initializer
+				 * @param {} container
+				 * @param {} app
+				 * @param {} callback
+				 * @return 
+				 */
 				initializer: function(container, app, callback) {
 					callback(new Error('initializer error'));
 				}
@@ -235,12 +299,25 @@ describe('Registry spec', function() {
 
 		it('should throw an error', function() {
 
-			var App = Registry.createApplication({
+			var App = Registry.createServer({
+				/**
+				 * Description
+				 * @method listener
+				 * @return 
+				 */
 				listener: function(){}
 			});
 
 			Registry.registerInitializer({
 				name: 'initializer',
+				/**
+				 * Description
+				 * @method initializer
+				 * @param {} container
+				 * @param {} app
+				 * @param {} callback
+				 * @return 
+				 */
 				initializer: function(container, app, callback) {
 					throw new Error('initializer error');
 				}
@@ -267,20 +344,25 @@ describe('Registry spec', function() {
 			}, 'You must pass a callback function to this method.');
 		});
 
-		it('should throw missing application error', function() {
+		it('should throw missing Server error', function() {
 			assert.throw(function() {
 				Registry.runInitializers(function() {});
-			}, "No application has been created. Please create on before runing initializers");
+			}, "No Server has been created. Please create one before runing initializers");
 		});
 
 	});
 
-	describe('#createApplication', function() {
+	describe('#createServer', function() {
 
-		it('should create an application', function() {
+		it('should create an Server', function() {
+			/**
+			 * Description
+			 * @method listener
+			 * @return 
+			 */
 			var listener = function() {};
 
-			var App = Registry.createApplication({
+			var App = Registry.createServer({
 				port: 8080,
 				listener: listener
 			});
@@ -292,21 +374,21 @@ describe('Registry spec', function() {
 			assert.equal(App.getPort(), 8080, "Ports are not equal");
 			assert.equal(App.getListener(), listener, "listener is not equal");
 
-			assert.deepEqual(App, Registry.get('application'), 'application from the Registry is not equal');
+			assert.deepEqual(App, Registry.get('server:main'), 'Server from the Registry is not equal');
 		});
 
-		it('should throw an error, when trying to crate an application with no config', function() {
+		it('should throw an error, when trying to crate an Server with no config', function() {
 			assert.throw(function() {
-				Registry.createApplication();
-			}, 'You must define options for the Application');
+				Registry.createServer();
+			}, 'You must define options or a listener for the Server');
 		});
 
-		it('should throw an error, when trying to crate another application', function() {
-			Registry.createApplication({});
+		it('should throw an error, when trying to crate another Server', function() {
+			Registry.createServer({});
 
 			assert.throw(function() {
-				Registry.createApplication({});
-			}, 'Application is already created.');
+				Registry.createServer({});
+			}, 'Server is already created.');
 		});
 
 	});
@@ -317,6 +399,12 @@ describe('Registry spec', function() {
 
 			Registry.readEnv(__dirname + "/mocks/env");
 
+			/**
+			 * Description
+			 * @method get
+			 * @param {} key
+			 * @return CallExpression
+			 */
 			var get = function(key) {
 				return Registry.environment.get(key);
 			};
@@ -328,6 +416,12 @@ describe('Registry spec', function() {
 		});
 
 		it('should override property', function() {
+			/**
+			 * Description
+			 * @method get
+			 * @param {} key
+			 * @return CallExpression
+			 */
 			var get = function(key) {
 				return Registry.environment.get(key);
 			};

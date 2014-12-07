@@ -25,6 +25,11 @@ describe('Utils specs', function() {
 		it('should return a value from a getter function', function() {
 
 			expect(utils.get({
+				/**
+				 * Description
+				 * @method val
+				 * @return Literal
+				 */
 				val: function() {
 					return "some testing value";
 				}
@@ -34,6 +39,12 @@ describe('Utils specs', function() {
 		it('should return a null value from a setter function', function() {
 
 			assert(typeof utils.get({
+				/**
+				 * Description
+				 * @method val
+				 * @param {} prop
+				 * @return Literal
+				 */
 				val: function(prop) {
 					return "some testing value";
 				}
