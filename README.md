@@ -225,3 +225,7 @@ Registry.readEnv("location/to/env");
 
 var value = Registry.environment.get('myKey');
 ```
+
+#License
+
+[Apache 2.0](http://www.apache.org/licenses/)  Copyright © 2014 Vladimir Spasic
