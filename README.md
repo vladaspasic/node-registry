@@ -226,7 +226,7 @@ Registry.readEnv("location/to/env");
 var value = Registry.environment.get('myKey');
 ```
 
-### More documentation to come soon...
+#####More documentation to come soon...
 
 #License
 
