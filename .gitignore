@@ -49,6 +49,7 @@ node_modules
 
 #Docs
 docs
+theme
 yuidoc.json
 
 .DS_Store

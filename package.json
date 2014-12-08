@@ -1,7 +1,8 @@
 {
   "name": "node-registry",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Node.js Module Registry and loader",
+  "homepage": "http://vladaspasic.github.io/node-registry",
   "main": "index.js",
   "scripts": {
     "prepublish": "npm prune",
