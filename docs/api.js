@@ -11,15 +11,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Registry",
         "Server"
     ],
-    "modules": [
-        "Registry"
-    ],
-    "allModules": [
-        {
-            "displayName": "Registry",
-            "name": "Registry",
-            "description": "Node Registry Module"
-        }
-    ]
+    "modules": [],
+    "allModules": []
 } };
 });
