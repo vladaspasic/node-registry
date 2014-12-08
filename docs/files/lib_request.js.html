@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/request.js - The Node Registry API</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/lucid.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        
+            The Node Registry API
+        </h1>
+	<div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    API Docs for Version: <b>0.1.7</b>
+                </p>
+            </li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Container", "classes/DAG", "classes/EventEmitter", "classes/Holder", "classes/Module", "classes/Object", "classes/OrederedConfiguration", "classes/Registry", "classes/Server", "modules/Registry"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3">
+	    <div>
+    <div id="sidebar">
+    <div id="classes">
+        <ul id="api-classes" class="nav nav-list">
+            
+                <li><a href="../classes/Container.html">Container</a></li>
+            
+                <li><a href="../classes/DAG.html">DAG</a></li>
+            
+                <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+            
+                <li><a href="../classes/Holder.html">Holder</a></li>
+            
+                <li><a href="../classes/Module.html">Module</a></li>
+            
+                <li><a href="../classes/Object.html">Object</a></li>
+            
+                <li><a href="../classes/OrederedConfiguration.html">OrederedConfiguration</a></li>
+            
+                <li><a href="../classes/Registry.html">Registry</a></li>
+            
+                <li><a href="../classes/Server.html">Server</a></li>
+            
+        </ul>
+    </div>
+    </div>
+</div>
+
+        </div>
+        <div class="span9">
+                <form id="options-form" class="form-inline pull-right">
+        Show:
+        <label for="api-show-inherited" class="checkbox">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected" class="checkbox">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private" class="checkbox">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated" class="checkbox">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </form>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+    <h1>lib/request.js <small>File</small></h1>
+</div>
+
+<div class="file">
+    <pre class="prettyprint linenums">
+var http = require(&#x27;http&#x27;),
+	utils = require(&#x27;./utils&#x27;);
+
+var request = http.IncomingMessage.prototype;
+
+/**
+ * Sets the child container of the Registry.
+ *
+ * This way it is separated from the main registry container,
+ * but it can still access all the modules from it.
+ *
+ * @private
+ * @param  {Container} container
+ */
+request.__setContainer = function(container) {
+	if (!container) throw new Error(&#x27;Container is not defined.&#x27;);
+
+	// Define the container property on the Request object
+	utils.defineProperty(this, &#x27;__container&#x27;, container, {
+		configurable: false
+	});
+
+	// attach an event listener to destroy the container upon request end
+	this.once(&#x27;end&#x27;, this.__destroyContainer.bind(this));
+};
+
+/**
+ * Destroys the container, clearing all modules that where
+ * looked up for this request.
+ *
+ * @private
+ */
+request.__destroyContainer = function() {
+	var container = this.__container;
+
+	// check if the container is present or it is destroyed
+	if (!container || container.isDestroyed) return;
+
+	container.destroy();
+};
+
+/**
+ * Register a factory that will be only accessible to this request.
+ * 
+ * @param {} name
+ * @param {Function} factory
+ * @param {Object} options
+ * @return CallExpression
+ */
+request.register = function(name, factory, options) {
+	var container = this.__container;
+
+	if (!container) throw new Error(&#x27;Container is not defined.&#x27;);
+
+	return container.register(name, factory, options);
+};
+
+/**
+ * Define injections for a certain module. These injections
+ * will be applied to factories only in this request.
+ * 
+ * @param {String} name
+ * @param {String} property
+ * @param {String} injectionName
+ * @return CallExpression
+ */
+request.injection = function(name, property, injectionName) {
+	var container = this.__container;
+
+	if (!container) throw new Error(&#x27;Container is not defined.&#x27;);
+
+	return container.inject(name, property, injectionName);
+};
+
+/**
+ * Runs a lookup in the container, finding the module by that name.
+ * 
+ * @param {String} name
+ * @param {Object} options
+ * @return CallExpression
+ */
+request.lookup = function(name, options) {
+	var container = this.__container;
+
+	if (!container) throw new Error(&#x27;Container is not defined.&#x27;);
+
+	return container.lookup(name, options);
+};
+
+module.exports = request;
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script>prettyPrint();</script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-57430955-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+</body>
+</html>

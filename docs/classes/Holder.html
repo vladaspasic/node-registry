@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Holder - The Node Registry API</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/lucid.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        
+            The Node Registry API
+        </h1>
+	<div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    API Docs for Version: <b>0.1.7</b>
+                </p>
+            </li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Container", "classes/DAG", "classes/EventEmitter", "classes/Holder", "classes/Module", "classes/Object", "classes/OrederedConfiguration", "classes/Registry", "classes/Server", "modules/Registry"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3">
+	    <div>
+    <div id="sidebar">
+    <div id="classes">
+        <ul id="api-classes" class="nav nav-list">
+            
+                <li><a href="../classes/Container.html">Container</a></li>
+            
+                <li><a href="../classes/DAG.html">DAG</a></li>
+            
+                <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+            
+                <li><a href="../classes/Holder.html">Holder</a></li>
+            
+                <li><a href="../classes/Module.html">Module</a></li>
+            
+                <li><a href="../classes/Object.html">Object</a></li>
+            
+                <li><a href="../classes/OrederedConfiguration.html">OrederedConfiguration</a></li>
+            
+                <li><a href="../classes/Registry.html">Registry</a></li>
+            
+                <li><a href="../classes/Server.html">Server</a></li>
+            
+        </ul>
+    </div>
+    </div>
+</div>
+
+        </div>
+        <div class="span9">
+                <form id="options-form" class="form-inline pull-right">
+        Show:
+        <label for="api-show-inherited" class="checkbox">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected" class="checkbox">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private" class="checkbox">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated" class="checkbox">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </form>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+    <h1>Holder</h1>
+</div>
+
+    
+
+    
+
+    
+	<div class="well well-small">
+        
+            Module: <a href="../modules/Registry.html">Registry</a>
+        
+    </div>
+    
+
+    
+
+
+
+
+<div class="yuidoc-class-description">
+<p>A simple implementation of the HashMap, which can have
+a parent object from where it can also access values.</p>
+
+</div>
+
+
+<!-- table of contents -->
+
+<div id="class-toc" class="page-section">
+	<h2>Table of Contents</h2>
+    <ul>
+		
+		<li>
+			<strong>Methods</strong>
+			<ul>
+				
+				
+				<li><a href="#method-eachLocal"><span class="im">eachLocal</span>(<span class="ia">callback</span><span class="ia">binding</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-get"><span class="im">get</span>(<span class="ia">key</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-has"><span class="im">has</span>(<span class="ia">key</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-remove"><span class="im">remove</span>(<span class="ia">key</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-set"><span class="im">set</span>(<span class="ia">key</span><span class="ia">value</span>)</a></li>
+				
+				
+			</ul>
+		</li>
+		
+
+		
+		<li>
+			<strong>Properties</strong>
+			<ul>
+				
+				<li><a href="#prop-data"><span class="ip">data</span></a></li>
+				
+				<li><a href="#prop-parent"><span class="ip">parent</span></a></li>
+				
+			</ul>
+		</li>
+		
+
+		
+
+		
+	</ul>
+</div>
+
+<!-- details -->
+
+
+    <div class="constructor yuidoc-class-constructor page-section">
+        <h2>Constructor</h2>
+        <div class="item-list">
+        <div id="method-Holder" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>Holder</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>parent</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l4"><code>lib&#x2F;registry&#x2F;holder.js:4</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">parent</code>
+						<span class="type"><a href="../classes/Holder.html" class="crosslink">Holder</a></span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+        </div>
+    </div>
+
+
+
+    <div id="methods" class="page-section">
+        <h2 class="off-left">Methods</h2>
+        <div class="item-list">
+       		
+        	
+            <div id="method-eachLocal" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>eachLocal</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>callback</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>binding</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l100"><code>lib&#x2F;registry&#x2F;holder.js:100</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Iterate and invoke a callback for each local key-value pair.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">callback</code>
+						<span class="type">Function</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">binding</code>
+						<span class="type">Object</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-get" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>get</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>key</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type"></span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l35"><code>lib&#x2F;registry&#x2F;holder.js:35</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Retrieve the value given a key, if the value is present at the current
+level use it, otherwise walk up the parent hierarchy and try again. If
+no matching key is found, return undefined.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">key</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+					<p>Object a value or undefined if not found</p>
+
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-has" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>has</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>key</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type">Boolean</span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l77"><code>lib&#x2F;registry&#x2F;holder.js:77</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Check for the existence of given a key, if the key is present at the current
+level return true, otherwise walk up the parent hierarchy and try again. If
+no matching key is found, return false.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">key</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type">Boolean</span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-remove" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>remove</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>key</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l67"><code>lib&#x2F;registry&#x2F;holder.js:67</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Delete the given key</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">key</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-set" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>set</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>key</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>value</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_holder.js.html#l56"><code>lib&#x2F;registry&#x2F;holder.js:56</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Set the given value for the given key, at the current level.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">key</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">value</code>
+						<span class="type">Any</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+            
+        
+        </div>
+    </div>
+
+
+
+    <div id="properties" class="page-section">
+        <h2 class="off-left">Properties</h2>
+
+        <div class="item-list">
+        
+            <div id="prop-data" class="property item">
+    <h3 class="name"><code>data</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_holder.js.html#l26"><code>lib&#x2F;registry&#x2F;holder.js:26</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Object used to store the current nodes data.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+            <div id="prop-parent" class="property item">
+    <h3 class="name"><code>parent</code></h3>
+    <span class="type"><a href="../classes/Holder.html" class="crosslink">Holder</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_holder.js.html#l19"><code>lib&#x2F;registry&#x2F;holder.js:19</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+        </div>
+    </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script>prettyPrint();</script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-57430955-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+</body>
+</html>

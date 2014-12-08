@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/object.js - The Node Registry API</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/lucid.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        
+            The Node Registry API
+        </h1>
+	<div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    API Docs for Version: <b>0.1.7</b>
+                </p>
+            </li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Container", "classes/DAG", "classes/EventEmitter", "classes/Holder", "classes/Module", "classes/Object", "classes/OrederedConfiguration", "classes/Registry", "classes/Server", "modules/Registry"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3">
+	    <div>
+    <div id="sidebar">
+    <div id="classes">
+        <ul id="api-classes" class="nav nav-list">
+            
+                <li><a href="../classes/Container.html">Container</a></li>
+            
+                <li><a href="../classes/DAG.html">DAG</a></li>
+            
+                <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+            
+                <li><a href="../classes/Holder.html">Holder</a></li>
+            
+                <li><a href="../classes/Module.html">Module</a></li>
+            
+                <li><a href="../classes/Object.html">Object</a></li>
+            
+                <li><a href="../classes/OrederedConfiguration.html">OrederedConfiguration</a></li>
+            
+                <li><a href="../classes/Registry.html">Registry</a></li>
+            
+                <li><a href="../classes/Server.html">Server</a></li>
+            
+        </ul>
+    </div>
+    </div>
+</div>
+
+        </div>
+        <div class="span9">
+                <form id="options-form" class="form-inline pull-right">
+        Show:
+        <label for="api-show-inherited" class="checkbox">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected" class="checkbox">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private" class="checkbox">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated" class="checkbox">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </form>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+    <h1>lib/object.js <small>File</small></h1>
+</div>
+
+<div class="file">
+    <pre class="prettyprint linenums">
+var _ = require(&#x27;lodash&#x27;),
+	utils = require(&#x27;./utils&#x27;);
+
+/**
+ * Base Object Class for all classes inside the Node Registry.
+ * 
+ * @class Object
+ */
+var CoreObject = function() {
+	
+};
+
+function extend(protoProps, staticProps) {
+	var parent = this;
+	var child, ctor, hasFunction = false;
+
+	if (protoProps &amp;&amp; _.has(protoProps, &#x27;constructor&#x27;)) {
+		child = protoProps.constructor;
+	} else {
+		child = function(){
+			if(this.init) {
+				this.init.apply(this, arguments);
+			} else {
+				parent.apply(this, arguments);
+			}
+		};
+	}
+
+	_.extend(child, parent);
+
+	var Class = function() {
+		this.constructor = child;
+	};
+
+	Class.prototype = parent.prototype;
+	child.prototype = new Class();
+
+	if (protoProps) {
+		_.each(protoProps, function(value, key) {
+
+			if (&#x27;function&#x27; !== typeof value) {
+				protoProps[key] = value;
+			} else {
+				hasFunction = true;
+				protoProps[key] = giveMethodSuper(child.prototype, key, value, parent.prototype);
+			}
+
+		});
+
+		_.extend(child.prototype, protoProps);
+
+		if (protoProps.hasOwnProperty(&#x27;toString&#x27;)) {
+			child.toString = protoProps.toString;
+		}
+	}
+
+	_.each(staticProps || {}, function(prop, key) {
+		utils.defineProperty(child.prototype, key, prop, {
+			writable: false,
+			configurable: false,
+			enumerable: false
+		});
+	});
+
+	if (hasFunction) {
+		child.prototype._super = superFunction;
+	}
+
+	child.__super__ = parent.prototype;
+
+	return child;
+}
+
+CoreObject.extend = extend;
+
+
+function giveMethodSuper(obj, key, method, proto) {
+	var superMethod = proto[key] || obj[key];
+
+	if (&#x27;function&#x27; !== typeof superMethod) {
+		return method;
+	}
+
+	return wrap(method, superMethod);
+}
+
+function wrap(func, superFunc) {
+	function superWrapper() {
+		var ret, sup = this &amp;&amp; this.__nextSuper;
+		
+		if(this) {
+			this.__nextSuper = superFunc;
+		}
+
+		ret = func.apply(this, arguments);
+		
+		if(this) {
+			this.__nextSuper = sup;
+		}
+
+		return ret;
+	}
+
+	return superWrapper;
+}
+
+function superFunction() {
+	var ret, func = this.__nextSuper;
+	if (func) {
+		this.__nextSuper = null;
+		ret = func.apply(this, arguments);
+		this.__nextSuper = func;
+	}
+
+	return ret;
+}
+
+/**
+ * Initializer function for each class, invoked by the CoreObject constructor.
+ * 
+ * @method init
+ */
+CoreObject.prototype.init = function init() {
+
+};
+
+/**
+ * Extends the current instance with an another object
+ * 
+ * @method extend
+ * @param {Object} props
+ * @return {Object} a new extended Object
+ */
+CoreObject.prototype.extend = function(props) {
+	return _.extend(this, props);
+};
+
+/**
+ * Destroy the Object
+ * 
+ * @method destroy
+ */
+CoreObject.prototype.destroy = function destroy() {
+	if(this.isDestroyed) return;
+
+	this.isDestroyed = true;
+};
+
+/**
+ * To string represenatation of the class
+ * 
+ * @static
+ * @method toString
+ * @return {String}
+ */
+CoreObject.toString = function toString() {
+	return &#x27;Registry.Object&#x27;;
+};
+
+/**
+ * Creates a new instance of the class
+ * 
+ * @method create
+ * @static
+ * @param {Object}    props   Defines new properties on the newly created object
+ * @param {Object}    statics Defines read only values for the object
+ * @return {Function} a new Object Class function
+ */
+CoreObject.create = function create(props, statics) {
+	var C = this;
+
+	var instance = new C();
+
+	_.extend(instance, props);
+
+	_.each(statics || {}, function(prop, key) {
+		utils.defineProperty(instance, key, prop, {
+			writable: false,
+			configurable: false,
+			enumerable: false
+		});
+	});
+
+	return instance;
+};
+
+/**
+ * Extends the class prototype
+ * 
+ * @method reopen
+ * @static
+ * @param {Object} protoProps new properties for the prototype
+ */
+CoreObject.reopen = function reopen(protoProps) {
+	_.extend(this.prototype, protoProps);
+};
+
+module.exports = CoreObject;
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script>prettyPrint();</script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-57430955-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+</body>
+</html>

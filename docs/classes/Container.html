@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Container - The Node Registry API</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/lucid.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        
+            The Node Registry API
+        </h1>
+	<div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    API Docs for Version: <b>0.1.7</b>
+                </p>
+            </li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Container", "classes/DAG", "classes/EventEmitter", "classes/Holder", "classes/Module", "classes/Object", "classes/OrederedConfiguration", "classes/Registry", "classes/Server", "modules/Registry"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3">
+	    <div>
+    <div id="sidebar">
+    <div id="classes">
+        <ul id="api-classes" class="nav nav-list">
+            
+                <li><a href="../classes/Container.html">Container</a></li>
+            
+                <li><a href="../classes/DAG.html">DAG</a></li>
+            
+                <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+            
+                <li><a href="../classes/Holder.html">Holder</a></li>
+            
+                <li><a href="../classes/Module.html">Module</a></li>
+            
+                <li><a href="../classes/Object.html">Object</a></li>
+            
+                <li><a href="../classes/OrederedConfiguration.html">OrederedConfiguration</a></li>
+            
+                <li><a href="../classes/Registry.html">Registry</a></li>
+            
+                <li><a href="../classes/Server.html">Server</a></li>
+            
+        </ul>
+    </div>
+    </div>
+</div>
+
+        </div>
+        <div class="span9">
+                <form id="options-form" class="form-inline pull-right">
+        Show:
+        <label for="api-show-inherited" class="checkbox">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected" class="checkbox">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private" class="checkbox">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated" class="checkbox">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </form>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+    <h1>Container</h1>
+</div>
+
+    
+
+    
+
+    
+	<div class="well well-small">
+        
+            Module: <a href="../modules/Registry.html">Registry</a>
+        
+    </div>
+    
+
+    
+
+
+
+
+<div class="yuidoc-class-description">
+<p>Container which contains all the <a href="../classes/Module.html" class="crosslink">Module</a> factories.</p>
+<p>Handles the injections of the dependencies for each <a href="../classes/Module.html" class="crosslink">Module</a>.</p>
+
+</div>
+
+
+<!-- table of contents -->
+
+<div id="class-toc" class="page-section">
+	<h2>Table of Contents</h2>
+    <ul>
+		
+		<li>
+			<strong>Methods</strong>
+			<ul>
+				
+				
+				<li><a href="#method-child"><span class="im">child</span>()</a></li>
+				
+				
+				
+				<li><a href="#method-destroy"><span class="im">destroy</span>()</a></li>
+				
+				
+				
+				<li><a href="#method-injection"><span class="im">injection</span>(<span class="ia">name</span><span class="ia">property</span><span class="ia">injectionName</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-isRegistered"><span class="im">isRegistered</span>(<span class="ia">name</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-lookup"><span class="im">lookup</span>(<span class="ia">name</span><span class="ia">options</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-lookupFactory"><span class="im">lookupFactory</span>(<span class="ia">name</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-register"><span class="im">register</span>(<span class="ia">name</span><span class="ia">factory</span><span class="ia">options</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-reset"><span class="im">reset</span>()</a></li>
+				
+				
+				
+				<li><a href="#method-resolve"><span class="im">resolve</span>(<span class="ia">name</span>)</a></li>
+				
+				
+				
+				<li><a href="#method-unregister"><span class="im">unregister</span>(<span class="ia">name</span>)</a></li>
+				
+				
+			</ul>
+		</li>
+		
+
+		
+		<li>
+			<strong>Properties</strong>
+			<ul>
+				
+				<li><a href="#prop-_options"><span class="ip">_options</span></a></li>
+				
+				<li><a href="#prop-cache"><span class="ip">cache</span></a></li>
+				
+				<li><a href="#prop-injections"><span class="ip">injections</span></a></li>
+				
+				<li><a href="#prop-parent"><span class="ip">parent</span></a></li>
+				
+				<li><a href="#prop-registrations"><span class="ip">registrations</span></a></li>
+				
+			</ul>
+		</li>
+		
+
+		
+
+		
+	</ul>
+</div>
+
+<!-- details -->
+
+
+    <div class="constructor yuidoc-class-constructor page-section">
+        <h2>Constructor</h2>
+        <div class="item-list">
+        <div id="method-Container" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>Container</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>parent</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l8"><code>lib&#x2F;registry&#x2F;container.js:8</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">parent</code>
+						<span class="type"><a href="../classes/Container.html" class="crosslink">Container</a></span>
+					
+
+					
+
+					
+					<div class="param-description"><p>The parent Container</p>
+</div>
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+        </div>
+    </div>
+
+
+
+    <div id="methods" class="page-section">
+        <h2 class="off-left">Methods</h2>
+        <div class="item-list">
+       		
+        	
+            <div id="method-child" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>child</code></span>
+
+	
+		<span class="paren">()</span>
+	
+	
+		<span class="returns-inline">
+			<span class="type"><a href="../classes/Container.html" class="crosslink">Container</a></span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l270"><code>lib&#x2F;registry&#x2F;container.js:270</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Creates a new child Container. These children are configured
+to correctly inherit from the current container.</p>
+</div>
+	
+
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type"><a href="../classes/Container.html" class="crosslink">Container</a></span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-destroy" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>destroy</code></span>
+
+	
+		<span class="paren">()</span>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l283"><code>lib&#x2F;registry&#x2F;container.js:283</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Destroys the container and all its managed objects.</p>
+</div>
+	
+
+	
+
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-injection" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>injection</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>property</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>injectionName</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type"></span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l224"><code>lib&#x2F;registry&#x2F;container.js:224</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Define injections for a certain module. These injections
+will be applied when Modules are instantiated.</p>
+<pre class="code prettyprint"><code class="lang-javascript">container.register(&#39;user&#39;, User);
+container.register(&#39;email&#39;, Email);
+container.inject(&#39;email&#39;, &#39;user&#39;, &#39;user&#39;);</code></pre>
+<p>or</p>
+<pre class="code prettyprint"><code class="lang-javascript">container.register(&#39;user&#39;, User);
+container.inject(&#39;email&#39;, &#39;user&#39;, &#39;user&#39;);
+container.register(&#39;email&#39;, Email);</code></pre>
+<p>When performing injections, please notice that the injected value must be declared before
+the injection is declared and the target module is not alreay looked up.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">property</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">injectionName</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-isRegistered" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>isRegistered</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type">Boolean</span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l115"><code>lib&#x2F;registry&#x2F;container.js:115</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Checks if the module is already registered.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type">Boolean</span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-lookup" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>lookup</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>options</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type">Object  |  Function</span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l149"><code>lib&#x2F;registry&#x2F;container.js:149</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Returns a module instance for the name.
+The default behaviour is for lookup to return a singleton instance.
+Which will always have the same value. If you wish to return a fresh
+module instance, pass &#39;singleton&#39;: false option.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">options</code>
+						<span class="type">Object</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type">Object  |  Function</span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-lookupFactory" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>lookupFactory</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type">Object  |  Function</span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l184"><code>lib&#x2F;registry&#x2F;container.js:184</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Return the corresponding factory for the module name.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type">Object  |  Function</span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-register" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>register</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>factory</code>
+					
+				</li>
+			
+				<li class="arg">
+					
+						<code>options</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l68"><code>lib&#x2F;registry&#x2F;container.js:68</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Registers a factory for later injection.</p>
+<p>Example:</p>
+<pre class="code prettyprint"><code class="lang-javascript">container.register(&#39;User&#39;, UserModule);
+container.register(&#39;email&#39;, Email, {singleton: true});</code></pre>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+					<div class="param-description"><p>Name of the Module</p>
+</div>
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">factory</code>
+						<span class="type">Function</span>
+					
+
+					
+
+					
+					<div class="param-description"><p>Instance or a value for this Module</p>
+</div>
+					
+
+					
+				</li>
+			
+				<li class="param">
+					
+						<code class="param-name">options</code>
+						<span class="type">Object</span>
+					
+
+					
+
+					
+					<div class="param-description"><p>Configuration telling the Container how to build a Module</p>
+</div>
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-reset" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>reset</code></span>
+
+	
+		<span class="paren">()</span>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l297"><code>lib&#x2F;registry&#x2F;container.js:297</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Clear the cache for the container</p>
+</div>
+	
+
+	
+
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-resolve" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>resolve</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+		<span class="returns-inline">
+			<span class="type">Object  |  Function</span>
+		</span>
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l128"><code>lib&#x2F;registry&#x2F;container.js:128</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Resolves the factory for the registration.</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+		<div class="returns">
+			<h4>Returns:</h4>
+
+			<div class="returns-description">
+				
+					
+						<span class="type">Object  |  Function</span>
+					
+				
+			</div>
+		</div>
+	
+
+	
+</div>
+
+            
+        
+        	
+            <div id="method-unregister" class="method item">
+	<div class="method-signature">
+	<span class="name"><code>unregister</code></span>
+
+	
+		<div class="args">
+			<span class="paren">(</span><ul class="args-list inline commas">
+			
+				<li class="arg">
+					
+						<code>name</code>
+					
+				</li>
+			
+			</ul><span class="paren">)</span>
+		</div>
+	
+	
+	</div>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	<div class="meta">
+		
+			
+				
+				<p>
+				
+				Defined in
+				
+			
+		
+		
+		<a href="../files/lib_registry_container.js.html#l99"><code>lib&#x2F;registry&#x2F;container.js:99</code></a>
+		
+		</p>
+
+
+		
+
+		
+	</div>
+
+	
+	<div class="description"><p>Unregisters a module</p>
+</div>
+	
+
+	
+		<div class="params">
+			<h4>Parameters:</h4>
+
+			<ul class="params-list">
+			
+				<li class="param">
+					
+						<code class="param-name">name</code>
+						<span class="type">String</span>
+					
+
+					
+
+					
+
+					
+				</li>
+			
+			</ul>
+		</div>
+	
+
+	
+
+	
+</div>
+
+            
+        
+        </div>
+    </div>
+
+
+
+    <div id="properties" class="page-section">
+        <h2 class="off-left">Properties</h2>
+
+        <div class="item-list">
+        
+            <div id="prop-_options" class="property item private">
+    <h3 class="name"><code>_options</code></h3>
+    <span class="type"><a href="../classes/Holder.html" class="crosslink">Holder</a></span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_container.js.html#l60"><code>lib&#x2F;registry&#x2F;container.js:60</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+            <div id="prop-cache" class="property item">
+    <h3 class="name"><code>cache</code></h3>
+    <span class="type"><a href="../classes/Holder.html" class="crosslink">Holder</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_container.js.html#l46"><code>lib&#x2F;registry&#x2F;container.js:46</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+            <div id="prop-injections" class="property item">
+    <h3 class="name"><code>injections</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_container.js.html#l53"><code>lib&#x2F;registry&#x2F;container.js:53</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+            <div id="prop-parent" class="property item">
+    <h3 class="name"><code>parent</code></h3>
+    <span class="type"><a href="../classes/Container.html" class="crosslink">Container</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_container.js.html#l32"><code>lib&#x2F;registry&#x2F;container.js:32</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+            <div id="prop-registrations" class="property item">
+    <h3 class="name"><code>registrations</code></h3>
+    <span class="type"><a href="../classes/Holder.html" class="crosslink">Holder</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/lib_registry_container.js.html#l39"><code>lib&#x2F;registry&#x2F;container.js:39</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+        
+        </div>
+    </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script>prettyPrint();</script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-57430955-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+</body>
+</html>
