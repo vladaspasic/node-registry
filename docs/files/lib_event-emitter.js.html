@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib/event-emitter.js - Node Registry</title>
+    <title>Node-registry by vladaspasic</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <link rel="stylesheet" href="">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/lucid.css">
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
 </head>
 <body class="yui3-skin-sam">
@@ -20,12 +28,11 @@
                 Node Registry
             </h1>    
         </a>
-	<div class="nav">
+    <div class="nav">
             <li class="divider-vertical"></li>
             <li>
                 <p class="navbar-text">
                     Node Registry API: lightweight IoC for Node applications
-                    <small>Version: 0.1.7</small>
                 </p>
             </li>
         </div>
@@ -36,11 +43,27 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="span3">
-	    <div>
+        <div class="span3" id='sidebar-left'>
+            <div class='repo-info'>
+                
+
+                <p>Version: 0.1.7</p>
+
+                <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
+
+
+                <ul>
+                  <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                </ul>
+            </div>
+
+           <div>
     <div id="sidebar">
     <div id="classes">
         <ul id="api-classes" class="nav nav-list">
+        	<li class="nav-header">Classes</li>
             
                 <li><a href="../classes/Container.html">Container</a></li>
             
@@ -60,13 +83,14 @@
             
                 <li><a href="../classes/Server.html">Server</a></li>
             
+            <li class="divider"></li>
         </ul>
     </div>
     </div>
 </div>
 
         </div>
-        <div class="span9">
+        <div class="span9 offset3">
                 <form id="options-form" class="form-inline pull-right">
         Show:
         <label for="api-show-inherited" class="checkbox">
@@ -163,6 +187,8 @@ module.exports = CoreObject.extend(EventEmitter.prototype);
 <script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
 <script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script src="javascripts/scale.fix.js"></script>
+
 <script>prettyPrint();</script>
 <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

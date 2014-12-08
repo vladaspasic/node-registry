@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Registry - Node Registry</title>
+    <title>Node-registry by vladaspasic</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <link rel="stylesheet" href="">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/lucid.css">
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
 </head>
 <body class="yui3-skin-sam">
@@ -20,12 +28,11 @@
                 Node Registry
             </h1>    
         </a>
-	<div class="nav">
+    <div class="nav">
             <li class="divider-vertical"></li>
             <li>
                 <p class="navbar-text">
                     Node Registry API: lightweight IoC for Node applications
-                    <small>Version: 0.1.7</small>
                 </p>
             </li>
         </div>
@@ -36,11 +43,27 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="span3">
-	    <div>
+        <div class="span3" id='sidebar-left'>
+            <div class='repo-info'>
+                
+
+                <p>Version: 0.1.7</p>
+
+                <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
+
+
+                <ul>
+                  <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                </ul>
+            </div>
+
+           <div>
     <div id="sidebar">
     <div id="classes">
         <ul id="api-classes" class="nav nav-list">
+        	<li class="nav-header">Classes</li>
             
                 <li><a href="../classes/Container.html">Container</a></li>
             
@@ -60,13 +83,14 @@
             
                 <li><a href="../classes/Server.html">Server</a></li>
             
+            <li class="divider"></li>
         </ul>
     </div>
     </div>
 </div>
 
         </div>
-        <div class="span9">
+        <div class="span9 offset3">
                 <form id="options-form" class="form-inline pull-right">
         Show:
         <label for="api-show-inherited" class="checkbox">
@@ -290,7 +314,7 @@
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l149"><code>lib&#x2F;registry&#x2F;registry.js:149</code></a>
+		<a href="../files/lib_registry_registry.js.html#l203"><code>lib&#x2F;registry&#x2F;registry.js:203</code></a>
 		
 		</p>
 
@@ -301,13 +325,24 @@
 	</div>
 
 	
-	<div class="description"><p>Create the Application Module. You will extend the <a href="../classes/Server.html" class="crosslink">Server</a>
+	<div class="description"><p>Creates the Server Module. You will extend the <a href="../classes/Server.html" class="crosslink">Server</a>
 module with new methods.</p>
-<pre class="code prettyprint"><code class="lang-javascript">var Server = Registry.createApplication(function(req, res) {
+<pre class="code prettyprint"><code class="lang-javascript">var Server = Registry.createServer(function(req, res) {
     res.write(&#39;ok&#39;);
 });
 
-Server.startServer();</code></pre>
+Server.start();</code></pre>
+<pre class="code prettyprint"><code class="lang-javascript">var Server = Registry.createServer({
+   port: 8080,
+   listener: function(req, res) {
+      res.write(&#39;ok&#39;);
+   }
+});
+
+Server.start();</code></pre>
+<p>If the server is already created, this method will raise an Error, as there can
+only be one instance of the <a href="../classes/Server.html" class="crosslink">Server</a> registered in the
+Container.</p>
 </div>
 	
 
@@ -385,7 +420,7 @@ Server.startServer();</code></pre>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l271"><code>lib&#x2F;registry&#x2F;registry.js:271</code></a>
+		<a href="../files/lib_registry_registry.js.html#l360"><code>lib&#x2F;registry&#x2F;registry.js:360</code></a>
 		
 		</p>
 
@@ -463,7 +498,7 @@ Ultimatly this method will exit the current process.</p>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l45"><code>lib&#x2F;registry&#x2F;registry.js:45</code></a>
+		<a href="../files/lib_registry_registry.js.html#l43"><code>lib&#x2F;registry&#x2F;registry.js:43</code></a>
 		
 		</p>
 
@@ -474,7 +509,13 @@ Ultimatly this method will exit the current process.</p>
 	</div>
 
 	
-	<div class="description"><p>Get the module instance</p>
+	<div class="description"><p>Get the <a href="../classes/Module.html" class="crosslink">Module</a> instance, that has
+been registered inside the <a href="../classes/Container.html" class="crosslink">Container</a>.</p>
+<pre class="code prettyprint"><code class="lang-javascript">var MyModule = Registry.registerFolder(&#39;myModule&#39;);
+
+MyModule.method();</code></pre>
+<p>If the <a href="../classes/Module.html" class="crosslink">Module</a> does not exist,
+an Error will be raised.</p>
 </div>
 	
 
@@ -569,7 +610,7 @@ Ultimatly this method will exit the current process.</p>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l211"><code>lib&#x2F;registry&#x2F;registry.js:211</code></a>
+		<a href="../files/lib_registry_registry.js.html#l295"><code>lib&#x2F;registry&#x2F;registry.js:295</code></a>
 		
 		</p>
 
@@ -647,7 +688,7 @@ property is set. If not it checks the environment variables by
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l243"><code>lib&#x2F;registry&#x2F;registry.js:243</code></a>
+		<a href="../files/lib_registry_registry.js.html#l331"><code>lib&#x2F;registry&#x2F;registry.js:331</code></a>
 		
 		</p>
 
@@ -731,7 +772,7 @@ property is set. If not it checks the environment variables by
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l200"><code>lib&#x2F;registry&#x2F;registry.js:200</code></a>
+		<a href="../files/lib_registry_registry.js.html#l269"><code>lib&#x2F;registry&#x2F;registry.js:269</code></a>
 		
 		</p>
 
@@ -742,7 +783,14 @@ property is set. If not it checks the environment variables by
 	</div>
 
 	
-	<div class="description"><p>Load more Environment properties to the Registry</p>
+	<div class="description"><p>Load more Environment properties to the Registry.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.readEnv(&#39;/location/to/folder/containing/envfile&#39;)</code></pre>
+<p>To not raise errors when reading the <code>.env</code> file, set <code>raise</code>
+property to <code>false</code>.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.readEnv(&#39;/location/to/folder/containing/envfile&#39;, {
+   raise: false
+})</code></pre>
+<p>For more options, visit <a href="https://www.npmjs.org/package/node-env-file">https://www.npmjs.org/package/node-env-file</a></p>
 </div>
 	
 
@@ -840,7 +888,7 @@ property is set. If not it checks the environment variables by
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l57"><code>lib&#x2F;registry&#x2F;registry.js:57</code></a>
+		<a href="../files/lib_registry_registry.js.html#l65"><code>lib&#x2F;registry&#x2F;registry.js:65</code></a>
 		
 		</p>
 
@@ -852,6 +900,11 @@ property is set. If not it checks the environment variables by
 
 	
 	<div class="description"><p>Registers the folder, which contains the Modules, in the container.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.registerFolder(&#39;modules/folder&#39;);</code></pre>
+<p>Registry will scan the folder, and load each folder inside it to
+create a <a href="../classes/Module.html" class="crosslink">Module</a>.</p>
+<p>If an <code>initializer.js</code> file is located inside the module folder,
+it will be automatically picked up and registered.</p>
 </div>
 	
 
@@ -940,7 +993,7 @@ property is set. If not it checks the environment variables by
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l96"><code>lib&#x2F;registry&#x2F;registry.js:96</code></a>
+		<a href="../files/lib_registry_registry.js.html#l138"><code>lib&#x2F;registry&#x2F;registry.js:138</code></a>
 		
 		</p>
 
@@ -953,6 +1006,13 @@ property is set. If not it checks the environment variables by
 	
 	<div class="description"><p>Register an initializer function that will be invoked before
 the server is started.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.registerInitializer({ 
+   name: &#39;myInitializer&#39;,
+   initializer: function(container, server, callback) {
+      // your logic
+  });</code></pre>
+<p>When creating an initializer, <code>name</code> and <code>initializer</code> properties,
+are required.</p>
 </div>
 	
 
@@ -1040,7 +1100,7 @@ the server is started.</p>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l68"><code>lib&#x2F;registry&#x2F;registry.js:68</code></a>
+		<a href="../files/lib_registry_registry.js.html#l86"><code>lib&#x2F;registry&#x2F;registry.js:86</code></a>
 		
 		</p>
 
@@ -1054,6 +1114,20 @@ the server is started.</p>
 	<div class="description"><p>Registers the Module to the container.
 If the module param is a string, it will require the module and extend the
 Module class. If the module is a Function or an Object it will register it for that name.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.registerModule(&#39;myModule&#39;, { 
+   method: function() {
+      // your logic
+   }
+});</code></pre>
+<p> You can also pass a location where to module is located.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.registerModule(&#39;myModule&#39;, &#39;path/to/my/module&#39;);</code></pre>
+<p>Or you can directly extend the <a href="../classes/Module.html" class="crosslink">Module</a> class,
+and pass it in the function.</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.registerModule(&#39;myModule&#39;, Registry.Module.extend{ 
+   method: function() {
+      // your logic
+   }
+});</code></pre>
 </div>
 	
 
@@ -1114,7 +1188,7 @@ Module class. If the module is a Function or an Object it will register it for t
             
         
         	
-            <div id="method-reset" class="method item">
+            <div id="method-reset" class="method item private">
 	<div class="method-signature">
 	<span class="name"><code>reset</code></span>
 
@@ -1126,6 +1200,8 @@ Module class. If the module is a Function or an Object it will register it for t
 
 	
 
+	
+		<span class="flag private">private</span>
 	
 
 	
@@ -1145,7 +1221,7 @@ Module class. If the module is a Function or an Object it will register it for t
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l253"><code>lib&#x2F;registry&#x2F;registry.js:253</code></a>
+		<a href="../files/lib_registry_registry.js.html#l341"><code>lib&#x2F;registry&#x2F;registry.js:341</code></a>
 		
 		</p>
 
@@ -1156,7 +1232,7 @@ Module class. If the module is a Function or an Object it will register it for t
 	</div>
 
 	
-	<div class="description"><p>Resets the Container, and emits a &#39;reset&#39; Event</p>
+	<div class="description"><p>Resets the Container, and emits a &#39;reset&#39; Event.</p>
 </div>
 	
 
@@ -1211,7 +1287,7 @@ Module class. If the module is a Function or an Object it will register it for t
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l117"><code>lib&#x2F;registry&#x2F;registry.js:117</code></a>
+		<a href="../files/lib_registry_registry.js.html#l170"><code>lib&#x2F;registry&#x2F;registry.js:170</code></a>
 		
 		</p>
 
@@ -1223,8 +1299,8 @@ Module class. If the module is a Function or an Object it will register it for t
 
 	
 	<div class="description"><p>Run the configured initalizers. After all of them are invoked,
-start up the server.
-You must pass a callback that will be run after initializers are finished.</p>
+start up the server.</p>
+<p>You must pass a callback that will be run after initializers are finished.</p>
 </div>
 	
 
@@ -1300,7 +1376,7 @@ You must pass a callback that will be run after initializers are finished.</p>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l229"><code>lib&#x2F;registry&#x2F;registry.js:229</code></a>
+		<a href="../files/lib_registry_registry.js.html#l313"><code>lib&#x2F;registry&#x2F;registry.js:313</code></a>
 		
 		</p>
 
@@ -1312,6 +1388,7 @@ You must pass a callback that will be run after initializers are finished.</p>
 
 	
 	<div class="description"><p>Manualy set the execution mode in the Regsitry</p>
+<pre class="code prettyprint"><code class="lang-javascript">Registry.setExecutionMode(&#39;production&#39;);</code></pre>
 </div>
 	
 
@@ -1382,7 +1459,7 @@ You must pass a callback that will be run after initializers are finished.</p>
             
         
         
-        <a href="../files/lib_registry_registry.js.html#l263"><code>lib&#x2F;registry&#x2F;registry.js:263</code></a>
+        <a href="../files/lib_registry_registry.js.html#l352"><code>lib&#x2F;registry&#x2F;registry.js:352</code></a>
         
         </p>
 
@@ -1466,7 +1543,7 @@ You must pass a callback that will be run after initializers are finished.</p>
 			
 		
 		
-		<a href="../files/lib_registry_registry.js.html#l286"><code>lib&#x2F;registry&#x2F;registry.js:286</code></a>
+		<a href="../files/lib_registry_registry.js.html#l385"><code>lib&#x2F;registry&#x2F;registry.js:385</code></a>
 		
 		</p>
 
@@ -1552,6 +1629,8 @@ You must pass a callback that will be run after initializers are finished.</p>
 <script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
 <script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script src="javascripts/scale.fix.js"></script>
+
 <script>prettyPrint();</script>
 <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

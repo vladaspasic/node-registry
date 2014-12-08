@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Node Registry</title>
+    <title>Node-registry by vladaspasic</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <link rel="stylesheet" href="">
     <link rel="stylesheet" href="./assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="./assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./assets/css/custom.css">
     <link rel="stylesheet" href="./assets/css/lucid.css">
-    <link rel="stylesheet" href="./assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="shortcut icon" type="image/png" href="./assets/favicon.png">
 </head>
 <body class="yui3-skin-sam">
@@ -20,12 +28,11 @@
                 Node Registry
             </h1>    
         </a>
-	<div class="nav">
+    <div class="nav">
             <li class="divider-vertical"></li>
             <li>
                 <p class="navbar-text">
                     Node Registry API: lightweight IoC for Node applications
-                    <small>Version: 0.1.7</small>
                 </p>
             </li>
         </div>
@@ -36,11 +43,27 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="span3">
-	    <div>
+        <div class="span3" id='sidebar-left'>
+            <div class='repo-info'>
+                
+
+                <p>Version: 0.1.7</p>
+
+                <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
+
+
+                <ul>
+                  <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                </ul>
+            </div>
+
+           <div>
     <div id="sidebar">
     <div id="classes">
         <ul id="api-classes" class="nav nav-list">
+        	<li class="nav-header">Classes</li>
             
                 <li><a href="./classes/Container.html">Container</a></li>
             
@@ -60,13 +83,14 @@
             
                 <li><a href="./classes/Server.html">Server</a></li>
             
+            <li class="divider"></li>
         </ul>
     </div>
     </div>
 </div>
 
         </div>
-        <div class="span9">
+        <div class="span9 offset3">
                 <form id="options-form" class="form-inline pull-right">
         Show:
         <label for="api-show-inherited" class="checkbox">
@@ -96,9 +120,233 @@
                     <div class="content">
                             <div class="apidocs">
         <div id="docs-main" class="content">
-            <p>
-            Browse to a module or class using the sidebar to view its API documentation.
-            </p>
+            <h1>
+<a id="node-registry" class="anchor" href="#node-registry" aria-hidden="true"><span class="octicon octicon-link"></span></a>node-registry</h1>
+
+<p>Node Registry is a IoC Container for <code>node.js</code>. Registry helps you to glue your code together and easily manage your dependencies. Building blocks for the Container are <code>Modules</code>. You can manage your Module dependecy injections, lifecycle and behavior easily with the Registry support. With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.</p>
+
+<p>The point behind the Registry is to be lightweight and independent. So it could be used with any <code>node.js</code> framework.</p>
+
+<p>This module has largy influenced by the Ember.js. If you had any experience with Ember, you will notice a lot of similarites a get acquainted quickly with <code>node-registry</code>.</p>
+
+<p>You can check API Documentation <a href="docs/index.html">here</a></p>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<div class="highlight highlight-bash"><pre>npm install node-registry --save</pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>Registry is a singleton, and there is only one instance of the Registry available across your application. Any module that has been registered will be kept inside the container.</p>
+
+<h2>
+<a id="creating-a-server" class="anchor" href="#creating-a-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a server</h2>
+
+<p>Registry wraps the Node HTTP/HTTPS Server to create an easily configurable server module. The server is then registered inside the container, so you are able to access it everywhere in your code easily.</p>
+
+<p>In this example we are creating a simple HTTP server with a listener function.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> Registry <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>node-registry<span class="pl-pds">'</span></span>);
+
+<span class="pl-s">var</span> Server <span class="pl-k">=</span> Registry.createServer(<span class="pl-st">function</span>(<span class="pl-vpf">req</span>, <span class="pl-vpf">res</span>) {
+    res.<span class="pl-s3">write</span>(<span class="pl-s1"><span class="pl-pds">'</span>ok<span class="pl-pds">'</span></span>);
+});</pre></div>
+
+<p>When a Server is created, we can start the server with a <code>start</code> method.</p>
+
+<div class="highlight highlight-javascript"><pre>Server.<span class="pl-sc">start</span>(<span class="pl-st">function</span>(<span class="pl-vpf">error</span>, <span class="pl-vpf">server</span>) {
+    <span class="pl-k">if</span>(error) {
+        <span class="pl-en">console</span><span class="pl-s3">.error</span>(<span class="pl-s1"><span class="pl-pds">'</span>An Error occured while starting server<span class="pl-pds">'</span></span>, error);
+    } <span class="pl-k">else</span> {
+        <span class="pl-en">console</span><span class="pl-s3">.info</span>(<span class="pl-s1"><span class="pl-pds">'</span>Server started on port: <code>%s</code>.<span class="pl-pds">'</span></span>, Server.getPort());
+    }
+});</pre></div>
+
+<p>The default port is set ot <code>8000</code>. If you wish to set a different port, or add <code>ssl</code> certificates, you can do it like this.</p>
+
+<p>Notice here that we must have a listener function declared, as every HTTP server must have a listener for any incoming requests.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> Server <span class="pl-k">=</span> Registry.createServer({
+    port<span class="pl-k">:</span> <span class="pl-c1">8080</span>,
+    <span class="pl-en">listener</span>: <span class="pl-st">function</span>(<span class="pl-vpf">req</span>, <span class="pl-vpf">res</span>) {
+        res.<span class="pl-s3">write</span>(<span class="pl-s1"><span class="pl-pds">'</span>ok<span class="pl-pds">'</span></span>);
+    }
+});</pre></div>
+
+<p>Running an Secure server:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> Server <span class="pl-k">=</span> Registry.createServer({
+    ssl<span class="pl-k">:</span> {
+        key<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>my/key.pem<span class="pl-pds">'</span></span>,
+        cert<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>my/cert.pem<span class="pl-pds">'</span></span>,
+    },
+    <span class="pl-en">listener</span>: <span class="pl-st">function</span>(<span class="pl-vpf">req</span>, <span class="pl-vpf">res</span>) {
+        res.<span class="pl-s3">write</span>(<span class="pl-s1"><span class="pl-pds">'</span>ok<span class="pl-pds">'</span></span>);
+    }
+});</pre></div>
+
+<p>When an <code>ssl</code> property is set, the port value is set to <code>443</code>, no mater how you declared it.</p>
+
+<h4>
+<a id="usage-with-express-or-koa" class="anchor" href="#usage-with-express-or-koa" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage with Express or Koa</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> express <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>express<span class="pl-pds">'</span></span>);
+
+<span class="pl-s">var</span> Server <span class="pl-k">=</span> Registry.createServer(express());
+
+Server.<span class="pl-sc">start</span>();</pre></div>
+
+<p>If you are using a framework which creates a server by it's own, you can override the <code>startServer</code> method in the <code>Server</code> module. The <code>start</code> method will call the <code>startServer</code> function when all <code>initializers</code> are loaded.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> Server <span class="pl-k">=</span> Registry.createServer({
+    <span class="pl-en">startServer</span>: <span class="pl-st">function</span>() {
+        <span class="pl-c">// start the server</span>
+    }
+});
+
+Server.<span class="pl-sc">start</span>();</pre></div>
+
+<h2>
+<a id="initializers" class="anchor" href="#initializers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initializers</h2>
+
+<p>Initializers are functions that are invoked before we start the Server. This is usefull when you are trying to execute some asyncronous code, like check if the database is running and if you can connect to it. There is no point in starting the server if our database is not there, we should instead notify that is server is unavailable and you should fix this problem first.</p>
+
+<p>Lets create our first initializer. Notice that the <code>name</code> and the <code>initializer</code> properties are required.</p>
+
+<div class="highlight highlight-javascript"><pre>Registry.registerInitializer({
+    name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>,
+    <span class="pl-en">initializer</span>: <span class="pl-st">function</span>(<span class="pl-vpf">container</span>, <span class="pl-vpf">server</span>, <span class="pl-vpf">callback</span>) {
+        checkMyDatabaseConnection(myOpts, <span class="pl-st">function</span>(<span class="pl-vpf">error</span>) {
+            <span class="pl-k">if</span>(error) {
+                <span class="pl-en">console</span><span class="pl-s3">.error</span>(<span class="pl-s1"><span class="pl-pds">'</span>Could not establish database connection.<span class="pl-pds">'</span></span>, error);
+
+                callback(error);
+            } <span class="pl-k">else</span> {
+                <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Database connection established.<span class="pl-pds">'</span></span>);
+
+                callback(<span class="pl-c1">null</span>);
+            }
+        });
+    }
+});</pre></div>
+
+<p>This initializer will be executed before we start the server, and depending if the callback contains an error, the server will be started.</p>
+
+<p>We can also order our initializers by setting the <code>before</code> and <code>after</code> properties.</p>
+
+<div class="highlight highlight-javascript"><pre>Registry.registerInitializer({
+    name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>initializer<span class="pl-pds">'</span></span>,
+    before<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>,
+    <span class="pl-en">initializer</span>: <span class="pl-st">function</span>(<span class="pl-vpf">container</span>, <span class="pl-vpf">server</span>, <span class="pl-vpf">callback</span>) {
+        <span class="pl-c">// your logic</span>
+    }
+});
+</pre></div>
+
+<p>This initializer will be called before the <code>database</code> initializer, no mater if we have declared afterwards. All initializers are sorted before running the Server via Application.</p>
+
+<h2>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h2>
+
+<p>There are mutiple ways how to declare a Module. The easiest way is to place them inside a folder that the Registry will scan. Lets create a <code>modules</code> directory, and inside create a <code>database</code> folder with a <code>index.js</code> file with this content.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-sv">module</span>.exports <span class="pl-k">=</span> {
+    <span class="pl-en">connect</span>: <span class="pl-st">function</span>(<span class="pl-vpf">callback</span>) {
+        connect(<span class="pl-st">function</span>(<span class="pl-vpf">error</span>) {
+            <span class="pl-k">if</span>(error) {
+                <span class="pl-en">console</span><span class="pl-s3">.error</span>(<span class="pl-s1"><span class="pl-pds">'</span>Could not establish database connection.<span class="pl-pds">'</span></span>, error);
+
+                callback(error);
+            } <span class="pl-k">else</span> {
+                <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">'</span>Database connection established.<span class="pl-pds">'</span></span>);
+
+                callback(<span class="pl-c1">null</span>);
+            }
+        });
+    }
+}</pre></div>
+
+<p>This will create a Module with a name <code>database</code> and put it inside the Registry container. We can later access this Module like so:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> database <span class="pl-k">=</span> Registry.get(<span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>);
+
+database.connect(<span class="pl-st">function</span>(<span class="pl-vpf">err</span>, <span class="pl-vpf">connection</span>) {
+    <span class="pl-c">// your logic</span>
+});</pre></div>
+
+<p>We can also create an <code>intializer.js</code> file that will call this <code>connect</code> method before we start the server.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-sv">module</span>.exports <span class="pl-k">=</span> {
+    <span class="pl-en">initializer</span>: <span class="pl-st">function</span>(<span class="pl-vpf">container</span>, <span class="pl-vpf">server</span>, <span class="pl-vpf">callback</span>) {
+        <span class="pl-s">var</span> database <span class="pl-k">=</span> container.lookup(<span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>);
+
+        database.connect(callback);
+    }
+};</pre></div>
+
+<p>The initialzer will be automatically detect by the registry and it will be invoked before the <code>Server</code> starts.</p>
+
+<p>You can also register module manually like this.</p>
+
+<div class="highlight highlight-javascript"><pre>Registry.registerModule(<span class="pl-s1"><span class="pl-pds">'</span>myModule<span class="pl-pds">'</span></span>, {
+    <span class="pl-en">method</span>: <span class="pl-st">function</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1"><span class="pl-pds">'</span>My module value<span class="pl-pds">'</span></span>
+    }
+});</pre></div>
+
+<p>Now we would have 2 modules registered in our container, <code>myModule</code> and <code>database</code>. Lets perform an injection of our 2 modules into a third module.</p>
+
+<div class="highlight highlight-javascript"><pre>Registry.registerModule(<span class="pl-s1"><span class="pl-pds">'</span>injectedModule<span class="pl-pds">'</span></span>, {
+    requires<span class="pl-k">:</span> [<span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>myModule<span class="pl-pds">'</span></span>],
+    <span class="pl-en">check</span>: <span class="pl-st">function</span>() {
+        <span class="pl-s">var</span> self <span class="pl-k">=</span> <span class="pl-v">this</span>;
+        <span class="pl-v">this</span>.database.connect(<span class="pl-st">function</span>(<span class="pl-vpf">error</span>) {
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(self.myModule.<span class="pl-sc">method</span>());
+        });
+    }
+});</pre></div>
+
+<p>As you can see, these 2 modules are injected into the <code>injectedModule</code> instance, and the values are their names. </p>
+
+<p>You can also perform the injections in the initializers, like so:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-sv">module</span>.exports <span class="pl-k">=</span> {
+    name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>injectedModule<span class="pl-pds">'</span></span>,
+    after<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>,
+    <span class="pl-en">initializer</span>: <span class="pl-st">function</span>(<span class="pl-vpf">container</span>, <span class="pl-vpf">server</span>, <span class="pl-vpf">callback</span>) {
+        container.inject(<span class="pl-s1"><span class="pl-pds">'</span>injectedModule<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>myDatabase<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span>);
+        container.inject(<span class="pl-s1"><span class="pl-pds">'</span>injectedModule<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>foo<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>module<span class="pl-pds">'</span></span>);
+
+        <span class="pl-s">var</span> <span class="pl-sv">module</span> <span class="pl-k">=</span>  container.lookup(<span class="pl-s1"><span class="pl-pds">'</span>injectedModule<span class="pl-pds">'</span></span>);
+
+        <span class="pl-sv">module</span>.myDatabase.connect(<span class="pl-st">function</span>(<span class="pl-vpf">error</span>) {
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-sv">module</span>.foo.<span class="pl-sc">method</span>());
+        });
+    }
+};</pre></div>
+
+<p>Here we are injecting these modules as <code>myDatabase</code> and <code>foo</code> properties inside the <code>injectedModule</code> initializer. And as you can see they can now be referenced like so.</p>
+
+<h2>
+<a id="environment" class="anchor" href="#environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment</h2>
+
+<p>When the <code>node-registry</code> instance is created, it automatically scans if the <code>.env</code> file is present in the <code>process.cwd()</code> directory and they can be accessed by calling the <code>Registry.environment.get('key')</code> method.</p>
+
+<p>If the file is located somewhere else you can load it like this:</p>
+
+<div class="highlight highlight-javascript"><pre>Registry.readEnv(<span class="pl-s1"><span class="pl-pds">"</span>location/to/env<span class="pl-pds">"</span></span>);
+
+<span class="pl-s">var</span> value <span class="pl-k">=</span> Registry.environment.get(<span class="pl-s1"><span class="pl-pds">'</span>myKey<span class="pl-pds">'</span></span>);</pre></div>
+
+<h5>
+<a id="more-documentation-to-come-soon" class="anchor" href="#more-documentation-to-come-soon" aria-hidden="true"><span class="octicon octicon-link"></span></a>More documentation to come soon...</h5>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p><a href="http://www.apache.org/licenses/">Apache 2.0</a>  Copyright © 2014 Vladimir Spasic</p>
         </div>
     </div>
 
@@ -114,6 +362,8 @@
 <script src="./assets/vendor/bootstrap/js/bootstrap.js"></script>
 <script src="./assets/vendor/prettify/prettify-min.js"></script>
 <script src="./assets/js/yuidoc-bootstrap.js"></script>
+<script src="javascripts/scale.fix.js"></script>
+
 <script>prettyPrint();</script>
 <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

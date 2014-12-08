@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>lib/registry/registry.js - Node Registry</title>
+    <title>Node-registry by vladaspasic</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <link rel="stylesheet" href="">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/lucid.css">
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
     <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
 </head>
 <body class="yui3-skin-sam">
@@ -20,12 +28,11 @@
                 Node Registry
             </h1>    
         </a>
-	<div class="nav">
+    <div class="nav">
             <li class="divider-vertical"></li>
             <li>
                 <p class="navbar-text">
                     Node Registry API: lightweight IoC for Node applications
-                    <small>Version: 0.1.7</small>
                 </p>
             </li>
         </div>
@@ -36,11 +43,27 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="span3">
-	    <div>
+        <div class="span3" id='sidebar-left'>
+            <div class='repo-info'>
+                
+
+                <p>Version: 0.1.7</p>
+
+                <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
+
+
+                <ul>
+                  <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                </ul>
+            </div>
+
+           <div>
     <div id="sidebar">
     <div id="classes">
         <ul id="api-classes" class="nav nav-list">
+        	<li class="nav-header">Classes</li>
             
                 <li><a href="../classes/Container.html">Container</a></li>
             
@@ -60,13 +83,14 @@
             
                 <li><a href="../classes/Server.html">Server</a></li>
             
+            <li class="divider"></li>
         </ul>
     </div>
     </div>
 </div>
 
         </div>
-        <div class="span9">
+        <div class="span9 offset3">
                 <form id="options-form" class="form-inline pull-right">
         Show:
         <label for="api-show-inherited" class="checkbox">
@@ -136,8 +160,6 @@ var Registry = EventEmitter.extend({
 
 		utils.defineProperty(this, &#x27;__initializers&#x27;, new OrderedConfiguration());
 
-		this.environment = new Holder();
-
 		this.readEnv(process.cwd() + &#x27;/.env&#x27;);
 
 		// add process shutdown events to tear down registry
@@ -145,9 +167,19 @@ var Registry = EventEmitter.extend({
 	},
 
 	/**
-	 * Get the module instance
-	 * @method get
+	 * Get the {{#crossLink &quot;Module&quot;}}{{/crossLink}} instance, that has
+	 * been registered inside the {{#crossLink &quot;Container&quot;}}{{/crossLink}}.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * var MyModule = Registry.registerFolder(&#x27;myModule&#x27;);
+	 *
+	 * MyModule.method();
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * If the {{#crossLink &quot;Module&quot;}}{{/crossLink}} does not exist,
+	 * an Error will be raised.
 	 * 
+	 * @method get
 	 * @param {String} name
 	 * @param {Object} options
 	 * @return {Module}
@@ -158,6 +190,16 @@ var Registry = EventEmitter.extend({
 
 	/**
 	 * Registers the folder, which contains the Modules, in the container.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.registerFolder(&#x27;modules/folder&#x27;);
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * Registry will scan the folder, and load each folder inside it to
+	 * create a {{#crossLink &quot;Module&quot;}}{{/crossLink}}.
+	 *
+	 * If an &#x60;initializer.js&#x60; file is located inside the module folder,
+	 * it will be automatically picked up and registered.
 	 * 
 	 * @method registerFolder
 	 * @param {String} location
@@ -171,6 +213,30 @@ var Registry = EventEmitter.extend({
 	 * Registers the Module to the container.
 	 * If the module param is a string, it will require the module and extend the
 	 * Module class. If the module is a Function or an Object it will register it for that name.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.registerModule(&#x27;myModule&#x27;, { 
+	 *    method: function() {
+	 *       // your logic
+	 *    }
+	 * });
+	 * &#x60;&#x60;&#x60;
+	 *  You can also pass a location where to module is located.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.registerModule(&#x27;myModule&#x27;, &#x27;path/to/my/module&#x27;);
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * Or you can directly extend the {{#crossLink &quot;Module&quot;}}{{/crossLink}} class,
+	 * and pass it in the function.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.registerModule(&#x27;myModule&#x27;, Registry.Module.extend{ 
+	 *    method: function() {
+	 *       // your logic
+	 *    }
+	 * });
+	 * &#x60;&#x60;&#x60;
 	 * 
 	 * @method registerModule
 	 * @param {String}                 name
@@ -198,6 +264,17 @@ var Registry = EventEmitter.extend({
 	/**
 	 * Register an initializer function that will be invoked before
 	 * the server is started.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.registerInitializer({ 
+	 *    name: &#x27;myInitializer&#x27;,
+	 *    initializer: function(container, server, callback) {
+	 *       // your logic
+	 *   });
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * When creating an initializer, &#x60;name&#x60; and &#x60;initializer&#x60; properties,
+	 * are required.
 	 * 
 	 * @method registerInitializer
 	 * @param {Object} initializer
@@ -219,6 +296,7 @@ var Registry = EventEmitter.extend({
 	/**
 	 * Run the configured initalizers. After all of them are invoked,
 	 * start up the server.
+	 * 
 	 * You must pass a callback that will be run after initializers are finished.
 	 * 
 	 * @method runInitializers
@@ -249,16 +327,31 @@ var Registry = EventEmitter.extend({
 	},
 
 	/**
-	 * Create the Application Module. You will extend the {{#crossLink &quot;Server&quot;}}{{/crossLink}}
+	 * Creates the Server Module. You will extend the {{#crossLink &quot;Server&quot;}}{{/crossLink}}
 	 * module with new methods.
 	 *
 	 * &#x60;&#x60;&#x60;javascript
-	 * var Server = Registry.createApplication(function(req, res) {
+	 * var Server = Registry.createServer(function(req, res) {
 	 *     res.write(&#x27;ok&#x27;);
 	 * });
 	 *
-	 * Server.startServer();
+	 * Server.start();
 	 * &#x60;&#x60;&#x60;
+	 * 
+	 * &#x60;&#x60;&#x60;javascript
+	 * var Server = Registry.createServer({
+	 *    port: 8080,
+	 *    listener: function(req, res) {
+	 *       res.write(&#x27;ok&#x27;);
+	 *    }
+	 * });
+	 *
+	 * Server.start();
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * If the server is already created, this method will raise an Error, as there can
+	 * only be one instance of the {{#crossLink &quot;Server&quot;}}{{/crossLink}} registered in the
+	 * Container.
 	 * 
 	 * @method createServer
 	 * @param {Object|Function} app
@@ -300,7 +393,22 @@ var Registry = EventEmitter.extend({
 	},
 
 	/**
-	 * Load more Environment properties to the Registry
+	 * Load more Environment properties to the Registry.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.readEnv(&#x27;/location/to/folder/containing/envfile&#x27;)
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * To not raise errors when reading the &#x60;.env&#x60; file, set &#x60;raise&#x60;
+	 * property to &#x60;false&#x60;.
+	 * 
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.readEnv(&#x27;/location/to/folder/containing/envfile&#x27;, {
+	 *    raise: false
+	 * })
+	 * &#x60;&#x60;&#x60;
+	 *
+	 * For more options, visit https://www.npmjs.org/package/node-env-file
 	 * 
 	 * @method readEnv
 	 * @param {String} location Where the &#x60;env&#x60; file is located
@@ -330,6 +438,10 @@ var Registry = EventEmitter.extend({
 
 	/**
 	 * Manualy set the execution mode in the Regsitry
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.setExecutionMode(&#x27;production&#x27;);
+	 * &#x60;&#x60;&#x60;
 	 * 
 	 * @method setExecutionMode
 	 * @param {String} mode
@@ -353,9 +465,10 @@ var Registry = EventEmitter.extend({
 	},
 
 	/**
-	 * Resets the Container, and emits a &#x27;reset&#x27; Event
+	 * Resets the Container, and emits a &#x27;reset&#x27; Event.
 	 * 
 	 * @method reset
+	 * @private
 	 */
 	reset: function() {
 		this.__container.reset();
@@ -382,7 +495,17 @@ var Registry = EventEmitter.extend({
 
 		this.__container.destroy();
 	}
-
+}, {
+	/**
+	 * You are able to access all Environment properties via this property.
+	 *
+	 * &#x60;&#x60;&#x60;javascript
+	 * Registry.environment.get(&#x27;KEY&#x27;);
+	 * &#x60;&#x60;&#x60;
+	 * 
+	 * @type {Holder}
+	 */
+	environment: new Holder()
 });
 
 /**
@@ -413,6 +536,8 @@ module.exports.getInstance = function(opts) {
 <script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
 <script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script src="../assets/js/yuidoc-bootstrap.js"></script>
+<script src="javascripts/scale.fix.js"></script>
+
 <script>prettyPrint();</script>
 <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

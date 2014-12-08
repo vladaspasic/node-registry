@@ -79,8 +79,8 @@ body .apidocs .item:first-child:last-child, body .apidocs .constructor .item:fir
 	min-height: 0 !important;
 }
 
-#sidebar {
-	margin-top: 65px;
+#sidebar-left, #sidebar {
+	margin-top: 20px;
 }
 
 #api-tabview-filter {

@@ -703,8 +703,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 45,
-            "description": "Get the module instance",
+            "line": 43,
+            "description": "Get the {{#crossLink \"Module\"}}{{/crossLink}} instance, that has\nbeen registered inside the {{#crossLink \"Container\"}}{{/crossLink}}.\n\n```javascript\nvar MyModule = Registry.registerFolder('myModule');\n\nMyModule.method();\n```\n\nIf the {{#crossLink \"Module\"}}{{/crossLink}} does not exist,\nan Error will be raised.",
             "itemtype": "method",
             "name": "get",
             "params": [
@@ -727,8 +727,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 57,
-            "description": "Registers the folder, which contains the Modules, in the container.",
+            "line": 65,
+            "description": "Registers the folder, which contains the Modules, in the container.\n\n```javascript\nRegistry.registerFolder('modules/folder');\n```\n\nRegistry will scan the folder, and load each folder inside it to\ncreate a {{#crossLink \"Module\"}}{{/crossLink}}.\n\nIf an `initializer.js` file is located inside the module folder,\nit will be automatically picked up and registered.",
             "itemtype": "method",
             "name": "registerFolder",
             "params": [
@@ -747,8 +747,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 68,
-            "description": "Registers the Module to the container.\nIf the module param is a string, it will require the module and extend the\nModule class. If the module is a Function or an Object it will register it for that name.",
+            "line": 86,
+            "description": "Registers the Module to the container.\nIf the module param is a string, it will require the module and extend the\nModule class. If the module is a Function or an Object it will register it for that name.\n\n```javascript\nRegistry.registerModule('myModule', { \n   method: function() {\n      // your logic\n   }\n});\n```\n You can also pass a location where to module is located.\n\n```javascript\nRegistry.registerModule('myModule', 'path/to/my/module');\n```\n\nOr you can directly extend the {{#crossLink \"Module\"}}{{/crossLink}} class,\nand pass it in the function.\n\n```javascript\nRegistry.registerModule('myModule', Registry.Module.extend{ \n   method: function() {\n      // your logic\n   }\n});\n```",
             "itemtype": "method",
             "name": "registerModule",
             "params": [
@@ -772,8 +772,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 96,
-            "description": "Register an initializer function that will be invoked before\nthe server is started.",
+            "line": 138,
+            "description": "Register an initializer function that will be invoked before\nthe server is started.\n\n```javascript\nRegistry.registerInitializer({ \n   name: 'myInitializer',\n   initializer: function(container, server, callback) {\n      // your logic\n  });\n```\n\nWhen creating an initializer, `name` and `initializer` properties,\nare required.",
             "itemtype": "method",
             "name": "registerInitializer",
             "params": [
@@ -787,8 +787,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 117,
-            "description": "Run the configured initalizers. After all of them are invoked,\nstart up the server.\nYou must pass a callback that will be run after initializers are finished.",
+            "line": 170,
+            "description": "Run the configured initalizers. After all of them are invoked,\nstart up the server.\n\nYou must pass a callback that will be run after initializers are finished.",
             "itemtype": "method",
             "name": "runInitializers",
             "params": [
@@ -802,8 +802,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 149,
-            "description": "Create the Application Module. You will extend the {{#crossLink \"Server\"}}{{/crossLink}}\nmodule with new methods.\n\n```javascript\nvar Server = Registry.createApplication(function(req, res) {\n    res.write('ok');\n});\n\nServer.startServer();\n```",
+            "line": 203,
+            "description": "Creates the Server Module. You will extend the {{#crossLink \"Server\"}}{{/crossLink}}\nmodule with new methods.\n\n```javascript\nvar Server = Registry.createServer(function(req, res) {\n    res.write('ok');\n});\n\nServer.start();\n```\n\n```javascript\nvar Server = Registry.createServer({\n   port: 8080,\n   listener: function(req, res) {\n      res.write('ok');\n   }\n});\n\nServer.start();\n```\n\nIf the server is already created, this method will raise an Error, as there can\nonly be one instance of the {{#crossLink \"Server\"}}{{/crossLink}} registered in the\nContainer.",
             "itemtype": "method",
             "name": "createServer",
             "params": [
@@ -821,8 +821,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 200,
-            "description": "Load more Environment properties to the Registry",
+            "line": 269,
+            "description": "Load more Environment properties to the Registry.\n\n```javascript\nRegistry.readEnv('/location/to/folder/containing/envfile')\n```\n\nTo not raise errors when reading the `.env` file, set `raise`\nproperty to `false`.\n\n```javascript\nRegistry.readEnv('/location/to/folder/containing/envfile', {\n   raise: false\n})\n```\n\nFor more options, visit https://www.npmjs.org/package/node-env-file",
             "itemtype": "method",
             "name": "readEnv",
             "params": [
@@ -841,7 +841,7 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 211,
+            "line": 295,
             "description": "Get the execution mode of the applcation by checking if the executionMode\nproperty is set. If not it checks the environment variables by \n`process.env.NODE_ENV` property.\n\nDefaults to 'development'.",
             "itemtype": "method",
             "name": "getExecutionMode",
@@ -853,8 +853,8 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 229,
-            "description": "Manualy set the execution mode in the Regsitry",
+            "line": 313,
+            "description": "Manualy set the execution mode in the Regsitry\n\n```javascript\nRegistry.setExecutionMode('production');\n```",
             "itemtype": "method",
             "name": "setExecutionMode",
             "params": [
@@ -868,7 +868,7 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 243,
+            "line": 331,
             "description": "Detects if the application is runing in production mode",
             "itemtype": "method",
             "name": "isProductionMode",
@@ -880,15 +880,17 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 253,
-            "description": "Resets the Container, and emits a 'reset' Event",
+            "line": 341,
+            "description": "Resets the Container, and emits a 'reset' Event.",
             "itemtype": "method",
             "name": "reset",
+            "access": "private",
+            "tagname": "",
             "class": "Registry"
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 263,
+            "line": 352,
             "description": "Event emited each time the Registry has been reset.",
             "itemtype": "event",
             "name": "reset",
@@ -896,7 +898,7 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 271,
+            "line": 360,
             "description": "Destroys the registry. This will close the server if it's runnig,\nand destroy the Container.\nUltimatly this method will exit the current process.",
             "itemtype": "method",
             "name": "destroy",
@@ -904,7 +906,14 @@
         },
         {
             "file": "lib/registry/registry.js",
-            "line": 286,
+            "line": 373,
+            "description": "You are able to access all Environment properties via this property.\n\n```javascript\nRegistry.environment.get('KEY');\n```",
+            "type": "{Holder}",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 385,
             "description": "Get the Sinlgeton Registry instance.",
             "itemtype": "method",
             "name": "getInstance",
@@ -1807,6 +1816,10 @@
         {
             "message": "Missing item type\nRequires the location and creates a Module Factory, by extending the\nprototype with the properties obtained from the file.",
             "line": " lib/registry/loader.js:52"
+        },
+        {
+            "message": "Missing item type\nYou are able to access all Environment properties via this property.\n\n```javascript\nRegistry.environment.get('KEY');\n```",
+            "line": " lib/registry/registry.js:373"
         },
         {
             "message": "Missing item type\nSets the child container of the Registry.\n\nThis way it is separated from the main registry container,\nbut it can still access all the modules from it.",

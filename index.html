@@ -1,8 +1,7 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Node-registry by vladaspasic</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
@@ -11,24 +10,93 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Node-registry</h1>
-        <p>Node.js Module Registry and loader</p>
 
-        <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="./docs/assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="./docs/assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="./docs/assets/vendor/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./docs/assets/css/custom.css">
+    <link rel="stylesheet" href="./docs/assets/css/lucid.css">
+    <link rel="shortcut icon" type="image/png" href="./docs/assets/favicon.png">
+</head>
+<body class="yui3-skin-sam">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <a href="http://vladaspasic.github.io/node-registry">
+            <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+            
+                Node Registry
+            </h1>    
+        </a>
+    <div class="nav">
+            <li class="divider-vertical"></li>
+            <li>
+                <p class="navbar-text">
+                    Node Registry API: lightweight IoC for Node applications
+                </p>
+            </li>
+        </div>
+        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+            <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/Container", "classes/DAG", "classes/EventEmitter", "classes/Holder", "classes/Module", "classes/Object", "classes/OrederedConfiguration", "classes/Registry", "classes/Server", "modules/Registry"]'>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span3" id='sidebar-left'>
+            <div class='repo-info'>
+                
+
+                <p>Version: 0.1.7</p>
+
+                <p class="view"><a href="https://github.com/vladaspasic/node-registry">View the Project on GitHub <small>vladaspasic/node-registry</small></a></p>
 
 
-        <ul>
-          <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                <ul>
+                  <li><a href="https://github.com/vladaspasic/node-registry/zipball/master">Download <strong>ZIP File</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry/tarball/master">Download <strong>TAR Ball</strong></a></li>
+                  <li><a href="https://github.com/vladaspasic/node-registry">View On <strong>GitHub</strong></a></li>
+                </ul>
+            </div>
+
+           <div>
+    <div id="sidebar">
+    <div id="classes">
+        <ul id="api-classes" class="nav nav-list">
+            <li class="nav-header">Classes</li>
+            
+                <li><a href="./docs/classes/Container.html">Container</a></li>
+            
+                <li><a href="./docs/classes/DAG.html">DAG</a></li>
+            
+                <li><a href="./docs/classes/EventEmitter.html">EventEmitter</a></li>
+            
+                <li><a href="./docs/classes/Holder.html">Holder</a></li>
+            
+                <li><a href="./docs/classes/Module.html">Module</a></li>
+            
+                <li><a href="./docs/classes/Object.html">Object</a></li>
+            
+                <li><a href="./docs/classes/OrederedConfiguration.html">OrederedConfiguration</a></li>
+            
+                <li><a href="./docs/classes/Registry.html">Registry</a></li>
+            
+                <li><a href="./docs/classes/Server.html">Server</a></li>
+            
+            <li class="divider"></li>
         </ul>
-      </header>
-      <section>
-        <h1>
+    </div>
+    </div>
+</div>
+
+        </div>
+        <div class="span9 offset3">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                            <div class="apidocs">
+        <div id="docs-main" class="content">
+            <h1>
 <a id="node-registry" class="anchor" href="#node-registry" aria-hidden="true"><span class="octicon octicon-link"></span></a>node-registry</h1>
 
 <p>Node Registry is a IoC Container for <code>node.js</code>. Registry helps you to glue your code together and easily manage your dependencies. Building blocks for the Container are <code>Modules</code>. You can manage your Module dependecy injections, lifecycle and behavior easily with the Registry support. With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.</p>
@@ -37,7 +105,7 @@
 
 <p>This module has largy influenced by the Ember.js. If you had any experience with Ember, you will notice a lot of similarites a get acquainted quickly with <code>node-registry</code>.</p>
 
-<p>You can check API Documentationn <a href="docs/index.html">here</a></p>
+<p>You can check API Documentation <a href="./docs/classes/Registry.html">here</a></p>
 
 <h1>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
@@ -68,7 +136,7 @@
     <span class="pl-k">if</span>(error) {
         <span class="pl-en">console</span><span class="pl-s3">.error</span>(<span class="pl-s1"><span class="pl-pds">'</span>An Error occured while starting server<span class="pl-pds">'</span></span>, error);
     } <span class="pl-k">else</span> {
-        <span class="pl-en">console</span><span class="pl-s3">.info</span>(<span class="pl-s1"><span class="pl-pds">'</span>Server started on port: `%s`.<span class="pl-pds">'</span></span>, Server.getPort());
+        <span class="pl-en">console</span><span class="pl-s3">.info</span>(<span class="pl-s1"><span class="pl-pds">'</span>Server started on port: <code>%s</code>.<span class="pl-pds">'</span></span>, Server.getPort());
     }
 });</pre></div>
 
@@ -255,19 +323,33 @@ database.connect(<span class="pl-st">function</span>(<span class="pl-vpf">err</s
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
 
 <p><a href="http://www.apache.org/licenses/">Apache 2.0</a>  Copyright © 2014 Vladimir Spasic</p>
-</section>
+        </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-57430955-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
 
-  </body>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./docs/assets/vendor/jquery/jquery-1.8.2.min.js"></script>
+<script src="./docs/assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="./docs/assets/vendor/prettify/prettify-min.js"></script>
+<script src="./docs/assets/js/yuidoc-bootstrap.js"></script>
+<script src="javascripts/scale.fix.js"></script>
+
+<script>prettyPrint();</script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-57430955-1");
+        pageTracker._trackPageview();
+    } catch(err) {}
+</script>
+</body>
 </html>
