@@ -1,6 +1,6 @@
 {
     "project": {
-        "name": "The Node Registry API",
+        "name": "Node Registry",
         "description": "Node Registry API: lightweight IoC for Node applications",
         "url": "https://github.com/vladaspasic/node-registry/",
         "version": "0.1.7"
