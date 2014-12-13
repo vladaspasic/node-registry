@@ -1,4 +1,4 @@
-node-registry
+node-registry [![Build Status](https://travis-ci.org/vladaspasic/node-registry.svg?branch=master)](https://travis-ci.org/vladaspasic/node-registry)
 =============
 
 Node Registry is a IoC Container for `node.js`. Registry helps you to glue your code together and easily manage your dependencies. Building blocks for the Container are `Modules`. You can manage your Module dependecy injections, lifecycle and behavior easily with the Registry support. With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.
