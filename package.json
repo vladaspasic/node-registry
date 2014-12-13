@@ -7,6 +7,7 @@
   "scripts": {
     "prepublish": "npm prune",
     "test": "make test",
+    "test-cov": "make test-cov",
     "test-coveralls": "make test-coveralls"
   },
   "repository": {
