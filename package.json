@@ -6,14 +6,21 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm prune",
-    "test": "make test"
+    "test": "make test",
+    "test-coveralls": "make test-coveralls"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/vladaspasic/node-registry.git"
   },
   "keywords": [
-    "node", "modules", "ioc", "registry", "dependecy", "injection", "container"
+    "node",
+    "modules",
+    "ioc",
+    "registry",
+    "dependecy",
+    "injection",
+    "container"
   ],
   "dependencies": {
     "async": "~0.9.0",
@@ -22,9 +29,13 @@
     "node-env-file": "0.1.4"
   },
   "devDependencies": {
+    "mocha": "1.20.1",
     "chai": "1.9.1",
-    "supertest": "0.13.0",
-    "mocha": "1.20.1"
+    "istanbul": "^0.3.5",
+    "jscover": "^0.2.4",
+    "coveralls": "^2.11.2",
+    "mocha-lcov-reporter": "0.0.1",
+    "supertest": "0.13.0"
   },
   "author": "Vladimir Spasic",
   "license": "Apache-2.0",
