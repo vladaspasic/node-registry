@@ -475,14 +475,16 @@ describe('Registry spec', function() {
 
 	});
 
-	beforeEach(function() {
+	afterEach(function() {
 		Registry.reset();
 
+		Registry.isRunning = false;
 		Registry.__container.registrations.data = {};
 		Registry.__container.cache.data = {};
 		Registry.__container.factoryCache.data = {};
 		Registry.__container.resolveCache.data = {};
 		Registry.__container._options.data = {};
+		Registry.__container.children = [];
 	});
 
 });

@@ -13,6 +13,8 @@ var app = function(req, res) {
 	res.end('Hello, world!\n');
 };
 
+Registry.reset();
+
 var Server = Registry.createServer({
 	listener: app
 });
@@ -270,6 +272,7 @@ describe('Server', function() {
 		Registry.__container.factoryCache.data = {};
 		Registry.__container.resolveCache.data = {};
 		Registry.__container._options.data = {};
+		Registry.__container.children = [];
 	});
 
 });
