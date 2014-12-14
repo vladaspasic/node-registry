@@ -88,4 +88,12 @@ describe('Module', function() {
 
 	});
 
+	describe('#toString', function() {
+		it('should return Registry.Module', function() {
+			var module = Module.create();
+
+			assert.deepEqual(module.toString(), 'Registry.Module');
+		});
+	});
+
 });
