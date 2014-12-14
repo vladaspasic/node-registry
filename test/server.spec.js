@@ -1,6 +1,6 @@
 var chai = require('chai'),
 	Registry = require('../lib');
-Server = require('../lib/server');
+
 http = require('http');
 
 var assert = chai.assert,
@@ -27,6 +27,29 @@ describe('Server', function() {
 
 	it('shoud have the registry Instance', function() {
 		assert.deepEqual(Server.registry, Registry);
+	});
+
+	describe('#init', function() {
+
+		it('Should throw bad SSL configuration', function() {
+
+			assert.throw(function() {
+				Registry.createServer({
+					listener: app,
+					ssl: 'Bad SSL'
+				});
+			}, 'Invalid SSL configuration!  Must include cert and key locations!');
+		});
+
+		it('Could not create Sever manualy', function() {
+
+			var Server = require('../lib/server');
+
+			assert.throw(function() {
+				new Server();
+			}, 'Server must be created via Registry.createServer method');
+		});
+
 	});
 
 	describe('#get', function() {
@@ -179,8 +202,57 @@ describe('Server', function() {
 			Server.start(function(error, server) {
 				if(error) return done(error);
 				
-				makeRequest(false, done);
+				makeRequest(false, function(err, result) {
+					done(err, result);
+					Server.stopServer();
+				});
 			});
+		});
+
+	});
+
+	describe('#stopServer', function() {
+
+		it('Should stop the HTTP server', function(done) {
+			Server.start(function(error, server) {
+				if(error) return done(error);
+				
+				assert.doesNotThrow(function() {
+					Server.stopServer();
+
+					assert.isFalse(Server.registry.isRunning, 'Server is still running.');
+					assert.isNull(Server.server, 'Server is not destroyed.');
+					done();
+				});
+			});
+		});
+
+		it('Should throw error because server is not running', function() {
+			assert.throw(function() {
+				Server.stopServer();
+			}, 'Can not close a server that is not yet started.');
+		});
+
+	});
+
+	describe('#destroy', function() {
+
+		it('Should destroy server', function() {
+			Server = Registry.createServer({
+				listener: app
+			});
+
+			assert.doesNotThrow(function() {
+				Server.destroy();
+			});
+		});
+
+	});
+
+	describe('#toString', function() {
+
+		it('Should return Registry.Server', function() {
+			assert.deepEqual(Server.toString(), 'Registry.Server');
 		});
 
 	});
