@@ -6,7 +6,7 @@ var assert = chai.assert,
 
 var configLocation = __dirname + '/configs';
 
-describe('Utils specs', function() {
+describe('Utils', function() {
 
 	describe('#get', function() {
 
@@ -39,7 +39,7 @@ describe('Utils specs', function() {
 			}, 'val') === 'function');
 		});
 
-		it('should return a null value from a setter function', function() {
+		it('should return a value from a path', function() {
 			var root = {
 				foo: {
 					bar: 'value'

@@ -1,14 +1,8 @@
 var Registry = require('../lib/registry').getInstance();
-	http = require('http');
+http = require('http');
 
 module.exports = {
-	/**
-	 * Description
-	 * @method createServer
-	 * @param {} port
-	 * @param {} done
-	 * @return 
-	 */
+
 	createServer: function(port, done) {
 		try {
 			Registry.start({
@@ -21,26 +15,16 @@ module.exports = {
 			}, function() {
 				done();
 			});
-		} catch(error) {
+		} catch (error) {
 			console.warn("Error while starting server", error);
 			done(error);
 		}
 	},
-	/**
-	 * Description
-	 * @method clearRegistry
-	 * @return 
-	 */
+	
 	clearRegistry: function() {
 		Registry.clear();
 	},
-	/**
-	 * Description
-	 * @method makeRequest
-	 * @param {} port
-	 * @param {} done
-	 * @return 
-	 */
+
 	makeRequest: function(port, done) {
 		http.get('http://localhost:' + (port || 8000), function(res) {
 			var data = '';
