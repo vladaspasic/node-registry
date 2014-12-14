@@ -16,6 +16,40 @@ describe('Module', function() {
 			assert.deepEqual(module.getName(), 'module');
 		});
 
+		it('should throw a TypeError', function() {
+			var module = Module.create({
+				name: {}
+			});
+
+			assert.throw(function() {
+				module.getName();
+			}, TypeError , 'Module name must be a String, you passed: object');
+
+			module.name = 1234;
+
+			assert.throw(function() {
+				module.getName();
+			}, TypeError , 'Module name must be a String, you passed: number');
+
+			module.name = undefined;
+
+			assert.throw(function() {
+				module.getName();
+			}, TypeError , 'Module name must be a String, you passed: undefined');
+
+			module.name = true;
+
+			assert.throw(function() {
+				module.getName();
+			}, TypeError , 'Module name must be a String, you passed: boolean');
+
+			module.name = function() {};
+
+			assert.throw(function() {
+				module.getName();
+			}, TypeError , 'Module name must be a String, you passed: function');
+		});
+
 	});
 
 	describe('#getRequirements', function() {
