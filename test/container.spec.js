@@ -74,6 +74,62 @@ describe("Container", function() {
 		assert.instanceOf(module4, Module, "The lookup is not an instance of the factory");
 	});
 
+	it("Should return a new instance for scope `instance`", function() {
+		var container = new Container();
+		var Module = Factory.extend({
+			name: 'test module'
+		});
+
+		container.register('module', Module, { scope: 'instance' });
+
+		var module1 = container.lookup('module');
+		var module2 = container.lookup('module');
+
+		assert.notEqual(module1, module2, "Modules are equal.");
+		
+		assert.instanceOf(module1, Module, "The lookup is not an instance of the factory");
+		assert.instanceOf(module2, Module, "The lookup is not an instance of the factory");
+	});
+
+	it("Should return a same instance for scope `singleton`", function() {
+		var container = new Container();
+		var Module = Factory.extend();
+
+		container.register('module', Module.create(), { scope: 'singleton' });
+
+		var module1 = container.lookup('module');
+		var module2 = container.lookup('module');
+
+		assert.deepEqual(module1, module2);
+		
+		assert.instanceOf(module1, Module, "The lookup is not an instance of the factory");
+		assert.instanceOf(module2, Module, "The lookup is not an instance of the factory");
+	});
+
+	it("Should throw error for unknown `scope`", function() {
+		var container = new Container();
+		var Module = Factory.extend();
+
+		assert.throw(function() {
+			container.register('module', Module.create(), { scope: 'noidea' });
+		}, TypeError, 'Unsuported scope value `noidea`, available scopes are `singleton`, `instance`');
+
+		assert.throw(function() {
+			container.register('module', Module.create(), { scope: false });
+		}, TypeError, 'Unsuported scope value `false`, available scopes are `singleton`, `instance`');
+
+		assert.throw(function() {
+			container.register('module', Module.create(), { scope: {} });
+		}, TypeError, 'Unsuported scope value `[object Object]`, available scopes are `singleton`, `instance`');
+
+		assert.throw(function() {
+			container.register('module', Module.create(), { scope: 1234 });
+		}, TypeError, 'Unsuported scope value `1234`, available scopes are `singleton`, `instance`');
+
+		assert.throw(function() {
+			container.register('module', Module.create(), { scope: function() {} });
+		}, TypeError, 'Unsuported scope value `function () {}`, available scopes are `singleton`, `instance`');
+	});
 
 	it("Check if the module is registered", function() {
 		var container = new Container();

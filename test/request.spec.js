@@ -1,4 +1,6 @@
 var chai = require('chai'),
+	async = require('async'),
+	utils = require('./utils'),
 	Registry = require('../lib');
 
 var assert = chai.assert,
@@ -9,11 +11,16 @@ var checkingFunction = function(req) {
 
 };
 
+var reqTimer = 0;
+
 var app = function(req, res) {
 		res.writeHead(200, {
 			'Content-Type': 'text/plain'
 		});
 
+		req.uuid = 'request-uuid-' + reqTimer;
+		reqTimer++;
+		
 		checkingFunction(req);
 
 		res.end('Hello, world!\n');
@@ -64,7 +71,7 @@ describe('Request', function() {
 
 	describe('#__destroyContainer', function() {
 
-		it('Container should be destroyedt', function(done) {
+		it('Container should be destroyed', function(done) {
 
 			checkingFunction = function(req) {
 				req.__destroyContainer();
@@ -87,6 +94,35 @@ describe('Request', function() {
 			};
 
 			makeRequest();
+		});
+
+		it('Module should be destroyed', function(done) {
+			var service = Registry.Module.extend({
+					init: function() {
+						this._super();
+					},
+					destroy: function() {
+						this._super();
+					}
+				}),
+				times = 0,
+				container;
+
+			Registry.registerModule('my:service', service);
+
+			checkingFunction = function(req) {
+				var module = req.lookup('my:service');
+
+				req.on('end', function() {
+					assert.ok(req.__container.isDestroyed);
+					assert.ok(module.isDestroyed);
+
+					times++;
+					container = req.__container;
+				});
+			};
+
+			async.parallel([makeRequest, makeRequest, makeRequest, makeRequest], done);
 		});
 
 	});
@@ -196,19 +232,15 @@ describe('Request', function() {
 	});
 
 	after(function() {
-		Registry.reset();
-
-		Registry.isRunning = false;
-		Registry.__container.registrations.data = {};
-		Registry.__container.cache.data = {};
-		Registry.__container.factoryCache.data = {};
-		Registry.__container.resolveCache.data = {};
-		Registry.__container._options.data = {};
-		Registry.__container.children = [];
+		utils.clearRegistry();
 	});
 
 });
 
-function makeRequest() {
-	http.get('http://localhost:8000');
+function makeRequest(callback) {
+	if(!callback) {
+		callback = function() {};
+	}
+
+	utils.makeRequest(8000, callback);
 }

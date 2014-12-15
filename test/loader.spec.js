@@ -13,23 +13,9 @@ describe('Loader specs', function() {
 		registry = {
 			inits: [],
 			__container: container,
-			/**
-			 * Description
-			 * @method registerModule
-			 * @param {} name
-			 * @param {} module
-			 * @param {} options
-			 * @return 
-			 */
 			registerModule: function(name, module, options) {
 				container.register(name, module, options);
 			},
-			/**
-			 * Description
-			 * @method registerInitializer
-			 * @param {} init
-			 * @return 
-			 */
 			registerInitializer: function(init) {
 				registry.inits.push(init);
 			}
@@ -41,7 +27,7 @@ describe('Loader specs', function() {
 		it('should load all modules', function() {
 			var list = loader.scanDirectoryForModules(registry, __dirname + '/modules');
 
-			expect(list).to.have.length(6);
+			expect(list).to.have.length(8);
 			assert.ok(registry.__container.data['db']);
 			assert.ok(registry.__container.data['parent']);
 			assert.ok(registry.__container.data['needed']);
@@ -51,17 +37,12 @@ describe('Loader specs', function() {
 		it('should load all modules and initializers', function() {
 			var list = loader.scanDirectoryForModules(registry, __dirname + '/modules');
 
-			expect(list).to.have.length(6);
+			expect(list).to.have.length(8);
 			expect(registry.inits).to.have.length(1);
 
 		});
 
 		it('should throw bad location error', function() {
-			/**
-			 * Description
-			 * @method bad
-			 * @return CallExpression
-			 */
 			var bad = function() {
 				return loader.scanDirectoryForModules(registry, './modules');
 			};
@@ -90,11 +71,6 @@ describe('Loader specs', function() {
 		});
 
 		it('should throw error for unknown module', function() {
-			/**
-			 * Description
-			 * @method bad
-			 * @return CallExpression
-			 */
 			var bad = function() {
 				return loader.loadModuleFactory(__dirname + '/mocks', 'module.js');
 			};

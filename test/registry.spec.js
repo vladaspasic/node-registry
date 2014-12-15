@@ -106,6 +106,32 @@ describe('Registry spec', function() {
 			expect(module).to.have.property('name').and.equal('module');
 		});
 
+		it('should register module with scope `singleton`', function() {
+			Registry.registerModule('module', Registry.Module.create({
+				name: 'module',
+				scope: 'singleton'
+			}));
+
+			var module = Registry.get('module');
+
+			expect(module).to.have.property('name').and.equal('module');
+			assert.deepEqual(module, Registry.get('module'), 'Modules are not equal');
+			assert.deepEqual(Registry.get('module'), Registry.get('module'), 'Modules are not equal');
+		});
+
+		it('should register module with scope `instance`', function() {
+			Registry.registerModule('module', {
+				name: 'module',
+				scope: 'instance'
+			});
+
+			var module = Registry.get('module');
+
+			expect(module).to.have.property('name').and.equal('module');
+			assert.notEqual(module, Registry.get('module'), 'Modules are equal');
+			assert.notEqual(Registry.get('module'), Registry.get('module'), 'Modules are equal');
+		});
+
 		it('should throw error because name is not a string', function() {
 			assert.throw(function() {
 				Registry.registerModule({});
@@ -152,6 +178,16 @@ describe('Registry spec', function() {
 			expect(get('child-two')).to.be.an('function');
 		});
 
+		it('should scan the directory and load detect scopes', function() {
+			Registry.registerFolder(__dirname + '/modules');
+
+			expect(get('instance')).to.have.property('scope').and.equal('instance');
+			expect(get('singleton')).to.have.property('scope').and.equal('singleton');
+
+			assert.notEqual(get('instance'), get('instance'), 'Instance Modules are equal');
+			assert.deepEqual(get('singleton'), get('singleton'), 'Singleton Modules are not equal');
+		});
+
 		it('Should throw error', function() {
 			assert.throw(function() {
 				Registry.registerFolder(__dirname + '/moduless');
@@ -165,11 +201,6 @@ describe('Registry spec', function() {
 		it('should register initializer', function() {
 			var initializer = {
 				name: 'init',
-				/**
-				 * Description
-				 * @method initializer
-				 * @return 
-				 */
 				initializer: function() {}
 			};
 
@@ -200,24 +231,11 @@ describe('Registry spec', function() {
 		it('should invoke callback after all initializers are initialized', function(done) {
 
 			var App = Registry.createServer({
-				/**
-				 * Description
-				 * @method listener
-				 * @return 
-				 */
 				listener: function(){}
 			}), value;
 
 			Registry.registerInitializer({
 				name: 'second',
-				/**
-				 * Description
-				 * @method initializer
-				 * @param {} container
-				 * @param {} app
-				 * @param {} callback
-				 * @return 
-				 */
 				initializer: function(container, app, callback) {
 					assert.deepEqual(container, Registry.__container, 'container is not the same');
 					assert.deepEqual(app, App, 'Server is not the same.');
@@ -231,14 +249,6 @@ describe('Registry spec', function() {
 			Registry.registerInitializer({
 				name: 'first',
 				before: 'second',
-				/**
-				 * Description
-				 * @method initializer
-				 * @param {} container
-				 * @param {} app
-				 * @param {} callback
-				 * @return 
-				 */
 				initializer: function(container, app, callback) {
 					value = 'loaded';
 
@@ -249,14 +259,6 @@ describe('Registry spec', function() {
 			Registry.registerInitializer({
 				name: 'thrid',
 				before: 'nonExisting',
-				/**
-				 * Description
-				 * @method initializer
-				 * @param {} container
-				 * @param {} app
-				 * @param {} callback
-				 * @return 
-				 */
 				initializer: function(container, app, callback) {
 					callback();
 				}
@@ -268,24 +270,11 @@ describe('Registry spec', function() {
 		it('should invoke callback with an error', function() {
 
 			var App = Registry.createServer({
-				/**
-				 * Description
-				 * @method listener
-				 * @return 
-				 */
 				listener: function(){}
 			});
 
 			Registry.registerInitializer({
 				name: 'initializer',
-				/**
-				 * Description
-				 * @method initializer
-				 * @param {} container
-				 * @param {} app
-				 * @param {} callback
-				 * @return 
-				 */
 				initializer: function(container, app, callback) {
 					callback(new Error('initializer error'));
 				}
@@ -300,24 +289,13 @@ describe('Registry spec', function() {
 		it('should throw an error', function() {
 
 			var App = Registry.createServer({
-				/**
-				 * Description
-				 * @method listener
-				 * @return 
-				 */
+
 				listener: function(){}
 			});
 
 			Registry.registerInitializer({
 				name: 'initializer',
-				/**
-				 * Description
-				 * @method initializer
-				 * @param {} container
-				 * @param {} app
-				 * @param {} callback
-				 * @return 
-				 */
+
 				initializer: function(container, app, callback) {
 					throw new Error('initializer error');
 				}
@@ -355,11 +333,7 @@ describe('Registry spec', function() {
 	describe('#createServer', function() {
 
 		it('should create an Server', function() {
-			/**
-			 * Description
-			 * @method listener
-			 * @return 
-			 */
+
 			var listener = function() {};
 
 			var App = Registry.createServer({
@@ -399,12 +373,6 @@ describe('Registry spec', function() {
 
 			Registry.readEnv(__dirname + "/mocks/env");
 
-			/**
-			 * Description
-			 * @method get
-			 * @param {} key
-			 * @return CallExpression
-			 */
 			var get = function(key) {
 				return Registry.environment.get(key);
 			};
@@ -416,12 +384,6 @@ describe('Registry spec', function() {
 		});
 
 		it('should override property', function() {
-			/**
-			 * Description
-			 * @method get
-			 * @param {} key
-			 * @return CallExpression
-			 */
 			var get = function(key) {
 				return Registry.environment.get(key);
 			};
