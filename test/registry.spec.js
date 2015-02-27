@@ -29,7 +29,7 @@ describe('Registry spec', function() {
 			 * Description
 			 * @method init
 			 * @param {} ctorProperty
-			 * @return 
+			 * @return
 			 */
 			init: function(ctorProperty) {
 				this.ctorProperty = ctorProperty;
@@ -58,14 +58,15 @@ describe('Registry spec', function() {
 	});
 
 	describe('#get', function() {
-		
+
 		it('Should return right module', function() {
 			Registry.registerFolder(__dirname + '/modules');
+
 			var db = Registry.get('db');
 
 			expect(db).to.be.an('object');
 
-			assert.deepEqual(db, Registry.get('db'));
+			assert.deepEqual(db, Registry.get('db'), 'Objects do not match');
 		});
 
 		it('Should throw error for missing module', function() {
@@ -75,7 +76,7 @@ describe('Registry spec', function() {
 		});
 
 	});
-	
+
 	describe('#registerModule', function() {
 
 		it('should register module as an Object', function() {
@@ -416,7 +417,7 @@ describe('Registry spec', function() {
 	});
 
 	describe('#reset', function() {
-		
+
 		it('Should clear container cache', function() {
 			Registry.registerFolder(__dirname + '/modules');
 
