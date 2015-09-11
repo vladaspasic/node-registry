@@ -1,1 +1,1 @@
-module.exports = require('./lib');
+var Registry = module.exports = require('./lib');

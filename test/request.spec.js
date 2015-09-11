@@ -20,7 +20,7 @@ var app = function(req, res) {
 
 		req.uuid = 'request-uuid-' + reqTimer;
 		reqTimer++;
-		
+
 		checkingFunction(req);
 
 		res.end('Hello, world!\n');
@@ -30,6 +30,12 @@ var app = function(req, res) {
 describe('Request', function() {
 
 	before(function() {
+		Registry.registerModule('requestScoped', {
+			flush: function() {
+				this.response.end('Bye!');
+			}
+		});
+
 		Server = Registry.createServer(app);
 	});
 

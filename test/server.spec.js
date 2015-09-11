@@ -168,15 +168,15 @@ describe('Server', function() {
 			expect(server).to.have.property('listen');
 		});
 
-		it('Should throw SSL not found error', function() {
+		it('Should throw ENOENT error for missing SSL files', function() {
 			Server.ssl = {
 				key: 'not-found',
 				cert: 'not-found'
 			};
 
-			assert.throw(function() {
+			assert.throw(function createSSLServer() {
 				Server.createServer();
-			}, "ENOENT, no such file or directory 'not-found'");
+			}, /^ENOENT/);
 		});
 
 		it('Should load HTTPS server', function() {
@@ -203,7 +203,7 @@ describe('Server', function() {
 
 			Server.start(function(error, server) {
 				if(error) return done(error);
-				
+
 				makeRequest(false, function(err, result) {
 					done(err, result);
 					Server.stopServer();
@@ -218,7 +218,7 @@ describe('Server', function() {
 		it('Should stop the HTTP server', function(done) {
 			Server.start(function(error, server) {
 				if(error) return done(error);
-				
+
 				assert.doesNotThrow(function() {
 					Server.stopServer();
 

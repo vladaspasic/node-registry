@@ -86,7 +86,7 @@ describe("Container", function() {
 		var module2 = container.lookup('module');
 
 		assert.notEqual(module1, module2, "Modules are equal.");
-		
+
 		assert.instanceOf(module1, Module, "The lookup is not an instance of the factory");
 		assert.instanceOf(module2, Module, "The lookup is not an instance of the factory");
 	});
@@ -101,7 +101,7 @@ describe("Container", function() {
 		var module2 = container.lookup('module');
 
 		assert.deepEqual(module1, module2);
-		
+
 		assert.instanceOf(module1, Module, "The lookup is not an instance of the factory");
 		assert.instanceOf(module2, Module, "The lookup is not an instance of the factory");
 	});
@@ -112,23 +112,23 @@ describe("Container", function() {
 
 		assert.throw(function() {
 			container.register('module', Module.create(), { scope: 'noidea' });
-		}, TypeError, 'Unsuported scope value `noidea`, available scopes are `singleton`, `instance`');
+		}, TypeError, /^Unsuported scope value `noidea`/);
 
 		assert.throw(function() {
 			container.register('module', Module.create(), { scope: false });
-		}, TypeError, 'Unsuported scope value `false`, available scopes are `singleton`, `instance`');
+		}, TypeError, /^Unsuported scope value /);
 
 		assert.throw(function() {
 			container.register('module', Module.create(), { scope: {} });
-		}, TypeError, 'Unsuported scope value `[object Object]`, available scopes are `singleton`, `instance`');
+		}, TypeError, /^Unsuported scope value /);
 
 		assert.throw(function() {
 			container.register('module', Module.create(), { scope: 1234 });
-		}, TypeError, 'Unsuported scope value `1234`, available scopes are `singleton`, `instance`');
+		}, TypeError, /^Unsuported scope value /);
 
 		assert.throw(function() {
 			container.register('module', Module.create(), { scope: function() {} });
-		}, TypeError, 'Unsuported scope value `function () {}`, available scopes are `singleton`, `instance`');
+		}, TypeError, /^Unsuported scope value /);
 	});
 
 	it("Check if the module is registered", function() {
@@ -140,7 +140,7 @@ describe("Container", function() {
 		assert.equal(container.isRegistered('module'), true, "module should be registered");
 		assert.equal(container.isRegistered('modules'), false, "modules should not be registered");
 	});
-	
+
 	it("Should unregister the module and clear the cache", function() {
 		var container = new Container();
 		var Module = Factory.extend();
@@ -267,6 +267,9 @@ describe("Container", function() {
 
 		container.register('module', Module);
 		container.lookup('module');
+
+		console.log(container.registrations);
+		console.log(container._options);
 
 		assert.throw(function() {
 			container.register('module', {});
