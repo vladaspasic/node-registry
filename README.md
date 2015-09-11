@@ -164,7 +164,7 @@ We can also create an `intializer.js` file that will call this `connect` method 
 module.exports = {
     initializer: function(container, server, callback) {
         var database = container.lookup('database');
-        
+
         database.connect(callback);
 	}
 };
@@ -194,7 +194,7 @@ Registry.registerModule('injectedModule', {
 	}
 });
 ```
-As you can see, these 2 modules are injected into the `injectedModule` instance, and the values are their names. 
+As you can see, these 2 modules are injected into the `injectedModule` instance, and the values are their names.
 
 You can also perform the injections in the initializers, like so:
 
@@ -205,9 +205,9 @@ module.exports = {
     initializer: function(container, server, callback) {
         container.inject('injectedModule', 'myDatabase', 'database');
         container.inject('injectedModule', 'foo', 'module');
-        
+
         var module =  container.lookup('injectedModule');
-    
+
         module.myDatabase.connect(function(error) {
 	        console.log(module.foo.method());
 	    });
@@ -216,7 +216,77 @@ module.exports = {
 ```
 Here we are injecting these modules as `myDatabase` and `foo` properties inside the `injectedModule` initializer. And as you can see they can now be referenced like so.
 
-##Environment
+### Scopes
+
+Each module can have a scope, scope defines the lifecycle of the module, how it is resolved from the container and where it can be used. Node Registry offers 3 type of scopes:
+
+- singleton
+- instance
+- request
+
+#### Singleton
+
+When using the `singleton` your are telling the registry that this module should be loaded as is. Meaning if the module is defined as `function`, a `function` is returned, it would never create a new instance of the module.
+
+#### Instance
+
+Module defined with a `instance` scope are always instantiated when a lookup is performed in the `Container`. This means that you would never get a same instance of the module.
+
+```javascript
+Registry.registerModule('instanceScoped', {
+    scope: 'instance'
+});
+
+Registry.get('instanceScoped') === Registry.get('instanceScoped') // returns false
+```
+
+#### Request
+
+These modules are only available when you create a Server using the `Registry.createServer` method. In each `request` scoped module, a `request` and `response` objects are injected, they are destroyed when the `request` is finished. You can use these modules like so:
+
+``` javascript
+Registry.registerModule('handler', {
+    needs: ['auth'],
+    scope: 'request',
+
+    handle: function() {
+        var status = 200,
+            body;
+        if(this.auth.canHandle()) {
+            body = 'Da secret page';
+        } else {
+            status = 401;
+            body = 'Not logged in';
+        }
+
+        this.response.writeHead(status, {
+    		'Content-Type': 'text/plain'
+    	});
+    	this.response.end(body);
+    }
+});
+
+Registry.registerModule('auth', {
+    scope: 'request',
+
+    canHandle: function() {
+        // Your authentication logic...
+        // For now lets asume we have an user...
+
+        return !!this.request.user;
+    }
+});
+
+Registry.createServer(function(req, res) {
+    var handler = req.lookup('handler');
+    handler.handle();
+}).start();
+```
+
+As you can see, we have two `request` scoped modules, where the `auth` module, which is performing the authentication, is injected into the `handle` module which is responsible to flush the response depending on the authenitcation result. This approach can be usefull if you use lots of modules that depend on the current state of the incoming request. Using `request` scope you do not need to pass the request and response arguments, they are simply there for you to use them.
+
+## Environment
+
 When the `node-registry` instance is created, it automatically scans if the `.env` file is present in the `process.cwd()` directory and they can be accessed by calling the `Registry.environment.get('key')` method.
 
 If the file is located somewhere else you can load it like this:
@@ -226,8 +296,19 @@ Registry.readEnv("location/to/env");
 var value = Registry.environment.get('myKey');
 ```
 
-#####More documentation to come soon...
+Or you can use the `environment` module, which is registered in the container by default.
 
-#License
+```javascript
+Registry.registerModule('auth', {
+    require: 'environment',
 
-[Apache 2.0](http://www.apache.org/licenses/)  Copyright © 2014 Vladimir Spasic
+    method: function() {
+        // Set a default value in case the `myKey` is not present
+        this.environment.get('myKey', 'DefaultValue');
+
+        // Throws an exception if `myKey` is not present
+        this.environment.getRequired('myKey');
+    },
+});
+```
+
