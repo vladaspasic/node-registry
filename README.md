@@ -246,7 +246,7 @@ These modules are only available when you create a Server using the `Registry.cr
 
 ``` javascript
 Registry.registerModule('handler', {
-    needs: ['auth'],
+    requires: ['auth'],
     scope: 'request',
 
     handle: function() {
