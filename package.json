@@ -14,13 +14,16 @@
     "type": "git",
     "url": "git://github.com/vladaspasic/node-registry.git"
   },
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "keywords": [
     "node",
     "modules",
+    "inversion of controll",
+    "dependecy injection",
     "ioc",
     "registry",
-    "dependecy",
-    "injection",
     "container"
   ],
   "dependencies": {
