@@ -356,10 +356,26 @@ describe('Registry spec', function() {
 			assert.throw(function() {
 				Registry.createServer();
 			}, 'You must define options or a listener for the Server');
+
+			assert.throw(function() {
+				Registry.createServer({});
+			}, 'You must define options or a listener for the Server');
+
+			assert.throw(function() {
+				Registry.createServer(1);
+			}, 'You must define options or a listener for the Server');
+
+			assert.throw(function() {
+				Registry.createServer('server');
+			}, 'You must define options or a listener for the Server');
+
+			assert.throw(function() {
+				Registry.createServer([]);
+			}, 'You must define options or a listener for the Server');
 		});
 
 		it('should throw an error, when trying to crate another Server', function() {
-			Registry.createServer({});
+			Registry.createServer(function() {});
 
 			assert.throw(function() {
 				Registry.createServer({});
@@ -439,15 +455,15 @@ describe('Registry spec', function() {
 	});
 
 	afterEach(function() {
-		Registry.reset();
-
 		Registry.isRunning = false;
-		Registry.__container.registrations.data = {};
-		Registry.__container.cache.data = {};
-		Registry.__container.factoryCache.data = {};
-		Registry.__container.resolveCache.data = {};
-		Registry.__container._options.data = {};
+		Registry.__container.registrations.clear();
+		Registry.__container.cache.clear();
+		Registry.__container.factoryCache.clear();
+		Registry.__container.resolveCache.clear();
+		Registry.__container._options.clear();
 		Registry.__container.children = [];
+
+		Registry.reset();
 	});
 
 });

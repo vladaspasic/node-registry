@@ -1,4 +1,4 @@
-var Container = require('../lib/registry/container'),
+var Container = require('../lib/container/container'),
 	Factory = require('../lib/object');
 
 var chai = require('chai'),
@@ -267,9 +267,6 @@ describe("Container", function() {
 
 		container.register('module', Module);
 		container.lookup('module');
-
-		console.log(container.registrations);
-		console.log(container._options);
 
 		assert.throw(function() {
 			container.register('module', {});

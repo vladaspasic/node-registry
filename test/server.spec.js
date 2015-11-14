@@ -1,4 +1,4 @@
-var chai = require('chai'),
+	var chai = require('chai'),
 	Registry = require('../lib');
 
 http = require('http');
@@ -267,11 +267,11 @@ describe('Server', function() {
 		Registry.reset();
 
 		Registry.isRunning = false;
-		Registry.__container.registrations.data = {};
-		Registry.__container.cache.data = {};
-		Registry.__container.factoryCache.data = {};
-		Registry.__container.resolveCache.data = {};
-		Registry.__container._options.data = {};
+		Registry.__container.registrations.clear();
+		Registry.__container.cache.clear();
+		Registry.__container.factoryCache.clear();
+		Registry.__container.resolveCache.clear();
+		Registry.__container._options.clear();
 		Registry.__container.children = [];
 	});
 
