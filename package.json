@@ -30,11 +30,12 @@
     "node-env-file": "^0.1.8"
   },
   "devDependencies": {
-    "mocha": "^2.3.3",
+    "async": "^1.5.0",
     "chai": "^3.4.1",
+    "coveralls": "^2.11.2",
     "istanbul": "^0.4.0",
     "jscover": "^1.0.0",
-    "coveralls": "^2.11.2",
+    "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
     "supertest": "^1.1.0"
   },
