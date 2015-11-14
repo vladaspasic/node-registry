@@ -20,8 +20,8 @@
   "keywords": [
     "node",
     "modules",
-    "inversion of controll",
-    "dependecy injection",
+    "inversion of control",
+    "dependency injection",
     "ioc",
     "registry",
     "container"
