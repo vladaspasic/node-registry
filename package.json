@@ -19,12 +19,11 @@
   },
   "keywords": [
     "node",
-    "modules",
+    "ioc",
     "inversion of control",
     "dependency injection",
-    "ioc",
-    "registry",
-    "container"
+    "di",
+    "registry"
   ],
   "dependencies": {
     "dag-map": "^1.0.2",
