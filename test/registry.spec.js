@@ -287,25 +287,25 @@ describe('Registry spec', function() {
 			});
 		});
 
-		it('should throw an error', function() {
+		it('should throw an error', function(done) {
 
 			var App = Registry.createServer({
 
 				listener: function(){}
-			});
+			}), error = new Error('initializer error');
 
 			Registry.registerInitializer({
 				name: 'initializer',
 
 				initializer: function(container, app, callback) {
-					throw new Error('initializer error');
+					throw error;
 				}
 			});
 
-			assert.throw(function() {
-				Registry.runInitializers(function(error) {
-				});
-			}, 'initializer error');
+			Registry.runInitializers(function(e) {
+				expect(e).equal(error);
+				done();
+			});
 		});
 
 		it('should throw missing callback error', function() {

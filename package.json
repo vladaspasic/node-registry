@@ -24,11 +24,10 @@
     "container"
   ],
   "dependencies": {
-    "async": "~0.9.0",
     "dag-map": "^1.0.2",
-    "eventemitter2": "0.4.14",
-    "lodash": "2.4.1",
-    "node-env-file": "0.1.4"
+    "eventemitter2": "^0.4.14",
+    "lodash": "^3.10.1",
+    "node-env-file": "^0.1.8"
   },
   "devDependencies": {
     "mocha": "2.1.0",
