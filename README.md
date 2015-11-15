@@ -21,6 +21,7 @@ The simplest usage with express would be like this:
 
 ```javascript
 var express = require('express');
+var Registry = require('node-registry');
 
 // Regsiter your `person` module
 Registry.registerModule('person', {
