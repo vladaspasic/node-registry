@@ -1,6 +1,3 @@
-node-registry [![NPM version](https://img.shields.io/npm/v/node-registry.svg)](https://img.shields.io/npm/v/node-registry.svg) [![Build Status](https://travis-ci.org/vladaspasic/node-registry.svg?branch=master)](https://travis-ci.org/vladaspasic/node-registry) [![Coverage Status](https://img.shields.io/coveralls/vladaspasic/node-registry.svg)](https://coveralls.io/r/vladaspasic/node-registry)
-=============
-
 Node Registry is a IoC Container for `node.js`. Registry helps you to glue your code together and easily manage your dependencies. Building blocks for the Container are `Modules`. You can manage your Module dependecy injections, lifecycle and behavior easily with the Registry support. With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.
 
 The point behind the Registry is to be lightweight and independent. So it could be used with any `node.js` framework.
@@ -57,8 +54,9 @@ var Server = Registry.createServer(app);
 Server.start(function() {
     console.info('Server running on Port: %d', Server.port);
 });
-    
 ```
+
+Registry API Documentation could be found [here](http://vladaspasic.github.io/node-registry/docs/classes/Registry.html)
 
 ## Creating a server
 
@@ -130,6 +128,8 @@ var Server = Registry.createServer({
 
 Server.start();
 ```
+
+Server API Documentation could be found [here](http://vladaspasic.github.io/node-registry/docs/classes/Server.html)
 
 ## Initializers
 
@@ -372,3 +372,4 @@ Registry.registerModule('auth', {
     },
 });
 ```
+
