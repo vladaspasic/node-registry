@@ -1,6 +1,6 @@
 {
   "name": "node-registry",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Node.js Module Registry and loader",
   "homepage": "http://vladaspasic.github.io/node-registry",
   "main": "index.js",
