@@ -7,17 +7,59 @@ The point behind the Registry is to be lightweight and independent. So it could 
 
 This module has largy influenced by the Ember.js. If you had any experience with Ember, you will notice a lot of similarites a get acquainted quickly with `node-registry`.
 
-#Installation
+# Installation
 
 ```bash
 npm install node-registry --save
 ```
 
-#Usage
+# Usage
 
 Registry is a singleton, and there is only one instance of the Registry available across your application. Any module that has been registered will be kept inside the container.
 
-##Creating a server
+The simplest usage with express would be like this:
+
+```javascript
+var express = require('express');
+
+// Regsiter your `person` module
+Registry.registerModule('person', {
+    name: function() {
+        return 'John Smith';
+    }
+});
+// Regsiter your `greeter` module that requires the `person` module
+Registry.registerModule('greeter', {
+    requires: ['person'],
+    sayHi: function() {
+        var name = this.person.name();
+        this.response.end('Hello, ' + name);
+    }
+}, {
+    scope: 'request'
+});
+
+// Scans your `modules` directory to autmatically register modules inside the IoC Container
+Registry.registerFolder(__dirname + '/modules');
+
+var app = express();
+// Prints the `Hello, John Smith`
+app.get('/', function(req) {
+    // Request scoped Modules are only accessible from the HTTP request `lookup` method
+    var greeter = req.lookup('greeter');
+    greeter.sayHi();
+});
+
+// register the Express HTTP Listener with the default port of 8000
+var Server = Registry.createServer(app);
+// Start the server
+Server.start(function() {
+    console.info('Server running on Port: %d', Server.port);
+});
+    
+```
+
+## Creating a server
 
 Registry wraps the Node HTTP/HTTPS Server to create an easily configurable server module. The server is then registered inside the container, so you are able to access it everywhere in your code easily.
 
@@ -67,7 +109,7 @@ var Server = Registry.createServer({
 ```
 When an `ssl` property is set, the port value is set to `443`, no mater how you declared it.
 
-####Usage with Express or Koa
+#### Usage with Express or Koa
 
 ```javascript
 var express = require('express');
@@ -88,7 +130,7 @@ var Server = Registry.createServer({
 Server.start();
 ```
 
-##Initializers
+## Initializers
 
 Initializers are functions that are invoked before we start the Server. This is usefull when you are trying to execute some asyncronous code, like check if the database is running and if you can connect to it. There is no point in starting the server if our database is not there, we should instead notify that is server is unavailable and you should fix this problem first.
 
@@ -130,9 +172,27 @@ Registry.registerInitializer({
 
 This initializer will be called before the `database` initializer, no mater if we have declared afterwards. All initializers are sorted before running the Server via Application.
 
-##Modules
+## Modules
 
-There are mutiple ways how to declare a Module. The easiest way is to place them inside a folder that the Registry will scan. Lets create a `modules` directory, and inside create a `database` folder with a `index.js` file with this content.
+There are mutiple ways how to declare a Module. The easiest way is to place them inside a folder that the Registry will scan.
+
+The modules directory structure should look like this:
+
+```bash
+-index.js
+/modules
+    /database ## This defines the name of the module
+        -index.js ## Module logic
+        -initializer.js ## Initializer for the module
+    /some-other-module
+        -index.js
+    /another-module
+        -index.js
+```
+
+When calling the `Registry.registerFolder(__dirname + '/modules')` method from your `index.js` file, `Registry` will automatically pick up and register those 3 defined modules from the `modules` directory, along with the `database` module `initializer` function.
+
+Lets create a `modules` directory, and inside create a `database` folder with a `index.js` file with this content.
 
 ```javascript
 module.exports = {
@@ -171,7 +231,7 @@ module.exports = {
 ```
 The initialzer will be automatically detect by the registry and it will be invoked before the `Server` starts.
 
-You can also register module manually like this.
+You can also register modules manually like this.
 
 ```javascript
 Registry.registerModule('myModule', {
@@ -311,4 +371,3 @@ Registry.registerModule('auth', {
     },
 });
 ```
-
