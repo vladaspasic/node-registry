@@ -1,3 +1,5 @@
+export NODE_REGISTRY_CONFIG=test/configuration
+
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha -R spec -r chai --recursive
 

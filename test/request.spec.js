@@ -1,11 +1,10 @@
+/* global describe, before, after, beforeEach, afterEach, it */
 var chai = require('chai'),
 	async = require('async'),
 	utils = require('./utils'),
 	Registry = require('../lib');
 
-var assert = chai.assert,
-	expect = chai.expect,
-	http = require('http');
+var assert = chai.assert;
 
 var checkingFunction = function(req) {
 

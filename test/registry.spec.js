@@ -1,21 +1,12 @@
+/* global describe, afterEach, it */
 var chai = require('chai'),
-	http = require('http'),
-	utils = require('./utils'),
 	Registry = require('../lib');
 
-var options = {
-	location: __dirname + '/modules'
-};
-
 var assert = chai.assert,
-	expect = chai.expect,
-	port = 1234;
+	expect = chai.expect;
 
 /**
- * Description
- * @method get
- * @param {} name
- * @return CallExpression
+ * Get Module Shortcut
  */
 var get = function(name) {
 	return Registry.get(name);
@@ -58,6 +49,20 @@ describe('Registry spec', function() {
 	});
 
 	describe('#get', function() {
+
+		it('Should return environment module', function() {
+			var environment = get('environment');
+
+			expect(environment).to.be.an('object');
+			assert.deepEqual(environment, get('environment'), 'Objects do not match');
+
+			// Must reload Env properties, as they are cleared after each test
+			environment.constructor.loadProjectConfiguration();
+
+			assert.equal(environment.get('NODE_ENV'), 'test');
+			assert.equal(environment.get('mode'), 'test');
+
+		});
 
 		it('Should return right module', function() {
 			Registry.registerFolder(__dirname + '/modules');
@@ -167,26 +172,14 @@ describe('Registry spec', function() {
 			expect(get('child-two')).to.be.an('object');
 		});
 
-		it('should scan the directory and register all modules without instantiation', function() {
-			Registry.registerFolder(__dirname + '/modules', {
-				instantiate: false
-			});
-
-			expect(get('needed')).to.be.an('function');
-			expect(get('parent')).to.be.an('function');
-			expect(get('testing')).to.be.an('function');
-			expect(get('child-one')).to.be.an('function');
-			expect(get('child-two')).to.be.an('function');
-		});
-
 		it('should scan the directory and load detect scopes', function() {
 			Registry.registerFolder(__dirname + '/modules');
 
 			expect(get('instance')).to.have.property('scope').and.equal('instance');
 			expect(get('singleton')).to.have.property('scope').and.equal('singleton');
 
-			assert.notEqual(get('instance'), get('instance'), 'Instance Modules are equal');
-			assert.deepEqual(get('singleton'), get('singleton'), 'Singleton Modules are not equal');
+			assert.notEqual(get('instance'), get('instance'), 'Instance Modules should not be equal');
+			assert.deepEqual(get('singleton'), get('singleton'), 'Singleton Modules should be equal');
 		});
 
 		it('Should throw error', function() {
@@ -269,8 +262,7 @@ describe('Registry spec', function() {
 		});
 
 		it('should invoke callback with an error', function() {
-
-			var App = Registry.createServer({
+			Registry.createServer({
 				listener: function(){}
 			});
 
@@ -288,16 +280,16 @@ describe('Registry spec', function() {
 		});
 
 		it('should throw an error', function(done) {
+			var error = new Error('initializer error');
 
-			var App = Registry.createServer({
-
+			Registry.createServer({
 				listener: function(){}
-			}), error = new Error('initializer error');
+			});
 
 			Registry.registerInitializer({
 				name: 'initializer',
 
-				initializer: function(container, app, callback) {
+				initializer: function() {
 					throw error;
 				}
 			});
@@ -384,54 +376,6 @@ describe('Registry spec', function() {
 
 	});
 
-	describe('#readEnv', function() {
-
-		it('should read .env file', function() {
-
-			Registry.readEnv(__dirname + "/mocks/env");
-
-			var get = function(key) {
-				return Registry.environment.get(key);
-			};
-
-			assert.deepEqual(get('PROPERTY'), 'value');
-			assert.deepEqual(get('PROPERTY_NUMBER'), '1');
-			assert.deepEqual(get('PROPERTY_BOOLEAN'), 'false');
-
-		});
-
-		it('should override property', function() {
-			var get = function(key) {
-				return Registry.environment.get(key);
-			};
-
-			Registry.environment.set('PROPERTY', 'different');
-
-			assert.deepEqual(get('PROPERTY'), 'different');
-
-			Registry.readEnv(__dirname + "/mocks/env", {
-				overwrite: true
-			});
-
-			assert.deepEqual(get('PROPERTY'), 'value');
-		});
-
-		it('should not raise error', function() {
-			assert.doesNotThrow(function() {
-				Registry.readEnv(__dirname + "/mock");
-			});
-		});
-
-		it('should raise not found file error', function() {
-			assert.throw(function() {
-				Registry.readEnv(__dirname + "/mock", {
-					raise: true
-				}, TypeError, 'Environment file doesn\'t exist');
-			});
-		});
-
-	});
-
 	describe('#reset', function() {
 
 		it('Should clear container cache', function() {
@@ -448,8 +392,13 @@ describe('Registry spec', function() {
 
 			Registry.reset();
 
-			assert.notEqual(db, Registry.get('db'));
-			assert.notEqual(needed, Registry.get('needed'));
+			assert.throw(function() {
+				Registry.get('db');
+			}, "Factory with name 'db' can not be found.");
+
+			assert.throw(function() {
+				Registry.get('needed');
+			}, "Factory with name 'needed' can not be found.");
 		});
 
 	});

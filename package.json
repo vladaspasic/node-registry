@@ -27,7 +27,9 @@
   ],
   "dependencies": {
     "dag-map": "^1.0.2",
+    "debug": "^2.2.0",
     "eventemitter2": "^0.4.14",
+    "js-yaml": "^3.4.6",
     "lodash": "^3.10.1",
     "node-env-file": "^0.1.8"
   },

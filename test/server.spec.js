@@ -1,7 +1,9 @@
-	var chai = require('chai'),
-	Registry = require('../lib');
+/* global describe, after, beforeEach, it */
+"use strict";
 
-http = require('http');
+var chai = require('chai'),
+	http = require('http'),
+	Registry = require('../lib');
 
 var assert = chai.assert,
 	expect = chai.expect;
@@ -141,15 +143,6 @@ describe('Server', function() {
 			Server.port = 1234;
 			assert.equal(Server.getPort(), 1234, 'Default port not equal');
 
-			Registry.environment.set('port', 8080);
-			assert.equal(Server.getPort(), 8080, 'Environment port not equal');
-
-			Server.port = undefined;
-			assert.equal(Server.getPort(), 8080, 'Did not used the environment port');
-
-			Registry.environment.remove('port');
-			assert.equal(Server.getPort(), 8000, 'Did not used the default port');
-
 			Server.ssl = {};
 			assert.equal(Server.getPort(), 443, 'SSL port not is not used');
 
@@ -201,10 +194,12 @@ describe('Server', function() {
 				listener: app
 			});
 
-			Server.start(function(error, server) {
-				if(error) return done(error);
+			Server.start(function(error) {
+				if (error) {
+					return done(error);
+				}
 
-				makeRequest(false, function(err, result) {
+				makeRequest(Server.getPort(), function(err, result) {
 					done(err, result);
 					Server.stopServer();
 				});
@@ -216,8 +211,14 @@ describe('Server', function() {
 	describe('#stopServer', function() {
 
 		it('Should stop the HTTP server', function(done) {
-			Server.start(function(error, server) {
-				if(error) return done(error);
+			Server = Registry.createServer({
+				listener: app
+			});
+			
+			Server.start(function(error) {
+				if (error) {
+					return done(error);
+				}
 
 				assert.doesNotThrow(function() {
 					Server.stopServer();
@@ -277,8 +278,8 @@ describe('Server', function() {
 
 });
 
-function makeRequest(isSecure, callback) {
-	http.get('http://localhost:' + (isSecure ? 443 : 8000), function(res) {
+function makeRequest(port, callback) {
+	http.get('http://localhost:' + port, function(res) {
 		var data = '';
 
 		res.on('data', function(chunk) {

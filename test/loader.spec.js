@@ -1,3 +1,4 @@
+/* global describe, beforeEach, afterEach, it */
 var chai = require('chai'),
 	container = require('./mocks/container'),
 	loader = require('../lib/registry/loader');
@@ -53,20 +54,10 @@ describe('Loader specs', function() {
 	});
 
 	describe('#loadModuleFactory', function() {
-
-		it('should load module factory class', function() {
-
+		it('should find module factory class', function() {
 			var factory = loader.loadModuleFactory(__dirname + '/modules', 'db');
 
-			expect(factory).to.have.property('create');
-			expect(factory).to.have.property('extend');
-
-			var value = factory.create({
-				newProp: 'new prop'
-			});
-
-			expect(value).to.have.property('name').and.equal('db');
-			expect(value).to.have.property('newProp').and.equal('new prop');
+			expect(factory).to.have.property('name').and.equal('db');
 
 		});
 

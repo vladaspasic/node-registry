@@ -4,8 +4,6 @@ var chai = require('chai'),
 var assert = chai.assert,
 	expect = chai.expect;
 
-var configLocation = __dirname + '/configs';
-
 describe('Utils', function() {
 
 	describe('#get', function() {
@@ -54,25 +52,25 @@ describe('Utils', function() {
 		it('should throw error for unknown root', function() {
 			assert.throw(function() {
 				utils.get();
-			}, 'No source object is passed');
+			}, 'Cannot call get with \'undefined\' on an undefined object.');
 		});
 
 		it('should throw type error for key', function() {
 			assert.throw(function() {
 				utils.get({}, 1234);
-			}, 'You must pass a string argument to this function');
+			}, 'The key provided to set must be a string');
 
 			assert.throw(function() {
 				utils.get({}, false);
-			}, 'You must pass a string argument to this function');
+			}, 'The key provided to set must be a string');
 
 			assert.throw(function() {
 				utils.get({}, {});
-			}, 'You must pass a string argument to this function');
+			}, 'The key provided to set must be a string');
 
 			assert.throw(function() {
 				utils.get({}, function() {});
-			}, 'You must pass a string argument to this function');
+			}, 'The key provided to set must be a string');
 		});
 
 	});
