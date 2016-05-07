@@ -21,6 +21,7 @@ logs
 
 # Env data
 .env
+!test/mocks/.env
 
 # Runtime data
 pids
