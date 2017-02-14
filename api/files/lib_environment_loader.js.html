@@ -1,0 +1,195 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/environment/loader.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/environment/loader.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const fs = require(&#x27;fs&#x27;);
+                        const path = require(&#x27;path&#x27;);
+                        const _ = require(&#x27;lodash&#x27;);
+                        const env = require(&#x27;node-env-file&#x27;);
+                        const yaml = require(&#x27;js-yaml&#x27;);
+                        const debug = require(&#x27;debug&#x27;)(&#x27;node-registry:environment&#x27;);
+                        const utils = require(&#x27;../utils&#x27;);
+                        
+                        /**
+                         * Read the Environment properties from the &#x60;.env&#x60; file.
+                         * 
+                         * @param  {Map} map
+                         */
+                        function readEnv(folder, map) {
+                        	const location = path.join(folder, &#x27;.env&#x27;);
+                        
+                        	debug(&#x27;Reading Environment properties&#x27;, location);
+                        
+                        	const options = {
+                        		raise: false,
+                        		verbose: false
+                        	};
+                        
+                        	_.each(env(location, options) || {}, function(value, key) {
+                        		map.set(key, value);
+                        	});
+                        
+                        	_.each(process.env, function(value, key) {
+                        		map.set(key, value);
+                        	});
+                        }
+                        
+                        /**
+                         * Read the &#x60;YAML&#x60; file configuration
+                         * 
+                         * @param  {String} location
+                         * @return {Object}
+                         */
+                        function readYaml(location) {
+                        	const contents = fs.readFileSync(location, &#x27;utf8&#x27;);
+                        	return yaml.safeLoad(contents);
+                        }
+                        
+                        /**
+                         * Read a &#x60;JSON&#x60; file configuration
+                         * 
+                         * @param  {String} location
+                         * @return {Object}
+                         */
+                        function readJson(location) {
+                        	const contents = fs.readFileSync(location, &#x27;utf8&#x27;);
+                        	return JSON.parse(contents);
+                        }
+                        
+                        /**
+                         * Read a javascript module file configuration
+                         * 
+                         * @param  {String} location
+                         * @return {Object}
+                         */
+                        function readJs(location) {
+                        	return require(location);
+                        }
+                        
+                        /**
+                         * Object of file type Handlers used to load
+                         * and read config files
+                         */
+                        const handlers = {
+                        	&#x27;.json&#x27;: readJson,
+                        	&#x27;.js&#x27;: readJs,
+                        	&#x27;.yml&#x27;: readYaml,
+                        	&#x27;.yaml&#x27;: readYaml
+                        };
+                        
+                        /**
+                         * Filter configuration files by supported extensions
+                         * and file name depending on the execution mode.
+                         * 
+                         * @param  {String}  executionMode
+                         * @param  {String}  file
+                         * @return {Boolean}
+                         */
+                        function filterFiles(executionMode, file) {
+                        	if (!_.isString(file)) {
+                        		return false;
+                        	}
+                        
+                        	const ext = path.extname(file);
+                        	const supportedExtensions = _.keys(handlers);
+                        
+                        	if (!_.includes(supportedExtensions, ext)) {
+                        		return false;
+                        	}
+                        
+                        	const fileName = path.basename(file, ext);
+                        
+                        	return fileName === &#x27;config&#x27; || fileName === &#x60;config-${executionMode}&#x60;;
+                        }
+                        
+                        /**
+                         * Scan the Directory folder which contains the
+                         * configuration files.
+                         *
+                         * @param  {String} folder
+                         * @param  {String} executionMode
+                         * @param  {Map}    map
+                         */
+                        function readConfiguration(folder, executionMode, map) {
+                        	if(!path.isAbsolute(folder)) {
+                        		folder = path.join(process.cwd(), folder);
+                        	}
+                        
+                        	if(!utils.pathExists(folder)) {
+                        		return;
+                        	}
+                        
+                        	debug(&#x27;Scanning Folder &#x60;%s&#x60; for Configuration files&#x27;, folder);
+                        
+                        	fs.readdirSync(folder).filter((file) =&gt; {
+                        		return filterFiles(executionMode, file);
+                        	}).sort((a, b) =&gt; {
+                        		return a.length &gt; b.length;
+                        	}).map((file) =&gt; {
+                        		const location = path.join(folder, file);
+                        		const ext = path.extname(file);
+                        		const parser = handlers[ext];
+                        
+                        		debug(&#x27;Reading Configuration file &#x60;%s&#x60;&#x27;, location);
+                        
+                        		return parser(location);
+                        	}).forEach((config) =&gt; {
+                        		utils.deepmerge(map, config);
+                        	});
+                        }
+                        
+                        exports.readConfiguration = readConfiguration;
+                        exports.readEnv = readEnv;
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,2659 @@
+{
+    "project": {},
+    "files": {
+        "lib/container/container.js": {
+            "name": "lib/container/container.js",
+            "modules": {},
+            "classes": {
+                "Container": 1,
+                "RequestContainer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/container/holder.js": {
+            "name": "lib/container/holder.js",
+            "modules": {},
+            "classes": {
+                "Holder": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/environment/index.js": {
+            "name": "lib/environment/index.js",
+            "modules": {},
+            "classes": {
+                "Environment": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/environment/loader.js": {
+            "name": "lib/environment/loader.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/plugins/index.js": {
+            "name": "lib/plugins/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/plugins/plugin.js": {
+            "name": "lib/plugins/plugin.js",
+            "modules": {},
+            "classes": {
+                "Plugin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/registry/container-aware.js": {
+            "name": "lib/registry/container-aware.js",
+            "modules": {},
+            "classes": {
+                "ContainerAware": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/registry/loader.js": {
+            "name": "lib/registry/loader.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/registry/registry.js": {
+            "name": "lib/registry/registry.js",
+            "modules": {},
+            "classes": {
+                "Registry": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/registry/shutdown.js": {
+            "name": "lib/registry/shutdown.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/server/index.js": {
+            "name": "lib/server/index.js",
+            "modules": {},
+            "classes": {
+                "Server": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/server/request.js": {
+            "name": "lib/server/request.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/event-emitter.js": {
+            "name": "lib/event-emitter.js",
+            "modules": {},
+            "classes": {
+                "EventEmitter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/module.js": {
+            "name": "lib/module.js",
+            "modules": {},
+            "classes": {
+                "Module": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/object.js": {
+            "name": "lib/object.js",
+            "modules": {},
+            "classes": {
+                "Object": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/ordered-configuration.js": {
+            "name": "lib/ordered-configuration.js",
+            "modules": {},
+            "classes": {
+                "OrderedConfiguration": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/project.js": {
+            "name": "lib/project.js",
+            "modules": {},
+            "classes": {
+                "Project": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "lib/utils.js": {
+            "name": "lib/utils.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/mocks/container.js": {
+            "name": "test/mocks/container.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/mocks/module.js": {
+            "name": "test/mocks/module.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/modules/child-one/index.js": {
+            "name": "test/modules/child-one/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/modules/child-two/index.js": {
+            "name": "test/modules/child-two/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/modules/db/initializer.js": {
+            "name": "test/modules/db/initializer.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/modules/parent/index.js": {
+            "name": "test/modules/parent/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/modules/testing/index.js": {
+            "name": "test/modules/testing/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "test/registry.spec.js": {
+            "name": "test/registry.spec.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Container": {
+            "name": "Container",
+            "shortname": "Container",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/container/container.js",
+            "line": 17,
+            "description": "Container which contains all the {{#crossLink \"Module\"}}{{/crossLink}} factories.\n\nHandles the construction, caching, injections of {{#crossLink \"Module\"}}Modules{{/crossLink}}.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "parent",
+                    "description": "The parent Container",
+                    "type": "Container"
+                }
+            ]
+        },
+        "RequestContainer": {
+            "name": "RequestContainer",
+            "shortname": "RequestContainer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/container/container.js",
+            "line": 355,
+            "description": "Container that is set in the HTTP request, that offers\n\nHandles the injections of the dependencies for each {{#crossLink \"Module\"}}{{/crossLink}}.",
+            "extends": "{Container}",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "parent",
+                    "description": "The parent Container",
+                    "type": "Container"
+                },
+                {
+                    "name": "request",
+                    "description": "HTTP request",
+                    "type": "Request"
+                },
+                {
+                    "name": "response",
+                    "description": "HTTP response",
+                    "type": "Response"
+                }
+            ]
+        },
+        "Holder": {
+            "name": "Holder",
+            "shortname": "Holder",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/container/holder.js",
+            "line": 6,
+            "description": "A simple implementation of the HashMap, which can have\na parent object from where it can also access values.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "parent",
+                    "description": "",
+                    "type": "Holder"
+                }
+            ]
+        },
+        "Environment": {
+            "name": "Environment",
+            "shortname": "Environment",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/environment/index.js",
+            "line": 32,
+            "description": "Class containing all the available Environment properties.\n\nProperties play an important role in almost all applications,\nand may originate from a variety of sources: properties files, system environment variables.\n\nThe role of the environment object with relation to properties is to provide the user with a convenient\ninterface that reads configuration from property sources and resolving properties from them."
+        },
+        "Plugin": {
+            "name": "Plugin",
+            "shortname": "Plugin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/plugins/plugin.js",
+            "line": 5,
+            "description": "Repesents the Node Module Plugin. If your plugin exposes\nan Object from the `plugin.js` file, it would extended this\nclass.",
+            "extends": "{Object}"
+        },
+        "ContainerAware": {
+            "name": "ContainerAware",
+            "shortname": "ContainerAware",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/registry/container-aware.js",
+            "line": 5,
+            "description": "Mixin that adds the ability to perform registration and lookup\nof {{#crossLink \"Module\"}}Modules{{/crossLink}} registered to \nthe underlying {{#crossLink \"Container\"}}{{/crossLink}}."
+        },
+        "Registry": {
+            "name": "Registry",
+            "shortname": "Registry",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/registry/registry.js",
+            "line": 19,
+            "description": "Registry Class which is a singleton.",
+            "uses": [
+                "{ContainerAware}"
+            ],
+            "extends": "{EventEmitter}"
+        },
+        "Server": {
+            "name": "Server",
+            "shortname": "Server",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/server/index.js",
+            "line": 57,
+            "description": "Server Module Class that is wrapped aroung Node HTTP and HTTPS servers.",
+            "extends": "{EventEmitter}"
+        },
+        "EventEmitter": {
+            "name": "EventEmitter",
+            "shortname": "EventEmitter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/event-emitter.js",
+            "line": 43,
+            "description": "Event Emitter class that has support for triggering\nand listening Events.\n\nFor more information about the Event Emitter, visit\nhttps://github.com/asyncly/EventEmitter2",
+            "extends": "{Object}"
+        },
+        "Module": {
+            "name": "Module",
+            "shortname": "Module",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/module.js",
+            "line": 7,
+            "description": "Building block for the Registry IoC.",
+            "extends": "{EventEmitter}"
+        },
+        "Object": {
+            "name": "Object",
+            "shortname": "Object",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/object.js",
+            "line": 6,
+            "description": "Base Object Class for all classes inside the Node Registry."
+        },
+        "OrderedConfiguration": {
+            "name": "OrderedConfiguration",
+            "shortname": "OrderedConfiguration",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/ordered-configuration.js",
+            "line": 7,
+            "description": "Orders the tasks or configurations for a certain task in an Ordered List.\n\nContributions must establish the order by giving each contributed object a unique id,\nby establishing forward and backward dependencies between the values.",
+            "is_constructor": 1
+        },
+        "Project": {
+            "name": "Project",
+            "shortname": "Project",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "lib/project.js",
+            "line": 12,
+            "description": "The Project model is tied to your `package.json` and defines\nthe application that is running the Node Container.",
+            "uses": [
+                "{ContainerAware}"
+            ],
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "container",
+                    "description": "Node registry child container instance",
+                    "type": "Container"
+                },
+                {
+                    "name": "root",
+                    "description": "Root directory for the project",
+                    "type": "String"
+                },
+                {
+                    "name": "pkg",
+                    "description": "Contents of package.json",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "lib/container/container.js",
+            "line": 28,
+            "itemtype": "property",
+            "name": "parent",
+            "type": "Container",
+            "default": "null",
+            "readonly": "",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 35,
+            "itemtype": "property",
+            "name": "registrations",
+            "type": "Holder",
+            "default": "null",
+            "readonly": "",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 42,
+            "itemtype": "property",
+            "name": "cache",
+            "type": "Holder",
+            "default": "null",
+            "readonly": "",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 49,
+            "itemtype": "property",
+            "name": "injections",
+            "type": "Object",
+            "default": "null",
+            "readonly": "",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 56,
+            "itemtype": "property",
+            "name": "_options",
+            "type": "Holder",
+            "default": "null",
+            "readonly": "",
+            "access": "private",
+            "tagname": "",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 79,
+            "description": "Registers a factory for later injection.\n\nExample:\n```javascript\ncontainer.register('User', UserModule);\ncontainer.register('email', Email, {singleton: true});\n```",
+            "itemtype": "method",
+            "name": "register",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the Module",
+                    "type": "String"
+                },
+                {
+                    "name": "factory",
+                    "description": "Instance or a value for this Module",
+                    "type": "Function"
+                },
+                {
+                    "name": "options",
+                    "description": "Configuration telling the Container how to build a Module",
+                    "type": "Object"
+                }
+            ],
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 112,
+            "description": "Unregisters a module",
+            "itemtype": "method",
+            "name": "unregister",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 128,
+            "description": "Checks if the module is already registered.",
+            "itemtype": "method",
+            "name": "isRegistered",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 141,
+            "description": "Resolves the factory for the registration.",
+            "itemtype": "method",
+            "name": "resolve",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Function"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 162,
+            "description": "Returns a module instance for the name.\nThe default behaviour is for lookup to return a singleton instance.\nWhich will always have the same value. If you wish to return a fresh\nmodule instance, pass 'singleton': false option.",
+            "itemtype": "method",
+            "name": "lookup",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Function"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 200,
+            "description": "Return the corresponding factory for the module name.",
+            "itemtype": "method",
+            "name": "lookupFactory",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Function"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 239,
+            "description": "Define injections for a certain module. These injections\nwill be applied when Modules are instantiated.\n\n```javascript\ncontainer.register('user', User);\ncontainer.register('email', Email);\ncontainer.inject('email', 'user', 'user');\n```\nor\n\n```javascript\ncontainer.register('user', User);\ncontainer.inject('email', 'user', 'user');\ncontainer.register('email', Email);\n```\n\nWhen performing injections, please notice that the injected value must be declared before\nthe injection is declared and the target module is not alreay looked up.",
+            "itemtype": "method",
+            "name": "injection",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "injectionName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 285,
+            "description": "Creates a new child Container. These children are configured\nto correctly inherit from the current container.",
+            "itemtype": "method",
+            "name": "child",
+            "return": {
+                "description": "",
+                "type": "Container"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 296,
+            "description": "Creates a new Request Container instance that is injected in\neach incoming HTTP request.",
+            "itemtype": "method",
+            "name": "createRequestContainer",
+            "params": [
+                {
+                    "name": "request",
+                    "description": "HTTP request",
+                    "type": "Request"
+                },
+                {
+                    "name": "response",
+                    "description": "HTTP response",
+                    "type": "Response"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "RequestContainer"
+            },
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 309,
+            "description": "Register the child container.",
+            "access": "private",
+            "tagname": "",
+            "itemtype": "method",
+            "name": "_addChild",
+            "params": [
+                {
+                    "name": "container",
+                    "description": "",
+                    "type": "Container"
+                }
+            ],
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 321,
+            "description": "Destroys the container and all its managed objects.",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/container.js",
+            "line": 335,
+            "description": "Clear the cache for the container",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "Container"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 16,
+            "itemtype": "property",
+            "name": "parent",
+            "type": "{Holder}",
+            "default": "null",
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 22,
+            "description": "Map used to store the current nodes data.",
+            "itemtype": "property",
+            "name": "data",
+            "type": "Map",
+            "default": "Map",
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 40,
+            "description": "Retrieve the value given a key, if the value is present at the current\nlevel use it, otherwise walk up the parent hierarchy and try again. If\nno matching key is found, return undefined.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Object a value or undefined if not found"
+            },
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 59,
+            "description": "Set the given value for the given key, at the current level.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                }
+            ],
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 70,
+            "description": "Delete the given key",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 80,
+            "description": "Check for the existence of given a key, if the key is present at the current\nlevel return true, otherwise walk up the parent hierarchy and try again. If\nno matching key is found, return false.",
+            "itemtype": "method",
+            "name": "has",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 93,
+            "description": "Clear the current node data from the Holder",
+            "itemtype": "method",
+            "name": "clear",
+            "class": "Holder"
+        },
+        {
+            "file": "lib/container/holder.js",
+            "line": 102,
+            "description": "Iterate and invoke a callback for each local key-value pair.",
+            "itemtype": "method",
+            "name": "eachLocal",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "binding",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Holder"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 49,
+            "description": "Returns a property value for the specified key.\n\nYou can supply an addition argument to define a default value,\nif the Environment value can not be found.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "Environment property key",
+                    "type": "String"
+                },
+                {
+                    "name": "def",
+                    "description": "Default value",
+                    "type": "*"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 66,
+            "description": "Returns a property value for the specified key.\n\nIf the value can not be found, an Error is thrown.",
+            "itemtype": "method",
+            "name": "getRequired",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "Environment property key",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 81,
+            "description": "Get the execution mode of the applcation by checking the\n`process.env.NODE_ENV` property.\n\nDefaults to 'development'.",
+            "itemtype": "method",
+            "name": "getExecutionMode",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "default": "development",
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 97,
+            "description": "Detects if the application is runing in production mode",
+            "itemtype": "method",
+            "name": "isProductionMode",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 107,
+            "description": "Clears all the properties.",
+            "itemtype": "method",
+            "name": "clear",
+            "access": "private",
+            "tagname": "",
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 121,
+            "description": "Scans the {{#crossLink \"Project\"}}{{/crossLink}} configuration files.\n\nYou can also specify the `folder` location in the `.env` file\nwith key `NODE_REGISTRY_CONFIG`. Defaults to `configuration`",
+            "itemtype": "method",
+            "name": "loadConfiguration",
+            "params": [
+                {
+                    "name": "root",
+                    "description": "Project root folder",
+                    "type": "String"
+                },
+                {
+                    "name": "executionMode",
+                    "description": "Current execution mode of the, defaults to `development`",
+                    "type": "String"
+                }
+            ],
+            "static": 1,
+            "access": "private",
+            "tagname": "",
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/index.js",
+            "line": 143,
+            "description": "Scans the folder containing configuration files.",
+            "itemtype": "method",
+            "name": "loadConfiguration",
+            "params": [
+                {
+                    "name": "folder",
+                    "description": "Folder location",
+                    "type": "String"
+                },
+                {
+                    "name": "executionMode",
+                    "description": "Current execution mode of the, defaults to `development`",
+                    "type": "String"
+                }
+            ],
+            "static": 1,
+            "access": "private",
+            "tagname": "",
+            "class": "Environment"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 11,
+            "description": "Read the Environment properties from the `.env` file.",
+            "params": [
+                {
+                    "name": "map",
+                    "description": "",
+                    "type": "Map"
+                }
+            ],
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 35,
+            "description": "Read the `YAML` file configuration",
+            "params": [
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 46,
+            "description": "Read a `JSON` file configuration",
+            "params": [
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 57,
+            "description": "Read a javascript module file configuration",
+            "params": [
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 67,
+            "description": "Object of file type Handlers used to load\nand read config files",
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 78,
+            "description": "Filter configuration files by supported extensions\nand file name depending on the execution mode.",
+            "params": [
+                {
+                    "name": "executionMode",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "file",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/environment/loader.js",
+            "line": 103,
+            "description": "Scan the Directory folder which contains the\nconfiguration files.",
+            "params": [
+                {
+                    "name": "folder",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "executionMode",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "map",
+                    "description": "",
+                    "type": "Map"
+                }
+            ],
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/plugins/index.js",
+            "line": 9,
+            "description": "Scan the node modules Directory folder in order to find all\nthe Node Registry plugins.",
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/plugins/plugin.js",
+            "line": 19,
+            "description": "Hook invoked when the {{#crossLink \"Registry\"}}{{/crossLink}}\nis created.",
+            "itemtype": "method",
+            "name": "load",
+            "params": [
+                {
+                    "name": "container",
+                    "description": "",
+                    "type": "ContainerAware"
+                },
+                {
+                    "name": "environment",
+                    "description": "",
+                    "type": "Environment"
+                }
+            ],
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/plugins/plugin.js",
+            "line": 31,
+            "description": "Hook invoked when the {{#crossLink \"Registry\"}}{{/crossLink}} can not\nfind a Server registration.",
+            "itemtype": "method",
+            "name": "server",
+            "params": [
+                {
+                    "name": "project",
+                    "description": "",
+                    "type": "Project"
+                },
+                {
+                    "name": "container",
+                    "description": "",
+                    "type": "ContainerAware"
+                },
+                {
+                    "name": "environment",
+                    "description": "",
+                    "type": "Environment"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Function"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/plugins/plugin.js",
+            "line": 45,
+            "description": "Hook invoked right before the Server starts to register\nthe Plugin initializer function.\n\nThis mehtod can return a Function or on Object.",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": "callback",
+                "type": "Function|Object"
+            },
+            "class": "Plugin"
+        },
+        {
+            "file": "lib/registry/container-aware.js",
+            "line": 14,
+            "description": "Get the {{#crossLink \"Module\"}}{{/crossLink}} instance, that has\nbeen registered inside the {{#crossLink \"Container\"}}{{/crossLink}}.\n\n```javascript\nvar MyModule = Registry.registerFolder('myModule');\n\nMyModule.method();\n```\n\nIf the {{#crossLink \"Module\"}}{{/crossLink}} does not exist,\nan Error will be raised.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Module"
+            },
+            "class": "ContainerAware"
+        },
+        {
+            "file": "lib/registry/container-aware.js",
+            "line": 36,
+            "description": "Registers the folder, which contains the Modules, in the container.\n\n```javascript\nRegistry.registerFolder('modules/folder');\n```\n\nRegistry will scan the folder, and load each folder inside it to\ncreate a {{#crossLink \"Module\"}}{{/crossLink}}.\n\nIf an `initializer.js` file is located inside the module folder,\nit will be automatically picked up and registered.",
+            "itemtype": "method",
+            "name": "registerFolder",
+            "params": [
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "ContainerAware"
+        },
+        {
+            "file": "lib/registry/container-aware.js",
+            "line": 56,
+            "description": "Registers the Module to the container.\n\nIf the module param is a string, it will require the module and extend the\nModule class. If the module is a Function or an Object it will register it for that name.\n\n```javascript\nRegistry.registerModule('myModule', {\n   method: function() {\n      // your logic\n   }\n});\n```\n You can also pass a location where to module is located.\n\n```javascript\nRegistry.registerModule('myModule', 'path/to/my/module');\n```\n\nOr you can directly extend the {{#crossLink \"Module\"}}{{/crossLink}} class,\nand pass it in the function.\n\n```javascript\nRegistry.registerModule('myModule', Registry.Module.extend{\n   method: function() {\n      // your logic\n   }\n});\n```\n\nYou can also define the Scope of you Module. Available scopes\nare `proxy`, `singleton`, `instance` and `request`. Default scope for all \nModules is `proxy`.\n\n```javascript\nRegistry.registerModule('myModule', {\n   method: function() {\n      // your logic\n   }\n}, 'instance');\n\nvar myModule = Registry.get('myModule');\nmyModule.method();\n```\n\nOr you can also register a custom class.\n\n```javascript\nfunction MyModule() {};\n\nMyModule.prototype.method = function() {\n\t\t// your logic\n}\n\nRegistry.registerModule('myModule', MyModule, 'instance');\n\nvar ModuleClass = Registry.get('myModule');\nvar myModule = new ModuleClass();\nmyModule.method();\n```",
+            "itemtype": "method",
+            "name": "registerModule",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "module",
+                    "description": "",
+                    "type": "String|Object|Function"
+                },
+                {
+                    "name": "scope",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "ContainerAware"
+        },
+        {
+            "file": "lib/registry/loader.js",
+            "line": 10,
+            "description": "Scans the directory in search of Modules. It returns an Array of\nfactories for the Container.",
+            "params": [
+                {
+                    "name": "registry",
+                    "description": "",
+                    "type": "Registry"
+                },
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/loader.js",
+            "line": 36,
+            "description": "Find the initializer.js file in the folder location. If it exists\nregister it.",
+            "params": [
+                {
+                    "name": "registry",
+                    "description": "",
+                    "type": "Registry"
+                },
+                {
+                    "name": "folder",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/loader.js",
+            "line": 52,
+            "description": "Prepares the Module to be registered in the Container",
+            "params": [
+                {
+                    "name": "container",
+                    "description": "",
+                    "type": "Container"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "module",
+                    "description": "",
+                    "type": "*"
+                },
+                {
+                    "name": "scope",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/loader.js",
+            "line": 99,
+            "description": "Requires the location and creates a Module Factory, by extending the\nprototype with the properties obtained from the file.",
+            "params": [
+                {
+                    "name": "location",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Module"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 62,
+            "description": "Register an initializer function that will be invoked before\nthe server is started.\n\n```javascript\nRegistry.registerInitializer({\n   name: 'myInitializer',\n   initializer: function(container, server, callback) {\n      // your logic\n  });\n```\n\nWhen creating an initializer, `name` and `initializer` properties,\nare required.",
+            "itemtype": "method",
+            "name": "registerInitializer",
+            "params": [
+                {
+                    "name": "initializer",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 94,
+            "description": "Run the configured initalizers. After all of them are invoked,\nstart up the server.\n\nYou must pass a callback that will be run after initializers are finished.",
+            "itemtype": "method",
+            "name": "runInitializers",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 133,
+            "description": "Creates the Server Module. You will extend the {{#crossLink \"Server\"}}{{/crossLink}}\nmodule with new methods.\n\n```javascript\nvar Server = Registry.createServer(function(req, res) {\n    res.write('ok');\n});\n\nServer.start();\n```\n\n```javascript\nvar Server = Registry.createServer({\n   port: 8080,\n   listener: function(req, res) {\n      res.write('ok');\n   }\n});\n\nServer.start();\n```\n\nIf the server is already created, this method will raise an Error, as there can\nonly be one instance of the {{#crossLink \"Server\"}}{{/crossLink}} registered in the\nContainer.",
+            "itemtype": "method",
+            "name": "createServer",
+            "params": [
+                {
+                    "name": "app",
+                    "description": "",
+                    "type": "Object|Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Server"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 193,
+            "description": "Starts the HTTP/HTTPS Server.\n\nIf the Server is not currently registered, it would try to resolve it from\nthe loaded Plugins. If no Server contribution is found in the Plugins an\nexception would be raised.",
+            "itemtype": "method",
+            "name": "startServer",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback function invoked when server is started",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Server"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 224,
+            "description": "Get the execution mode of the applcation from the\n{{#crossLink \"Environemnt\"}}{{/crossLink}}.\n\nDefaults to 'development'.",
+            "itemtype": "method",
+            "name": "getExecutionMode",
+            "return": {
+                "description": "LogicalExpression"
+            },
+            "default": "development",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 238,
+            "description": "Manualy set the execution mode in the Regsitry\n\n```javascript\nRegistry.setExecutionMode('production');\n```",
+            "itemtype": "method",
+            "name": "setExecutionMode",
+            "params": [
+                {
+                    "name": "mode",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 253,
+            "description": "Detects if the application is runing in production mode",
+            "itemtype": "method",
+            "name": "isProductionMode",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 263,
+            "description": "Resets the Container, and emits a 'reset' Event.",
+            "itemtype": "method",
+            "name": "reset",
+            "access": "private",
+            "tagname": "",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 280,
+            "description": "Event emited each time the Registry has been reset.",
+            "itemtype": "event",
+            "name": "reset",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 288,
+            "description": "Destroys the registry. This will close the server if it's runnig,\nand destroy the Container.\nUltimatly this method will exit the current process.",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 302,
+            "description": "You are able to access all {{#crossLink \"Environment\"}}{{/crossLink}}\nproperties via this property.\n\n```javascript\nRegistry.environment.get('KEY');\n```",
+            "type": "{Environment}",
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/registry.js",
+            "line": 315,
+            "description": "Get the Sinlgeton Registry instance.",
+            "itemtype": "method",
+            "name": "getInstance",
+            "params": [
+                {
+                    "name": "opts",
+                    "description": ""
+                }
+            ],
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "Registry"
+            },
+            "class": "Registry"
+        },
+        {
+            "file": "lib/registry/shutdown.js",
+            "line": 6,
+            "description": "Shutdown event listener that shutdowns the registry, emitting\nthe 'shutdown' event. \nEach module listens to the 'shutdown' event, and when it is emited\nmodule will invoke its 'onShudown' hook.",
+            "params": [
+                {
+                    "name": "Registry",
+                    "description": "Registry instance",
+                    "type": "Registry"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/registry/shutdown.js",
+            "line": 36,
+            "description": "Assign listeners for each process kill event to trigger\nmodule teardown process.",
+            "params": [
+                {
+                    "name": "Registry",
+                    "description": "Registry instance",
+                    "type": "Registry"
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 45,
+            "description": "Detects if the configuration contains the key and the SSL Certificate used to create a HTTPS server. <br/>\nIf no SSL configuration is provided, false is returned.",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 80,
+            "description": "Server hostname address",
+            "itemtype": "property",
+            "name": "hostname",
+            "type": "{String}",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 88,
+            "description": "Set the port number for the Server",
+            "type": "{Number}",
+            "default": "8000",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 96,
+            "description": "Here you declare your SSL `key` and `cert` file location\nto read by the Server when a HTTPS server is created.\n\nWhen this property is set, the port is automatically set to `443`.",
+            "type": "{Object}",
+            "default": "null",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 107,
+            "description": "Get the module instance",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Module"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 119,
+            "description": "The request listener function that should be added\nto the server when it's created.",
+            "itemtype": "method",
+            "name": "getListener",
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 132,
+            "description": "Set the request listener function that should be added\nto the server.",
+            "itemtype": "method",
+            "name": "setListener",
+            "params": [
+                {
+                    "name": "listener",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 145,
+            "description": "Returns the hostname to be used by the Server.\n\nYou can either set the `hostname` property when extending this\nmodule or set a `server.hostname` environment property\nin your configuration files.",
+            "itemtype": "method",
+            "name": "getHostname",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 159,
+            "description": "Returns the port number to be used by the Server.\nIf SSL parameters are configured, it will use the 443 port.",
+            "itemtype": "method",
+            "name": "getPort",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 174,
+            "description": "Returns the SSL confugration for the HTTPS server",
+            "itemtype": "method",
+            "name": "getSSL",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 184,
+            "description": "Register an initializer function that will be invoked before\nthe server is started.",
+            "itemtype": "method",
+            "name": "registerInitializer",
+            "params": [
+                {
+                    "name": "initializer",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 195,
+            "description": "Creates a HTTP server instance.\nIf SSL is configured, it creates a HTTPS server instance.",
+            "itemtype": "method",
+            "name": "createServer",
+            "return": {
+                "description": "Server Node.js Server instance"
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 224,
+            "description": "Runs the initializers and starts up the server, if\nthey are all initialized.",
+            "itemtype": "method",
+            "name": "start",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback to be invoked after the server is started",
+                    "type": "Function"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 255,
+            "description": "Starts the server by listening to the defined port",
+            "itemtype": "method",
+            "name": "startServer",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback to be invoked after the server is started",
+                    "type": "Function"
+                }
+            ],
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 282,
+            "description": "Stops the server",
+            "itemtype": "method",
+            "name": "stopServer",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 300,
+            "description": "Method to be invoked before the server is loaded",
+            "itemtype": "method",
+            "name": "beforeServerStart",
+            "params": [
+                {
+                    "name": "server",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 311,
+            "description": "Method to be invoked after the server is started",
+            "itemtype": "method",
+            "name": "afterServerStart",
+            "params": [
+                {
+                    "name": "server",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/index.js",
+            "line": 322,
+            "description": "Destroy hook, shutdowns the server",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Server"
+        },
+        {
+            "file": "lib/server/request.js",
+            "line": 17,
+            "description": "Sets the child container of the Registry.\n\nThis way it is separated from the main registry container,\nbut it can still access all the modules from it.",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "container",
+                    "description": "",
+                    "type": "Container"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/server/request.js",
+            "line": 37,
+            "description": "Destroys the container, clearing all modules that where\nlooked up for this request.",
+            "access": "private",
+            "tagname": "",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/server/request.js",
+            "line": 54,
+            "description": "Register a factory that will be only accessible to this request.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": ""
+                },
+                {
+                    "name": "factory",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/server/request.js",
+            "line": 66,
+            "description": "Define injections for a certain module. These injections\nwill be applied to factories only in this request.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "injectionName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/server/request.js",
+            "line": 79,
+            "description": "Runs a lookup in the container, finding the module by that name.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/event-emitter.js",
+            "line": 7,
+            "description": "Initialize the EventEmitter Prototype",
+            "itemtype": "method",
+            "name": "init",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/event-emitter.js",
+            "line": 21,
+            "description": "Removes the assigned Event listeners from this\ninstance.",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/event-emitter.js",
+            "line": 32,
+            "description": "Fired when this instance is destroyed",
+            "itemtype": "event",
+            "name": "destroy",
+            "params": [
+                {
+                    "name": "this",
+                    "description": "instance value",
+                    "type": "Object"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "lib/module.js",
+            "line": 15,
+            "description": "Returns the requirements for this module.\nThese requirements are injected into the module when\nit is being constructed by the registry.",
+            "itemtype": "method",
+            "name": "getRequirements",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Module"
+        },
+        {
+            "file": "lib/module.js",
+            "line": 35,
+            "description": "Returns the Module name",
+            "itemtype": "method",
+            "name": "getName",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "Module"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 123,
+            "description": "Initializer function for each class, invoked by the CoreObject constructor.",
+            "itemtype": "method",
+            "name": "init",
+            "class": "Object"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 132,
+            "description": "Extends the current instance with an another object",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "props",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "a new extended Object",
+                "type": "Object"
+            },
+            "class": "Object"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 143,
+            "description": "Destroy the Object",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Object"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 156,
+            "description": "To string represenatation of the class",
+            "static": 1,
+            "itemtype": "method",
+            "name": "toString",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "Object"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 167,
+            "description": "Creates a new instance of the class",
+            "itemtype": "method",
+            "name": "create",
+            "static": 1,
+            "params": [
+                {
+                    "name": "props",
+                    "description": "Defines new properties on the newly created object",
+                    "type": "Object"
+                },
+                {
+                    "name": "statics",
+                    "description": "Defines read only values for the object",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "a new Object Class function",
+                "type": "Function"
+            },
+            "class": "Object"
+        },
+        {
+            "file": "lib/object.js",
+            "line": 182,
+            "description": "Extends the class prototype",
+            "itemtype": "method",
+            "name": "reopen",
+            "static": 1,
+            "params": [
+                {
+                    "name": "protoProps",
+                    "description": "new properties for the prototype",
+                    "type": "Object"
+                }
+            ],
+            "class": "Object"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 22,
+            "description": "Orders the configuration using Directed acyclic graph",
+            "itemtype": "method",
+            "name": "order",
+            "return": {
+                "description": "an ordered Array of the Configuration",
+                "type": "Array"
+            },
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 44,
+            "description": "Iterates for each ordered registration in the OrderedConfiguraion,\nand runs a callback function with a given binding context.",
+            "itemtype": "method",
+            "name": "each",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "Function that is invoked for each iteration",
+                    "type": "Function"
+                },
+                {
+                    "name": "ctx",
+                    "description": "Context for the iterator fn",
+                    "type": "Object"
+                }
+            ],
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 55,
+            "description": "Maps ordered registration in the OrderedConfiguraion,\nand runs a callback function with a given binding context.",
+            "itemtype": "method",
+            "name": "map",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "Function that is invoked for each iteration",
+                    "type": "Function"
+                },
+                {
+                    "name": "ctx",
+                    "description": "Context for the iterator fn",
+                    "type": "Object"
+                }
+            ],
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 66,
+            "description": "Get the configuration Object by its name, or undefined if it is not found",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "configuration",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "the Configuration for the given name",
+                "type": "Object"
+            },
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 80,
+            "description": "Register a configuration object to be run",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "configuration",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 103,
+            "description": "Overrides the specific configuration",
+            "itemtype": "method",
+            "name": "override",
+            "params": [
+                {
+                    "name": "configuration",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 119,
+            "description": "Checks if the configuration exists",
+            "itemtype": "method",
+            "name": "has",
+            "params": [
+                {
+                    "name": "configuration",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/ordered-configuration.js",
+            "line": 135,
+            "description": "Removes the specific configuration",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "configuration",
+                    "description": "",
+                    "type": "String|Object"
+                }
+            ],
+            "class": "OrderedConfiguration"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 40,
+            "description": "Returns the name from `package.json`.",
+            "itemtype": "method",
+            "name": "getName",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 58,
+            "description": "Load the Configuration properties for this Project.",
+            "itemtype": "method",
+            "name": "loadConfiguration",
+            "params": [
+                {
+                    "name": "executionMode",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 71,
+            "description": "Scan the dependencies, from the Project `package.json`,\nin order to find the `node-registry` {{#crossLink \"Plugin\"}}plugins{{/crossLink}}.",
+            "itemtype": "method",
+            "name": "loadPlugins",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 87,
+            "description": "Load the Configuration properties for each {{#crossLink \"Plugin\"}}{{/crossLink}}\ndefined in this Project.",
+            "itemtype": "method",
+            "name": "loadPluginConfiguration",
+            "params": [
+                {
+                    "name": "executionMode",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 107,
+            "description": "Register the {{#crossLink \"Module\"}}Modules{{/crossLink}} from the\ncontaining Project {{#crossLink \"Plugin\"}}plugins.{{/crossLink}}",
+            "itemtype": "method",
+            "name": "loadModules",
+            "params": [
+                {
+                    "name": "registry",
+                    "description": "",
+                    "type": "Registry"
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 121,
+            "description": "Detect if any of the {{#crossLink \"Plugin\"}}Plugins{{/crossLink}}\nexposes a Server configuration.",
+            "itemtype": "method",
+            "name": "loadServer",
+            "params": [
+                {
+                    "name": "registry",
+                    "description": "",
+                    "type": "Registry"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object|Function"
+            },
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 148,
+            "description": "Extract and register the initializer functions for of the\n{{#crossLink \"Plugin\"}}plugins.{{/crossLink}}",
+            "itemtype": "method",
+            "name": "loadInitializers",
+            "params": [
+                {
+                    "name": "registry",
+                    "description": "",
+                    "type": "Registry"
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 176,
+            "description": "Destroy the Project and its Plugins",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 187,
+            "description": "Iterate through each of the {{#crossLink \"Plugin\"}}{{/crossLink}}\ndetected in this Project",
+            "itemtype": "method",
+            "name": "eachPlugin",
+            "params": [
+                {
+                    "name": "cb",
+                    "description": "Function invoked for each iteration",
+                    "type": "Function"
+                }
+            ],
+            "class": "Project"
+        },
+        {
+            "file": "lib/project.js",
+            "line": 200,
+            "description": "Clear the container and empty the registered plugins.",
+            "itemtype": "method",
+            "name": "clear",
+            "access": "private",
+            "tagname": "",
+            "class": "Project"
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 7,
+            "description": "Defines a static, non writable properties for each object,\nusing the Object.defineProperty method.",
+            "params": [
+                {
+                    "name": "source",
+                    "description": "Object which will have the property",
+                    "type": "Object"
+                },
+                {
+                    "name": "name",
+                    "description": "name of the property",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "value of the property",
+                    "type": "Object"
+                },
+                {
+                    "name": "options",
+                    "description": "Options for defining the property",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": ""
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 26,
+            "description": "Gets the value of a property on an object. If the property is a function,\nthe function will be invoked with no arguments, as it is being considered\nto be a getter function.\nIf the property/function is not defined `null` will be returned.",
+            "params": [
+                {
+                    "name": "root",
+                    "description": "The object to retrieve from.",
+                    "type": "Object"
+                },
+                {
+                    "name": "keyName",
+                    "description": "The property key to retrieve",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "LogicalExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 71,
+            "description": "Check if a file or folder exists with this path location",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": ""
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 88,
+            "description": "Read the `package.json` file",
+            "params": [
+                {
+                    "name": "root",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": ""
+        },
+        {
+            "file": "lib/utils.js",
+            "line": 104,
+            "description": "Merge the enumerable attributes of a source Object to\na Target Object deeply.",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Merged Object",
+                "type": "Object"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/mocks/container.js",
+            "line": 3,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "register",
+            "params": [
+                {
+                    "name": "name",
+                    "description": ""
+                },
+                {
+                    "name": "value",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": ""
+        },
+        {
+            "file": "test/mocks/container.js",
+            "line": 13,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "lookupFactory",
+            "params": [
+                {
+                    "name": "name",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "MemberExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/mocks/module.js",
+            "line": 1,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "exports",
+            "return": {
+                "description": ""
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/child-one/index.js",
+            "line": 3,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "load",
+            "params": [
+                {
+                    "name": "options",
+                    "description": ""
+                },
+                {
+                    "name": "callback",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/child-two/index.js",
+            "line": 3,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "load",
+            "params": [
+                {
+                    "name": "options",
+                    "description": ""
+                },
+                {
+                    "name": "callback",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/db/initializer.js",
+            "line": 3,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": ""
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/parent/index.js",
+            "line": 2,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "load",
+            "params": [
+                {
+                    "name": "opts",
+                    "description": ""
+                },
+                {
+                    "name": "cb",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/testing/index.js",
+            "line": 3,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "initialize",
+            "params": [
+                {
+                    "name": "db",
+                    "description": ""
+                },
+                {
+                    "name": "needed",
+                    "description": ""
+                },
+                {
+                    "name": "cb",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "CallExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/testing/index.js",
+            "line": 17,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "notFun",
+            "params": [
+                {
+                    "name": "arg",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "Literal"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/modules/testing/index.js",
+            "line": 26,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "fun",
+            "return": {
+                "description": "ObjectExpression"
+            },
+            "class": ""
+        },
+        {
+            "file": "test/registry.spec.js",
+            "line": 8,
+            "description": "Get Module Shortcut",
+            "class": ""
+        },
+        {
+            "file": "test/registry.spec.js",
+            "line": 19,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "ctorProperty",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": ""
+            },
+            "class": ""
+        },
+        {
+            "file": "test/registry.spec.js",
+            "line": 28,
+            "description": "Description",
+            "itemtype": "method",
+            "name": "method",
+            "return": {
+                "description": "MemberExpression"
+            },
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nRead the Environment properties from the `.env` file.",
+            "line": " lib/environment/loader.js:11"
+        },
+        {
+            "message": "Missing item type\nRead the `YAML` file configuration",
+            "line": " lib/environment/loader.js:35"
+        },
+        {
+            "message": "Missing item type\nRead a `JSON` file configuration",
+            "line": " lib/environment/loader.js:46"
+        },
+        {
+            "message": "Missing item type\nRead a javascript module file configuration",
+            "line": " lib/environment/loader.js:57"
+        },
+        {
+            "message": "Missing item type\nObject of file type Handlers used to load\nand read config files",
+            "line": " lib/environment/loader.js:67"
+        },
+        {
+            "message": "Missing item type\nFilter configuration files by supported extensions\nand file name depending on the execution mode.",
+            "line": " lib/environment/loader.js:78"
+        },
+        {
+            "message": "Missing item type\nScan the Directory folder which contains the\nconfiguration files.",
+            "line": " lib/environment/loader.js:103"
+        },
+        {
+            "message": "Missing item type\nScan the node modules Directory folder in order to find all\nthe Node Registry plugins.",
+            "line": " lib/plugins/index.js:9"
+        },
+        {
+            "message": "Missing item type\nScans the directory in search of Modules. It returns an Array of\nfactories for the Container.",
+            "line": " lib/registry/loader.js:10"
+        },
+        {
+            "message": "Missing item type\nFind the initializer.js file in the folder location. If it exists\nregister it.",
+            "line": " lib/registry/loader.js:36"
+        },
+        {
+            "message": "Missing item type\nPrepares the Module to be registered in the Container",
+            "line": " lib/registry/loader.js:52"
+        },
+        {
+            "message": "Missing item type\nRequires the location and creates a Module Factory, by extending the\nprototype with the properties obtained from the file.",
+            "line": " lib/registry/loader.js:99"
+        },
+        {
+            "message": "Missing item type\nYou are able to access all {{#crossLink \"Environment\"}}{{/crossLink}}\nproperties via this property.\n\n```javascript\nRegistry.environment.get('KEY');\n```",
+            "line": " lib/registry/registry.js:302"
+        },
+        {
+            "message": "Missing item type\nShutdown event listener that shutdowns the registry, emitting\nthe 'shutdown' event. \nEach module listens to the 'shutdown' event, and when it is emited\nmodule will invoke its 'onShudown' hook.",
+            "line": " lib/registry/shutdown.js:6"
+        },
+        {
+            "message": "Missing item type\nAssign listeners for each process kill event to trigger\nmodule teardown process.",
+            "line": " lib/registry/shutdown.js:36"
+        },
+        {
+            "message": "Missing item type\nDetects if the configuration contains the key and the SSL Certificate used to create a HTTPS server. <br/>\nIf no SSL configuration is provided, false is returned.",
+            "line": " lib/server/index.js:45"
+        },
+        {
+            "message": "Missing item type\nSet the port number for the Server",
+            "line": " lib/server/index.js:88"
+        },
+        {
+            "message": "Missing item type\nHere you declare your SSL `key` and `cert` file location\nto read by the Server when a HTTPS server is created.\n\nWhen this property is set, the port is automatically set to `443`.",
+            "line": " lib/server/index.js:96"
+        },
+        {
+            "message": "Missing item type\nSets the child container of the Registry.\n\nThis way it is separated from the main registry container,\nbut it can still access all the modules from it.",
+            "line": " lib/server/request.js:17"
+        },
+        {
+            "message": "Missing item type\nDestroys the container, clearing all modules that where\nlooked up for this request.",
+            "line": " lib/server/request.js:37"
+        },
+        {
+            "message": "Missing item type\nRegister a factory that will be only accessible to this request.",
+            "line": " lib/server/request.js:54"
+        },
+        {
+            "message": "Missing item type\nDefine injections for a certain module. These injections\nwill be applied to factories only in this request.",
+            "line": " lib/server/request.js:66"
+        },
+        {
+            "message": "Missing item type\nRuns a lookup in the container, finding the module by that name.",
+            "line": " lib/server/request.js:79"
+        },
+        {
+            "message": "Missing item type\nDefines a static, non writable properties for each object,\nusing the Object.defineProperty method.",
+            "line": " lib/utils.js:7"
+        },
+        {
+            "message": "Missing item type\nGets the value of a property on an object. If the property is a function,\nthe function will be invoked with no arguments, as it is being considered\nto be a getter function.\nIf the property/function is not defined `null` will be returned.",
+            "line": " lib/utils.js:26"
+        },
+        {
+            "message": "Missing item type\nCheck if a file or folder exists with this path location",
+            "line": " lib/utils.js:71"
+        },
+        {
+            "message": "Missing item type\nRead the `package.json` file",
+            "line": " lib/utils.js:88"
+        },
+        {
+            "message": "Missing item type\nMerge the enumerable attributes of a source Object to\na Target Object deeply.",
+            "line": " lib/utils.js:104"
+        },
+        {
+            "message": "Missing item type\nGet Module Shortcut",
+            "line": " test/registry.spec.js:8"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+<div class="row button-navigation">
+  <div class="col-xs-6 text-left">
+    {% if include.prevLink %}
+      <a class="btn btn-primary prev" href="{{ include.prevLink | relative_url}}">
+        {% include icon.html icon='angle-left' %}<span>{{ include.prevLabel }}</span>
+      </a>
+    {% endif %}
+  </div>
+  <div class="col-xs-6 text-right">
+    {% if include.nextLink %}
+      <a class="btn btn-primary next" href="{{ include.nextLink | relative_url}}">
+        <span>{{ include.nextLabel }}</span>{% include icon.html icon='angle-right' %}
+      </a>
+    {% endif %}    
+  </div>
+</div>

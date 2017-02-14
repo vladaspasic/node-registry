@@ -1,0 +1,23 @@
+.button-navigation {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+
+  span, .fa {
+    display: inline-block;
+    line-height: 20px;
+    vertical-align: middle;
+  }
+
+  .fa {
+    margin-top: -2px;
+    font-size: 20px;
+  }
+
+  .next > .fa {
+    margin-left: 1rem;
+  }
+
+  .prev > .fa {
+    margin-right: 1rem;
+  }
+}

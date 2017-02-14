@@ -1,0 +1,115 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/plugins/plugin.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/plugins/plugin.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const CoreObject = require(&#x27;../object&#x27;);
+                        
+                        /**
+                         * Repesents the Node Module Plugin. If your plugin exposes
+                         * an Object from the &#x60;plugin.js&#x60; file, it would extended this
+                         * class.
+                         * 
+                         * @class Plugin
+                         * @extends {Object}
+                         */
+                        const Plugin = CoreObject.extend({
+                        
+                        	getConfigurationLocation() {
+                        		return &#x27;configuration&#x27;;
+                        	},
+                        
+                        	/**
+                        	 * Hook invoked when the {{#crossLink &quot;Registry&quot;}}{{/crossLink}}
+                        	 * is created.
+                        	 *
+                        	 * @method load
+                        	 * @param  {ContainerAware} container
+                        	 * @param  {Environment}    environment
+                        	 */
+                        	load(/* container, environment */) {
+                        
+                        	},
+                        
+                        	/**
+                        	 * Hook invoked when the {{#crossLink &quot;Registry&quot;}}{{/crossLink}} can not
+                        	 * find a Server registration.
+                        	 *
+                        	 * @method server
+                        	 * @param  {Project}        project
+                        	 * @param  {ContainerAware} container
+                        	 * @param  {Environment}    environment
+                        	 * @return {Object|Function}
+                        	 */
+                        	server(/* project, container, environment */) {
+                        		return false;
+                        	},
+                        
+                        	/**
+                        	 * Hook invoked right before the Server starts to register
+                        	 * the Plugin initializer function.
+                        	 *
+                        	 * This mehtod can return a Function or on Object.
+                        	 *
+                        	 * @method initializer
+                        	 * @return  {Function|Object}  callback
+                        	 */
+                        	initializer() {
+                        		return false;
+                        	}
+                        
+                        });
+                        
+                        module.exports = Plugin;
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,172 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/container/holder.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/container/holder.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /*jslint node: true */
+                        &quot;use strict&quot;;
+                        
+                        const utils = require(&#x27;../utils&#x27;);
+                        
+                        /**
+                         * A simple implementation of the HashMap, which can have
+                         * a parent object from where it can also access values.
+                         * 
+                         * @class Holder
+                         * @constructor
+                         * @param {Holder} parent
+                         */
+                        class Holder {
+                        
+                          /**
+                            @property parent
+                            @type {Holder}
+                            @default null
+                          */
+                        
+                          /**
+                            Map used to store the current nodes data.
+                        
+                            @property data
+                            @type Map
+                            @default Map
+                          */
+                        
+                          constructor(parent) {
+                            utils.defineProperty(this, &#x27;parent&#x27;, parent, {
+                              configurable: false
+                            });
+                        
+                            utils.defineProperty(this, &#x27;data&#x27;, new Map(), {
+                              configurable: false
+                            });
+                          }
+                        
+                          /**
+                           * Retrieve the value given a key, if the value is present at the current
+                           * level use it, otherwise walk up the parent hierarchy and try again. If
+                           * no matching key is found, return undefined.
+                           * 
+                           * @method get
+                           * @param {String} key
+                           * @return Object a value or undefined if not found
+                           */
+                          get(key) {
+                            if (this.data.has(key)) {
+                              return this.data.get(key);
+                            }
+                        
+                            if (this.parent) {
+                              return this.parent.get(key);
+                            }
+                          }
+                        
+                          /**
+                           * Set the given value for the given key, at the current level.
+                           * 
+                           * @method set
+                           * @param {String} key
+                           * @param {Any} value
+                           */
+                          set(key, value) {
+                            this.data.set(key, value);
+                          }
+                        
+                          /**
+                           * Delete the given key
+                           * 
+                           * @method remove
+                           * @param {String} key
+                           */
+                          remove(key) {
+                            this.data.delete(key);
+                          }
+                        
+                          /**
+                           * Check for the existence of given a key, if the key is present at the current
+                           * level return true, otherwise walk up the parent hierarchy and try again. If
+                           * no matching key is found, return false.
+                           * 
+                           * @method has
+                           * @param {String} key
+                           * @return {Boolean}
+                           */
+                          has(key) {
+                            return this.data.has(key) || (this.parent &amp;&amp; this.parent.has(key)) || false;
+                          }
+                        
+                         /**
+                           * Clear the current node data from the Holder
+                           * 
+                           @method clear
+                           */
+                          clear() {
+                            this.data.clear();
+                          }
+                        
+                          /**
+                           * Iterate and invoke a callback for each local key-value pair.
+                           * @method eachLocal
+                           * 
+                           * @param {Function} callback
+                           * @param {Object} binding
+                           */
+                          eachLocal(callback, binding) {
+                            this.data.forEach((key, value) =&gt; {
+                              callback.call(binding, value, key);
+                            });
+                          }
+                        
+                        }
+                        
+                        module.exports = Holder;
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

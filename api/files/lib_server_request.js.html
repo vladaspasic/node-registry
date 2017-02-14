@@ -1,0 +1,146 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/server/request.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/server/request.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              const http = require(&#x27;http&#x27;);
+                        const utils = require(&#x27;../utils&#x27;);
+                        const request = http.IncomingMessage.prototype;
+                        
+                        function resolveContainer(req) {
+                        	const container = req.__container;
+                        
+                        	if (!container) {
+                        		throw new TypeError(&#x27;Container is not defined. In order to use the Container inside &#x27; +
+                        			&#x27;, the request  you must create a Server instance using the &#x27; +
+                        			&#x27;  &#x60;NodeRegistry.createServer(app)&#x60; method.&#x27;);
+                        	}
+                        
+                        	return container;
+                        }
+                        
+                        /**
+                         * Sets the child container of the Registry.
+                         *
+                         * This way it is separated from the main registry container,
+                         * but it can still access all the modules from it.
+                         *
+                         * @private
+                         * @param  {Container} container
+                         */
+                        request.__setContainer = function(container) {
+                        	if (!container) {
+                        		throw new Error(&#x27;Container is not defined.&#x27;);
+                        	}
+                        
+                        	// Define the container property on the Request object
+                        	utils.defineProperty(this, &#x27;__container&#x27;, container, {
+                        		configurable: false
+                        	});
+                        };
+                        
+                        /**
+                         * Destroys the container, clearing all modules that where
+                         * looked up for this request.
+                         *
+                         * @private
+                         */
+                        request.__destroyContainer = function() {
+                        	const container = this.__container;
+                        
+                        	// check if the container is present or it is destroyed
+                        	if (!container || container.isDestroyed) {
+                        		return;
+                        	}
+                        
+                        	container.destroy();
+                        };
+                        
+                        /**
+                         * Register a factory that will be only accessible to this request.
+                         *
+                         * @param {} name
+                         * @param {Function} factory
+                         * @param {Object} options
+                         * @return CallExpression
+                         */
+                        request.register = function(name, factory, options) {
+                        	return resolveContainer(this).register(name, factory, options);
+                        };
+                        
+                        /**
+                         * Define injections for a certain module. These injections
+                         * will be applied to factories only in this request.
+                         *
+                         * @param {String} name
+                         * @param {String} property
+                         * @param {String} injectionName
+                         * @return CallExpression
+                         */
+                        request.injection = function(name, property, injectionName) {
+                        	return resolveContainer(this).injection(name, property, injectionName);
+                        };
+                        
+                        /**
+                         * Runs a lookup in the container, finding the module by that name.
+                         *
+                         * @param {String} name
+                         * @param {Object} options
+                         * @return CallExpression
+                         */
+                        request.lookup = function(name, options) {
+                        	return resolveContainer(this).lookup(name, options);
+                        };
+                        
+                        module.exports = request;
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

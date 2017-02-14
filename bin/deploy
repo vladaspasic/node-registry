@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+
+DIR=${PWD}
+REPO="git@github.com:vladaspasic/node-registry.git"
+CLONE_TARGET="${DIR}/repo/"
+YUIDOCS_THEME="${DIR}/theme/"
+YUIDOCS_HELPERS="${DIR}/theme/helpers.js"
+YUIDOCS_TARGET="${DIR}/api/"
+
+echo "Cloning ${REPO} to ${CLONE_TARGET}...\n"
+git clone ${REPO} --depth 1 ${CLONE_TARGET}
+
+echo "\nGenerating documentation\n"
+
+cd ${CLONE_TARGET}
+npm install yuidocjs
+node_modules/.bin/yuidoc . -o ${YUIDOCS_TARGET} --themedir ${YUIDOCS_THEME} -H ${YUIDOCS_HELPERS}
+
+echo '\nRemoving cloned repository...\n'
+rm -rf ${CLONE_TARGET}
+

@@ -1,0 +1,181 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/registry/container-aware.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/registry/container-aware.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const loader = require(&#x27;./loader&#x27;);
+                        
+                        /**
+                         * Mixin that adds the ability to perform registration and lookup
+                         * of {{#crossLink &quot;Module&quot;}}Modules{{/crossLink}} registered to 
+                         * the underlying {{#crossLink &quot;Container&quot;}}{{/crossLink}}.
+                         *
+                         * @class ContainerAware
+                         */
+                        module.exports = {
+                        
+                        	/**
+                        	 * Get the {{#crossLink &quot;Module&quot;}}{{/crossLink}} instance, that has
+                        	 * been registered inside the {{#crossLink &quot;Container&quot;}}{{/crossLink}}.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * var MyModule = Registry.registerFolder(&#x27;myModule&#x27;);
+                        	 *
+                        	 * MyModule.method();
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * If the {{#crossLink &quot;Module&quot;}}{{/crossLink}} does not exist,
+                        	 * an Error will be raised.
+                        	 *
+                        	 * @method get
+                        	 * @param {String} name
+                        	 * @param {Object} options
+                        	 * @return {Module}
+                        	 */
+                        	get(name, options) {
+                        		return this.__container.lookup(name, options);
+                        	},
+                        
+                        	/**
+                        	 * Registers the folder, which contains the Modules, in the container.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerFolder(&#x27;modules/folder&#x27;);
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * Registry will scan the folder, and load each folder inside it to
+                        	 * create a {{#crossLink &quot;Module&quot;}}{{/crossLink}}.
+                        	 *
+                        	 * If an &#x60;initializer.js&#x60; file is located inside the module folder,
+                        	 * it will be automatically picked up and registered.
+                        	 *
+                        	 * @method registerFolder
+                        	 * @param {String} location
+                        	 */
+                        	registerFolder(location) {
+                        		loader.scanDirectoryForModules(this, location);
+                        	},
+                        
+                        	/**
+                        	 * Registers the Module to the container.
+                        	 * 
+                        	 * If the module param is a string, it will require the module and extend the
+                        	 * Module class. If the module is a Function or an Object it will register it for that name.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerModule(&#x27;myModule&#x27;, {
+                        	 *    method: function() {
+                        	 *       // your logic
+                        	 *    }
+                        	 * });
+                        	 * &#x60;&#x60;&#x60;
+                        	 *  You can also pass a location where to module is located.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerModule(&#x27;myModule&#x27;, &#x27;path/to/my/module&#x27;);
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * Or you can directly extend the {{#crossLink &quot;Module&quot;}}{{/crossLink}} class,
+                        	 * and pass it in the function.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerModule(&#x27;myModule&#x27;, Registry.Module.extend{
+                        	 *    method: function() {
+                        	 *       // your logic
+                        	 *    }
+                        	 * });
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * You can also define the Scope of you Module. Available scopes
+                        	 * are &#x60;proxy&#x60;, &#x60;singleton&#x60;, &#x60;instance&#x60; and &#x60;request&#x60;. Default scope for all 
+                        	 * Modules is &#x60;proxy&#x60;.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerModule(&#x27;myModule&#x27;, {
+                        	 *    method: function() {
+                        	 *       // your logic
+                        	 *    }
+                        	 * }, &#x27;instance&#x27;);
+                        	 *
+                        	 * var myModule = Registry.get(&#x27;myModule&#x27;);
+                        	 * myModule.method();
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * Or you can also register a custom class.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * function MyModule() {};
+                        	 *
+                        	 * MyModule.prototype.method = function() {
+                        	 * 		// your logic
+                        	 * }
+                        	 * 
+                        	 * Registry.registerModule(&#x27;myModule&#x27;, MyModule, &#x27;instance&#x27;);
+                        	 *
+                        	 * var ModuleClass = Registry.get(&#x27;myModule&#x27;);
+                        	 * var myModule = new ModuleClass();
+                        	 * myModule.method();
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * @method registerModule
+                        	 * @param {String}                 name
+                        	 * @param {String|Object|Function} module
+                        	 * @param {String}                 scope
+                        	 */
+                        	registerModule(name, module, scope) {
+                        		return loader.registerModule(this.__container, name, module, scope);
+                        	}
+                        
+                        };
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

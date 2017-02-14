@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="jumbotron">
+      <div class="container text-center">
+        <h1>Registry</h1>
+        <p>{{ site.description }}</p>
+        <code class="highlight">
+          <pre class="cursor">npm install node-registry</pre>
+        </code>
+        <p><a class="btn btn-primary btn-lg" href="{{ 'docs/getting-started' }}" role="button">Getting started</a></p>
+      </div>
+    </div>
+
+    <main class="page-content container" aria-label="Content">
+      {{ content }}
+    </main>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

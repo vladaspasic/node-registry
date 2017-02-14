@@ -1,1 +1,4 @@
-theme
+_site
+repo
+.sass-cache
+.jekyll-metadata

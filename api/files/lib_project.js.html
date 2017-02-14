@@ -1,0 +1,290 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/project.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/project.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const path = require(&#x27;path&#x27;);
+                        const _ = require(&#x27;lodash&#x27;);
+                        const debug = require(&#x27;debug&#x27;)(&#x27;node-registry:project&#x27;);
+                        const ContainerAware = require(&#x27;./registry/container-aware&#x27;);
+                        const logger = require(&#x27;./logger&#x27;);
+                        const environment = require(&#x27;./environment&#x27;);
+                        const plugins = require(&#x27;./plugins&#x27;);
+                        const utils = require(&#x27;./utils&#x27;);
+                        
+                        /**
+                         *  The Project model is tied to your &#x60;package.json&#x60; and defines
+                         *  the application that is running the Node Container.
+                         *
+                         * @class Project
+                         * @uses {ContainerAware}
+                         * @constructor
+                         * @param {Container} container Node registry child container instance
+                         * @param {String}    root      Root directory for the project
+                         * @param {Object}    pkg       Contents of package.json
+                         */
+                        class Project {
+                        
+                        	constructor(container, root, pkg) {
+                        		this.root = root;
+                        		this.pkg = pkg;
+                        
+                        		utils.defineProperty(this, &#x27;__container&#x27;, container, {
+                        			configurable: false
+                        		});
+                        
+                        		_.extend(this, ContainerAware);
+                        
+                        		logger.assign(this);
+                        
+                        		debug(&#x27;Initializing Project with Root &#x60;%s&#x60;&#x27;, root);
+                        	}
+                        
+                        	/**
+                        	 * Returns the name from &#x60;package.json&#x60;.
+                        	 * 
+                        	 * @method getName
+                        	 * @return {String}
+                        	 */
+                        	getName() {
+                        		const name = this.pkg.name;
+                        		let packageParts;
+                        
+                        		if (!name) {
+                        			return null;
+                        		}
+                        
+                        		packageParts = name.split(&#x27;/&#x27;);
+                        		return packageParts[(packageParts.length - 1)];
+                        	}
+                        
+                        	/**
+                        	 * Load the Configuration properties for this Project.
+                        	 *
+                        	 * @method loadConfiguration
+                        	 * @param  {String} executionMode
+                        	 */
+                        	loadConfiguration(executionMode) {
+                        		this.loadPluginConfiguration(executionMode);
+                        
+                        		debug(&#x27;Loading configuration for Project &#x60;%s&#x60;&#x27;, this.getName());
+                        		environment.loadProjectConfiguration(this.root, executionMode);
+                        	}
+                        
+                        	/**
+                        	 * Scan the dependencies, from the Project &#x60;package.json&#x60;,
+                        	 * in order to find the &#x60;node-registry&#x60; {{#crossLink &quot;Plugin&quot;}}plugins{{/crossLink}}.
+                        	 *
+                        	 * @method loadPlugins
+                        	 */
+                        	loadPlugins() {
+                        		if (this._pluginsLoaded) {
+                        			return;
+                        		}
+                        
+                        		this.plugins = plugins.loadPlugins(this.pkg);
+                        
+                        		this._pluginsLoaded = true;
+                        	}
+                        
+                        	/**
+                        	 * Load the Configuration properties for each {{#crossLink &quot;Plugin&quot;}}{{/crossLink}}
+                        	 * defined in this Project.
+                        	 *
+                        	 * @method loadPluginConfiguration
+                        	 * @param  {String} executionMode
+                        	 */
+                        	loadPluginConfiguration(executionMode) {
+                        		this.eachPlugin((plugin) =&gt; {
+                        			let configPath = plugin.getConfigurationLocation();
+                        
+                        			if (!path.isAbsolute(configPath)) {
+                        				configPath = path.join(this.root, plugin.name, configPath);
+                        			}
+                        
+                        			debug(&#x27;Loading configuration for Plugin &#x60;%s&#x60;&#x27;, plugin.name);
+                        			environment.loadConfiguration(configPath, executionMode);
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Register the {{#crossLink &quot;Module&quot;}}Modules{{/crossLink}} from the
+                        	 * containing Project {{#crossLink &quot;Plugin&quot;}}plugins.{{/crossLink}}
+                        	 *
+                        	 * @method loadModules
+                        	 * @param  {Registry} registry
+                        	 */
+                        	loadModules(registry) {
+                        		this.eachPlugin((plugin) =&gt; {
+                        			debug(&#x27;Loading Modules for Plugin &#x60;%s&#x60;&#x27;, plugin.name);
+                        			plugin.load(this, registry.environment);
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Detect if any of the {{#crossLink &quot;Plugin&quot;}}Plugins{{/crossLink}}
+                        	 * exposes a Server configuration.
+                        	 *
+                        	 * @method loadServer
+                        	 * @param  {Registry} registry
+                        	 * @return {Object|Function}
+                        	 */
+                        	loadServer(registry) {
+                        		const candidates = [];
+                        
+                        		this.eachPlugin((plugin) =&gt; {
+                        			debug(&#x27;Searching for a Server in Plugin &#x60;%s&#x60;&#x27;, plugin.name);
+                        			const server = plugin.server(this, registry.__container, registry.environment);
+                        
+                        			if(server) {
+                        				candidates.push(server);
+                        			}
+                        		});
+                        
+                        		if(_.isEmpty(candidates)) {
+                        			return;
+                        		}
+                        
+                        		return registry.createServer(_.first(candidates));
+                        	}
+                        
+                        	/**
+                        	 * Extract and register the initializer functions for of the
+                        	 * {{#crossLink &quot;Plugin&quot;}}plugins.{{/crossLink}}
+                        	 *
+                        	 * @method loadInitializers
+                        	 * @param  {Registry} registry
+                        	 */
+                        	loadInitializers(registry) {
+                        		this.eachPlugin((plugin) =&gt; {
+                        			let initializer = plugin.initializer();
+                        
+                        			if (!initializer) {
+                        				return;
+                        			}
+                        
+                        			if (_.isFunction(initializer)) {
+                        				initializer = {
+                        					name: plugin.name,
+                        					initializer
+                        				};
+                        			}
+                        
+                        			debug(&#x27;Loading Initializer for plugin &#x60;%s&#x60;&#x27;, plugin.name);
+                        
+                        			registry.registerInitializer(initializer);
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Destroy the Project and its Plugins
+                        	 * 
+                        	 * @method destroy
+                        	 */
+                        	destroy() {
+                        		debug(&#x27;Destroying Project &#x60;%s&#x60;&#x27;, this.getName());
+                        
+                        		this.clear();
+                        	}
+                        
+                        	/**
+                        	 * Iterate through each of the {{#crossLink &quot;Plugin&quot;}}{{/crossLink}}
+                        	 * detected in this Project
+                        	 *
+                        	 * @method eachPlugin
+                        	 * @param  {Function} cb Function invoked for each iteration
+                        	 */
+                        	eachPlugin(cb) {
+                        		this.loadPlugins();
+                        
+                        		_.each(this.plugins || [], cb, this);
+                        	}
+                        
+                        	/**
+                        	 * Clear the container and empty the registered plugins.
+                        	 *  
+                        	 * @method clear
+                        	 * @private
+                        	 */
+                        	clear() {
+                        		this.__container.reset();
+                        		this.plugins = [];
+                        
+                        		this.eachPlugin((plugin) =&gt; {
+                        			plugin.destroy();
+                        		});
+                        
+                        		this._pluginsLoaded = false;
+                        		this.plugins = null;
+                        	}
+                        
+                        	static load(container, pathName) {
+                        		try {
+                        			const root = path.resolve(pathName);
+                        			const pkg = require(path.join(root, &#x27;package.json&#x27;));
+                        
+                        			return new Project(container, root, pkg);
+                        		} catch (e) {
+                        			if (e &amp;&amp; /not found/i.test(e.message)) {
+                        				throw new Error(&#x60;No Project could be found at: ${pathName}&#x60;);
+                        			} else {
+                        				throw e;
+                        			}
+                        		}
+                        
+                        	}
+                        }
+                        
+                        module.exports = Project;
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

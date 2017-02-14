@@ -1,0 +1,384 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/registry/registry.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/registry/registry.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /*jslint node: true */
+                        &quot;use strict&quot;;
+                        
+                        const _ = require(&#x27;lodash&#x27;),
+                        	debug = require(&#x27;debug&#x27;)(&#x27;node-registry:registry&#x27;),
+                        	EventEmitter = require(&#x27;../event-emitter&#x27;),
+                        	OrderedConfiguration = require(&#x27;../ordered-configuration&#x27;),
+                        	utils = require(&#x27;../utils&#x27;),
+                        	server = require(&#x27;../server&#x27;),
+                        	Environment = require(&#x27;../environment&#x27;),
+                        	Project = require(&#x27;../project&#x27;),
+                        	Container = require(&#x27;../container/container&#x27;),
+                        	ContainerAware = require(&#x27;./container-aware&#x27;),
+                        	logger = require(&#x27;../logger&#x27;),
+                        	onShutdown = require(&#x27;./shutdown&#x27;);
+                        
+                        const SERVER_REGISTRATION_KEY = &#x27;server:main&#x27;;
+                        
+                        /**
+                         * Registry Class which is a singleton.
+                         *
+                         * @class Registry
+                         * @uses {ContainerAware}
+                         * @extends {EventEmitter}
+                         */
+                        const Registry = EventEmitter.extend({
+                        	init: function() {
+                        		this._super();
+                        
+                        		_.bindAll(this);
+                        
+                        		const container = new Container();
+                        		const project = Project.load(container, process.cwd());
+                        
+                        		utils.defineProperty(this, &#x27;project&#x27;, project, {
+                        			configurable: false
+                        		});
+                        
+                        		utils.defineProperty(this, &#x27;__container&#x27;, container.child(), {
+                        			configurable: false
+                        		});
+                        
+                        		utils.defineProperty(this, &#x27;__initializers&#x27;, new OrderedConfiguration());
+                        
+                        		// Load the Project configuration
+                        		project.loadConfiguration(this.getExecutionMode());
+                        
+                        		// Register environment module
+                        		this.registerModule(&#x27;environment&#x27;, this.environment, &#x27;singleton&#x27;);
+                        
+                        		// Load the Project configuration
+                        		project.loadModules(this);
+                        
+                        		logger.assign(this);
+                        
+                        		// add process shutdown events to tear down registry
+                        		onShutdown(this);
+                        
+                        		debug(&#x27;Node Registry has been created&#x27;);
+                        	},
+                        
+                        	/**
+                        	 * Register an initializer function that will be invoked before
+                        	 * the server is started.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.registerInitializer({
+                        	 *    name: &#x27;myInitializer&#x27;,
+                        	 *    initializer: function(container, server, callback) {
+                        	 *       // your logic
+                        	 *   });
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * When creating an initializer, &#x60;name&#x60; and &#x60;initializer&#x60; properties,
+                        	 * are required.
+                        	 *
+                        	 * @method registerInitializer
+                        	 * @param {Object} initializer
+                        	 */
+                        	registerInitializer: function(initializer) {
+                        		if (this.isRunning) {
+                        			throw new Error(&#x27;You can only register an initializer before the server is started.&#x27;);
+                        		}
+                        
+                        		const initializers = this.__initializers;
+                        
+                        		if (initializer &amp;&amp; _.isFunction(initializer.initializer)) {
+                        			initializers.add(initializer);
+                        		} else {
+                        			throw new TypeError(&#x27;Initializer must contain an initializer method&#x27;);
+                        		}
+                        	},
+                        
+                        	/**
+                        	 * Run the configured initalizers. After all of them are invoked,
+                        	 * start up the server.
+                        	 *
+                        	 * You must pass a callback that will be run after initializers are finished.
+                        	 *
+                        	 * @method runInitializers
+                        	 * @param {Function} callback
+                        	 */
+                        	runInitializers: function(callback) {
+                        		if (!_.isFunction(callback)) {
+                        			throw new TypeError(&#x27;You must pass a callback function to this method.&#x27;);
+                        		}
+                        
+                        		const container = this.__container;
+                        
+                        		if (!container.isRegistered(SERVER_REGISTRATION_KEY)) {
+                        			throw new Error(&#x27;No Server has been created. Please create one before runing initializers&#x27;);
+                        		}
+                        
+                        		// Load Plugin Initializers
+                        		this.project.loadInitializers(this);
+                        
+                        		const server = this.get(SERVER_REGISTRATION_KEY);
+                        
+                        		debug(&#x27;About to run Initializers&#x27;);
+                        
+                        		// Order Initializers
+                        		const initializers = this.__initializers.map((initializer) =&gt; {
+                        			return function(cb) {
+                        				initializer.initializer(container, server, cb);
+                        			};
+                        		});
+                        
+                        		return utils.series(initializers, (err) =&gt; {
+                        			return callback(err, server);
+                        		}, true);
+                        	},
+                        
+                        	/**
+                        	 * Creates the Server Module. You will extend the {{#crossLink &quot;Server&quot;}}{{/crossLink}}
+                        	 * module with new methods.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * var Server = Registry.createServer(function(req, res) {
+                        	 *     res.write(&#x27;ok&#x27;);
+                        	 * });
+                        	 *
+                        	 * Server.start();
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * var Server = Registry.createServer({
+                        	 *    port: 8080,
+                        	 *    listener: function(req, res) {
+                        	 *       res.write(&#x27;ok&#x27;);
+                        	 *    }
+                        	 * });
+                        	 *
+                        	 * Server.start();
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * If the server is already created, this method will raise an Error, as there can
+                        	 * only be one instance of the {{#crossLink &quot;Server&quot;}}{{/crossLink}} registered in the
+                        	 * Container.
+                        	 *
+                        	 * @method createServer
+                        	 * @param {Object|Function} app
+                        	 * @return {Server}
+                        	 */
+                        	createServer: function(app) {
+                        		if (this.__container.isRegistered(SERVER_REGISTRATION_KEY)) {
+                        			throw new Error(&#x27;Server is already created.&#x27;);
+                        		}
+                        
+                        		if (_.isFunction(app)) {
+                        			app = {
+                        				listener: app
+                        			};
+                        		}
+                        
+                        		if (typeof app !== &#x27;object&#x27; || !_.isFunction(app.listener)) {
+                        			throw new TypeError(&#x27;You must define options or a listener for the Server&#x27;);
+                        		}
+                        
+                        		const Server = server.extend(app).extend({
+                        			registry: this,
+                        			container: this.__container.child()
+                        		}).create();
+                        
+                        		this.__container.register(SERVER_REGISTRATION_KEY, Server, {
+                        			instantiate: false
+                        		});
+                        
+                        		this.once(&#x27;destroy&#x27;, Server.destroy);
+                        
+                        		return this.get(SERVER_REGISTRATION_KEY);
+                        	},
+                        
+                        	/**
+                        	 * Starts the HTTP/HTTPS Server.
+                        	 *
+                        	 * If the Server is not currently registered, it would try to resolve it from
+                        	 * the loaded Plugins. If no Server contribution is found in the Plugins an
+                        	 * exception would be raised.
+                        	 *
+                        	 * @method startServer
+                        	 * @param  {Function} callback Callback function invoked when server is started
+                        	 * @return {Server}
+                        	 */
+                        	startServer(callback) {
+                        		let server;
+                        
+                        		if (this.__container.isRegistered(SERVER_REGISTRATION_KEY)) {
+                        			server = this.get(SERVER_REGISTRATION_KEY);
+                        		} else {
+                        			server = this.project.loadServer(this);
+                        		}
+                        
+                        		if(server &amp;&amp;  _.isFunction(server.start)) {
+                        			server.start(callback);
+                        		} else {
+                        			throw new Error(&#x27;Could not detect any Server registration either in &#x27; +
+                        				&#x27;the Container nor in the Plugins. Please create a Server first &#x27; + 
+                        				&#x27;using the &#x60;createServer&#x60; method.&#x27;);
+                        		}
+                        
+                        		return server;
+                        	},
+                        
+                        	/**
+                        	 * Get the execution mode of the applcation from the
+                        	 * {{#crossLink &quot;Environemnt&quot;}}{{/crossLink}}.
+                        	 *
+                        	 * Defaults to &#x27;development&#x27;.
+                        	 *
+                        	 * @method getExecutionMode
+                        	 * @return LogicalExpression
+                        	 * @default development
+                        	 */
+                        	getExecutionMode: function() {
+                        		return this.environment.getExecutionMode();
+                        	},
+                        
+                        	/**
+                        	 * Manualy set the execution mode in the Regsitry
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.setExecutionMode(&#x27;production&#x27;);
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * @method setExecutionMode
+                        	 * @param {String} mode
+                        	 */
+                        	setExecutionMode: function() {
+                        		console.warn(&#x27;The &#x60;setExecutionMode&#x60; has been deprecated, please set it in &#x27; +
+                        			&#x27; the &#x60;NODE_ENV&#x60; environment property.&#x27;);
+                        	},
+                        
+                        	/**
+                        	 * Detects if the application is runing in production mode
+                        	 *
+                        	 * @method isProductionMode
+                        	 * @return {Boolean}
+                        	 */
+                        	isProductionMode: function() {
+                        		return this.environment.isProductionMode();
+                        	},
+                        
+                        	/**
+                        	 * Resets the Container, and emits a &#x27;reset&#x27; Event.
+                        	 *
+                        	 * @method reset
+                        	 * @private
+                        	 */
+                        	reset: function() {
+                        		this.__container.reset();
+                        		this.__initializers.registrations = {};
+                        		this.environment.clear();
+                        		this.project.clear();
+                        
+                        		// reregister environment module
+                        		this.registerModule(&#x27;environment&#x27;, this.environment, &#x27;singleton&#x27;);
+                        
+                        		debug(&#x27;Reseting Node Registry&#x27;);
+                        
+                        		/**
+                        		 * Event emited each time the Registry has been reset.
+                        		 *
+                        		 * @event reset
+                        		 */
+                        		this.emit(&#x27;reset&#x27;);
+                        	},
+                        
+                        	/**
+                        	 * Destroys the registry. This will close the server if it&#x27;s runnig,
+                        	 * and destroy the Container.
+                        	 * Ultimatly this method will exit the current process.
+                        	 *
+                        	 * @method destroy
+                        	 */
+                        	destroy: function() {
+                        		this._super();
+                        
+                        		this.project.destroy();
+                        		this.__container.destroy();
+                        	}
+                        }, {
+                        	/**
+                        	 * You are able to access all {{#crossLink &quot;Environment&quot;}}{{/crossLink}}
+                        	 * properties via this property.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * Registry.environment.get(&#x27;KEY&#x27;);
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * @type {Environment}
+                        	 */
+                        	environment: new Environment()
+                        }).extend(ContainerAware);
+                        
+                        /**
+                         * Get the Sinlgeton Registry instance.
+                         *
+                         * @method getInstance
+                         * @param {} opts
+                         * @static
+                         * @return {Registry}
+                         */
+                        module.exports.getInstance = function(opts) {
+                        	if (!this.instance) {
+                        		this.instance = Registry.create(opts || {});
+                        	}
+                        
+                        	return this.instance;
+                        };
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

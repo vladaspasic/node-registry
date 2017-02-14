@@ -1,0 +1,218 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/environment/index.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/environment/index.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const _ = require(&#x27;lodash&#x27;);
+                        const path = require(&#x27;path&#x27;);
+                        const loader = require(&#x27;./loader&#x27;);
+                        const utils = require(&#x27;../utils&#x27;);
+                        
+                        const environmentProperties = new Map();
+                        const configProperties = {};
+                        
+                        // Helper function that does the env lookup
+                        function lookup(key, cb) {
+                        	if (typeof key !== &#x27;string&#x27;) {
+                        		throw new TypeError(&#x27;Environment key must be a String.&#x27;);
+                        	}
+                        
+                        	let value;
+                        
+                        	if (environmentProperties.has(key)) {
+                        		value= environmentProperties.get(key);
+                        	} else {
+                        		value = utils.get(configProperties, key);
+                        	}
+                        
+                        	if (_.isUndefined(value) || _.isNull(value)) {
+                        		return cb();
+                        	} else {
+                        		return value;
+                        	}
+                        }
+                        
+                        /**
+                         * Class containing all the available Environment properties.
+                         *
+                         * Properties play an important role in almost all applications,
+                         * and may originate from a variety of sources: properties files, system environment variables.
+                         * 
+                         * The role of the environment object with relation to properties is to provide the user with a convenient
+                         * interface that reads configuration from property sources and resolving properties from them.
+                         *
+                         * @class Environment
+                         */
+                        class Environment {
+                        
+                        	constructor() {
+                        		loader.readEnv(process.cwd(), environmentProperties);
+                        	}
+                        
+                        	/**
+                        	 * Returns a property value for the specified key.
+                        	 *
+                        	 * You can supply an addition argument to define a default value,
+                        	 * if the Environment value can not be found.
+                        	 *
+                        	 * @method get
+                        	 * @param  {String} key Environment property key
+                        	 * @param  {*}      def Default value
+                        	 * @return {*}
+                        	 */
+                        	get(key, def) {
+                        		return lookup(key, () =&gt; {
+                        			return def;
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Returns a property value for the specified key.
+                        	 *
+                        	 * If the value can not be found, an Error is thrown.
+                        	 *
+                        	 * @method getRequired
+                        	 * @param  {String} key Environment property key
+                        	 * @return {*}
+                        	 */
+                        	getRequired(key) {
+                        		return lookup(key, () =&gt; {
+                        			throw new Error(&#x60;Could not find Environment property: ${key}&#x60;);
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Get the execution mode of the applcation by checking the
+                        	 * &#x60;process.env.NODE_ENV&#x60; property.
+                        	 *
+                        	 * Defaults to &#x27;development&#x27;.
+                        	 *
+                        	 * @method getExecutionMode
+                        	 * @return {String}
+                        	 * @default development
+                        	 */
+                        	getExecutionMode() {
+                        		return this.get(&#x27;NODE_ENV&#x27;) ||
+                        			process.env.NODE_ENV || 
+                        			&#x27;development&#x27;;
+                        	}
+                        
+                        	/**
+                        	 * Detects if the application is runing in production mode
+                        	 *
+                        	 * @method isProductionMode
+                        	 * @return {Boolean}
+                        	 */
+                        	isProductionMode() {
+                        		return this.getExecutionMode() === &#x27;production&#x27;;
+                        	}
+                        
+                        	/**
+                        	 * Clears all the properties.
+                        	 * 
+                        	 * @method clear
+                        	 * @private
+                        	 */
+                        	clear() {
+                        		for(let property in configProperties) {
+                        			if(configProperties.hasOwnProperty(property)) {
+                        				delete configProperties[property];
+                        			}
+                        		}
+                        	}
+                        
+                        	/**
+                        	 * Scans the {{#crossLink &quot;Project&quot;}}{{/crossLink}} configuration files.
+                        	 *
+                        	 * You can also specify the &#x60;folder&#x60; location in the &#x60;.env&#x60; file
+                        	 * with key &#x60;NODE_REGISTRY_CONFIG&#x60;. Defaults to &#x60;configuration&#x60;
+                        	 * 
+                        	 * @method loadConfiguration
+                        	 * @param  {String} root        Project root folder
+                        	 * @param  {String} executionMode Current execution mode of the, defaults to &#x60;development&#x60;
+                        	 * @static
+                        	 * @private
+                        	 */
+                        	static loadProjectConfiguration(root, executionMode) {
+                        		if(environmentProperties.has(&#x27;NODE_REGISTRY_CONFIG&#x27;)) {
+                        			root = environmentProperties.get(&#x27;NODE_REGISTRY_CONFIG&#x27;);
+                        		} else {
+                        			root = path.resolve(root, &#x27;configuration&#x27;);
+                        		}
+                        
+                        		this.loadConfiguration(root, executionMode);
+                        	}
+                        
+                        	/**
+                        	 * Scans the folder containing configuration files.
+                        	 * 
+                        	 * @method loadConfiguration
+                        	 * @param  {String} folder        Folder location
+                        	 * @param  {String} executionMode Current execution mode of the, defaults to &#x60;development&#x60;
+                        	 * @static
+                        	 * @private
+                        	 */
+                        	static loadConfiguration(folder, executionMode) {
+                        		if (_.isUndefined(executionMode)) {
+                        			executionMode = environmentProperties.get(&#x27;NODE_ENV&#x27;) || &#x27;development&#x27;;
+                        		}
+                        
+                        		loader.readConfiguration(folder, executionMode, configProperties);
+                        	}
+                        
+                        }
+                        
+                        module.exports = Environment;
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

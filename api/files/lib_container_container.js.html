@@ -1,0 +1,572 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/container/container.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/container/container.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /*jslint node: true */
+                        &quot;use strict&quot;;
+                        
+                        const Holder = require(&#x27;./holder&#x27;),
+                        	_ = require(&#x27;lodash&#x27;),
+                        	utils = require(&#x27;../utils&#x27;);
+                        
+                        function buildHolder(container, key) {
+                        	const parent = (container.parent &amp;&amp; container.parent[key]) || null; 
+                        	const holder = new Holder(parent);
+                        
+                        	utils.defineProperty(container, key, holder, {
+                        		configurable: false
+                        	});
+                        }
+                        
+                        /**
+                         * Container which contains all the {{#crossLink &quot;Module&quot;}}{{/crossLink}} factories.
+                         *
+                         * Handles the construction, caching, injections of {{#crossLink &quot;Module&quot;}}Modules{{/crossLink}}.
+                         *
+                         * @class Container
+                         * @constructor
+                         * @param {Container} parent The parent Container
+                         */
+                        class Container {
+                        
+                        	/**
+                        	 * @property parent
+                        	 * @type Container
+                        	 * @default null
+                        	 * @readOnly
+                        	 */
+                        
+                        	/**
+                        	 * @property registrations
+                        	 * @type Holder
+                        	 * @default null
+                        	 * @readOnly
+                        	 */
+                        
+                        	/**
+                        	 * @property cache
+                        	 * @type Holder
+                        	 * @default null
+                        	 * @readOnly
+                        	 */
+                        
+                        	/**
+                        	 * @property injections
+                        	 * @type Object
+                        	 * @default null
+                        	 * @readOnly
+                        	 */
+                        
+                        	/**
+                        	 * @property _options
+                        	 * @type Holder
+                        	 * @default null
+                        	 * @readOnly
+                        	 * @private
+                        	 */
+                        
+                        	constructor(parent) {
+                        		utils.defineProperty(this, &#x27;parent&#x27;, parent, {
+                        			configurable: false
+                        		});
+                        
+                        		this.children = [];
+                        		this.injections = {};
+                        
+                        		buildHolder(this, &#x27;registrations&#x27;);
+                        		buildHolder(this, &#x27;cache&#x27;);
+                        		buildHolder(this, &#x27;resolveCache&#x27;);
+                        		buildHolder(this, &#x27;factoryCache&#x27;);
+                        		buildHolder(this, &#x27;_options&#x27;);
+                        	}
+                        
+                        	/**
+                        	 * Registers a factory for later injection.
+                        	 *
+                        	 * Example:
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * container.register(&#x27;User&#x27;, UserModule);
+                        	 * container.register(&#x27;email&#x27;, Email, {singleton: true});
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * @method register
+                        	 * @param {String} name      Name of the Module
+                        	 * @param {Function} factory Instance or a value for this Module
+                        	 * @param {Object} options   Configuration telling the Container how to build a Module
+                        	 */
+                        	register(name, factory, options) {
+                        		isNameValid(name);
+                        
+                        		if (factory === undefined) {
+                        			throw new TypeError(&#x27;Attempting to register an unknown factory: \&#x27;&#x27; + name + &#x27;\&#x27;.&#x27;);
+                        		}
+                        
+                        		if (this.cache.has(name)) {
+                        			throw new Error(&#x27;Cannot re-register: \&#x27;&#x27; + name + &#x27;\&#x27;, as it has already been registered.&#x27;);
+                        		}
+                        
+                        		options = resolveOptions(options);
+                        
+                        		this.registrations.set(name, factory);
+                        		this._options.set(name, options);
+                        
+                        		this.resolveCache.remove(name);
+                        	}
+                        
+                        	/**
+                        	 * Unregisters a module
+                        	 *
+                        	 * @method unregister
+                        	 * @param {String} name
+                        	 */
+                        	unregister(name) {
+                        		isNameValid(name);
+                        
+                        		this.registrations.remove(name);
+                        		this.cache.remove(name);
+                        		this.factoryCache.remove(name);
+                        		this.resolveCache.remove(name);
+                        		this._options.remove(name);
+                        	}
+                        
+                        	/**
+                        	 * Checks if the module is already registered.
+                        	 *
+                        	 * @method isRegistered
+                        	 * @param {String}  name
+                        	 * @return {Boolean}
+                        	 */
+                        	isRegistered(name) {
+                        		isNameValid(name);
+                        
+                        		return this.registrations.has(name);
+                        	}
+                        
+                        	/**
+                        	 * Resolves the factory for the registration.
+                        	 *
+                        	 * @method resolve
+                        	 * @param {String} name
+                        	 * @return {Object|Function}
+                        	 */
+                        	resolve(name) {
+                        		isNameValid(name);
+                        
+                        		let factory = this.resolveCache.get(name);
+                        
+                        		if (!factory) {
+                        			factory = this.registrations.get(name);
+                        
+                        			this.resolveCache.set(name, factory);
+                        		}
+                        
+                        		return factory;
+                        	}
+                        
+                        	/**
+                        	 * Returns a module instance for the name.
+                        	 * The default behaviour is for lookup to return a singleton instance.
+                        	 * Which will always have the same value. If you wish to return a fresh
+                        	 * module instance, pass &#x27;singleton&#x27;: false option.
+                        	 *
+                        	 * @method lookup
+                        	 * @param {String} name
+                        	 * @param {Object} options
+                        	 * @return {Object|Function}
+                        	 */
+                        	lookup(name, options) {
+                        		isNameValid(name);
+                        
+                        		options = options || {};
+                        
+                        		if (this.cache.has(name) &amp;&amp; options.singleton !== false) {
+                        			return this.cache.get(name);
+                        		}
+                        
+                        		let value = instantiate(this, name);
+                        
+                        		if (value === undefined) {
+                        			throw new TypeError(&#x27;Can not find a Module registration with name: \&#x27;&#x27; + name + &#x27;\&#x27;.&#x27;);
+                        		}
+                        
+                        		if ((findOption(this, name, &#x27;request&#x27;) === true) &amp;&amp; !(this instanceof RequestContainer)) {
+                        			throw new TypeError(&#x27;You tried to lookup Module name: \&#x27;&#x27; + name + &#x27;\&#x27;, which is defined with a &#x60;request&#x60; scope. &#x27; +
+                        				&#x27;Request scoped Modules are only accessible from the HTTP request &#x60;lookup&#x60; method.&#x27;);
+                        		}
+                        
+                        		if ((findOption(this, name, &#x27;singleton&#x27;) !== false) &amp;&amp; options.singleton !== false) {
+                        			this.cache.set(name, value);
+                        		}
+                        
+                        		return value;
+                        	}
+                        
+                        	/**
+                        	 * Return the corresponding factory for the module name.
+                        	 *
+                        	 * @method lookupFactory
+                        	 * @param {String} name
+                        	 * @return {Object|Function}
+                        	 */
+                        	lookupFactory(name) {
+                        		isNameValid(name);
+                        
+                        		const cache = this.factoryCache;
+                        
+                        		if (cache.has(name)) {
+                        			return cache.get(name);
+                        		}
+                        
+                        		const factory = this.resolve(name);
+                        
+                        		if (factory === undefined) {
+                        			throw new TypeError(&#x27;Factory with name \&#x27;&#x27; + name + &#x27;\&#x27; can not be found.&#x27;);
+                        		}
+                        
+                        		if (findOption(this, name, &#x27;instantiate&#x27;) === false) {
+                        			return factory;
+                        		}
+                        
+                        		if (typeof factory.extend !== &#x27;function&#x27; &amp;&amp; typeof factory.create !== &#x27;function&#x27;) {
+                        			throw new TypeError(&#x27;Factory is not the right type for Module: \&#x27;&#x27; + name + &#x27;\&#x27;.&#x27;);
+                        		}
+                        
+                        		const injections = injectionsFor(this, name);
+                        		const injectedFactory = factory.extend(injections);
+                        
+                        		cache.set(name, injectedFactory);
+                        
+                        		return injectedFactory;
+                        
+                        	}
+                        
+                        	/**
+                        	 * Define injections for a certain module. These injections
+                        	 * will be applied when Modules are instantiated.
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * container.register(&#x27;user&#x27;, User);
+                        	 * container.register(&#x27;email&#x27;, Email);
+                        	 * container.inject(&#x27;email&#x27;, &#x27;user&#x27;, &#x27;user&#x27;);
+                        	 * &#x60;&#x60;&#x60;
+                        	 * or
+                        	 *
+                        	 * &#x60;&#x60;&#x60;javascript
+                        	 * container.register(&#x27;user&#x27;, User);
+                        	 * container.inject(&#x27;email&#x27;, &#x27;user&#x27;, &#x27;user&#x27;);
+                        	 * container.register(&#x27;email&#x27;, Email);
+                        	 * &#x60;&#x60;&#x60;
+                        	 *
+                        	 * When performing injections, please notice that the injected value must be declared before
+                        	 * the injection is declared and the target module is not alreay looked up.
+                        	 *
+                        	 * @method injection
+                        	 * @param {String} name
+                        	 * @param {String} property
+                        	 * @param {String} injectionName
+                        	 * @return
+                        	 */
+                        	injection(name, property, injectionName) {
+                        		isNameValid(name);
+                        		isNameValid(injectionName);
+                        
+                        		if (this.cache.has(name)) {
+                        			throw new Error(&quot;Can not register an injection to already looked up module. (&#x27;&quot; + name + &quot;&#x27;, &#x27;&quot; + property + &quot;&#x27;, &#x27;&quot; + injectionName + &quot;&#x27;)&quot;);
+                        		}
+                        
+                        		if (!this.injections[name]) {
+                        			this.injections[name] = [];
+                        		}
+                        
+                        		this.injections[name].push({
+                        			property: property,
+                        			name: injectionName
+                        		});
+                        
+                        		this.factoryCache.remove(name);
+                        	}
+                        
+                        	/**
+                        	 * Creates a new child Container. These children are configured
+                        	 * to correctly inherit from the current container.
+                        	 *
+                        	 * @method child
+                        	 * @return {Container}
+                        	 */
+                        	child() {
+                        		return this._addChild(new Container(this));
+                        	}
+                        
+                        	/**
+                        	 * Creates a new Request Container instance that is injected in
+                        	 * each incoming HTTP request.
+                        	 *
+                        	 * @method createRequestContainer
+                        	 * @param {Request}   request  HTTP request
+                        	 * @param {Response}  response HTTP response
+                        	 * @return {RequestContainer}
+                        	 */
+                        	createRequestContainer(request, response) {
+                        		return this._addChild(new RequestContainer(this, request, response));
+                        	}
+                        
+                        	/**
+                        	 * Register the child container.
+                        	 *
+                        	 * @private
+                        	 * @method _addChild
+                        	 * @param {Container} container
+                        	 */
+                        	_addChild(container) {
+                        		this.children.push(container);
+                        		return container;
+                        	}
+                        
+                        	/**
+                        	 * Destroys the container and all its managed objects.
+                        	 *
+                        	 * @method destroy
+                        	 */
+                        	destroy() {
+                        		_.each(this.children, function(child) {
+                        			return child.destroy();
+                        		});
+                        
+                        		clearCache(this);
+                        		this.isDestroyed = true;
+                        	}
+                        
+                        	/**
+                        	 * Clear the cache for the container
+                        	 *
+                        	 * @method reset
+                        	 */
+                        	reset() {
+                        		_.each(this.children, function(child) {
+                        			return child.reset();
+                        		});
+                        
+                        		clearCache(this);
+                        
+                        		this.registrations.clear();
+                        		this.cache.clear();
+                        		this.resolveCache.clear();
+                        		this.factoryCache.clear();
+                        		this._options.clear();
+                        	}
+                        }
+                        
+                        /**
+                         * Container that is set in the HTTP request, that offers
+                         *
+                         * Handles the injections of the dependencies for each {{#crossLink &quot;Module&quot;}}{{/crossLink}}.
+                         *
+                         * @class RequestContainer
+                         * @extends {Container}
+                         * @constructor
+                         * @param {Container} parent   The parent Container
+                         * @param {Request}   request  HTTP request
+                         * @param {Response}  response HTTP response
+                         */
+                        class RequestContainer extends Container {
+                        
+                        	constructor(parent, request, response) {
+                        		super(parent);
+                        
+                        		utils.defineProperty(this, &#x27;__request&#x27;, request, {
+                        			configurable: false
+                        		});
+                        
+                        		utils.defineProperty(this, &#x27;__response&#x27;, response, {
+                        			configurable: false
+                        		});
+                        	}
+                        
+                        	lookupFactory(name) {
+                        		const factory = super.lookupFactory(name);
+                        
+                        		if (findOption(this, name, &#x27;instantiate&#x27;) === false) {
+                        			return factory;
+                        		}
+                        
+                        		return factory.extend({
+                        			request: utils.get(this, &#x27;__request&#x27;),
+                        			response: utils.get(this, &#x27;__response&#x27;)
+                        		});
+                        	}
+                        
+                        }
+                        
+                        function instantiate(container, name) {
+                        	const factory = container.lookupFactory(name);
+                        
+                        	if (findOption(container, name, &#x27;instantiate&#x27;) === false) {
+                        		return factory;
+                        	}
+                        
+                        	if (typeof factory.create !== &#x27;function&#x27;) {
+                        		throw new Error(&#x27;Failed to create an instance of \&#x27;&#x27; + name + &#x27;\&#x27;. &#x27; +
+                        			&#x27;All modules must have the crate method.&#x27;);
+                        	}
+                        
+                        	const requirements = requirementsFor(container, factory);
+                        
+                        	return factory.create(requirements);
+                        }
+                        
+                        function requirementsFor(container, factory) {
+                        	const proto = factory.prototype;
+                        	let requires;
+                        
+                        	if (!proto.requires) {
+                        		requires = [];
+                        	} else if (_.isString(proto.requires)) {
+                        		requires = [proto.requires];
+                        	} else if (_.isArray(proto.requires)) {
+                        		requires = proto.requires;
+                        	}
+                        
+                        	if (!requires) {
+                        		throw new TypeError(&#x27;Module \&#x27;requires\&#x27; property must be a String an Array&#x27;);
+                        	}
+                        
+                        	const requirements = {};
+                        
+                        	_.each(requires, function(requirement) {
+                        		let injectable = container.lookup(requirement);
+                        
+                        		if (injectable !== undefined) {
+                        			requirements[requirement] = injectable;
+                        		} else {
+                        			throw new Error(&#x27;Attempting to inject an unknown injection: &#x60;&#x27; + requirement + &#x27;&#x60;&#x27;);
+                        		}
+                        	});
+                        
+                        	return requirements;
+                        }
+                        
+                        
+                        function injectionsFor(container, name) {
+                        	const injections = {};
+                        
+                        	_.each(container.injections[name] || [], function(injection) {
+                        		let injectable = container.lookup(injection.name);
+                        
+                        		if (injectable !== undefined) {
+                        			injections[injection.property] = injectable;
+                        		} else {
+                        			throw new Error(&#x27;Attempting to inject an unknown injection: &#x60;&#x27; + injection.name + &#x27;&#x60;&#x27;);
+                        		}
+                        	});
+                        
+                        	injections.container = container;
+                        
+                        	return injections;
+                        }
+                        
+                        function isNameValid(name) {
+                        	if (!_.isString(name)) {
+                        		throw new TypeError(&#x27;Name must be a String&#x27;);
+                        	}
+                        }
+                        
+                        // Define scope configs
+                        const scopesConfig = {
+                        	proxy: {},
+                        	singleton: {
+                        		instantiate: false
+                        	},
+                        	instance: {
+                        		singleton: false
+                        	},
+                        	request: {
+                        		request: true
+                        	}
+                        };
+                        
+                        function resolveOptions(options) {
+                        	options = options || {};
+                        
+                        	const scope = options.scope;
+                        	const scopes = _.keys(scopesConfig);
+                        
+                        	if (typeof scope !== &#x27;undefined&#x27;) {
+                        		if (_.includes(scopes, scope)) {
+                        			options = _.defaults(options, scopesConfig[scope]);
+                        		} else {
+                        			throw new TypeError(&#x27;Unsuported scope value &#x60;&#x27; + scope + &#x27;&#x60;, available scopes are [&#x27; + scopes.join(&#x27;, &#x27;) + &#x27;].&#x27;);
+                        		}
+                        	}
+                        
+                        	return options;
+                        }
+                        
+                        function findOption(container, name, key) {
+                        	const options = container._options.get(name);
+                        
+                        	if (options &amp;&amp; options[key] !== undefined) {
+                        		return options[key];
+                        	}
+                        }
+                        
+                        function clearCache(container) {
+                        	container.cache.eachLocal(function(key, value) {
+                        		if (findOption(container, key, &#x27;instantiate&#x27;) !== false) {
+                        			value.destroy();
+                        		}
+                        	}, container);
+                        }
+                        
+                        module.exports = Container;
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
