@@ -26,22 +26,22 @@
     "registry"
   ],
   "dependencies": {
-    "dag-map": "^1.0.2",
-    "debug": "^2.2.0",
-    "eventemitter2": "^1.0.3",
-    "js-yaml": "^3.4.6",
+    "dag-map": "^2.0.2",
+    "debug": "^2.6.0",
+    "eventemitter2": "^3.0.0",
+    "js-yaml": "^3.8.1",
     "lodash": "^4.12.0",
     "node-env-file": "^0.1.8"
   },
   "devDependencies": {
-    "async": "^1.5.0",
+    "async": "^2.1.4",
     "chai": "^3.4.1",
     "coveralls": "^2.11.2",
     "istanbul": "^0.4.0",
     "jscover": "^1.0.0",
-    "mocha": "^2.3.3",
-    "mocha-lcov-reporter": "^1.0.0",
-    "supertest": "^1.1.0"
+    "mocha": "^3.2.0",
+    "mocha-lcov-reporter": "^1.2.0",
+    "supertest": "^3.0.0"
   },
   "author": "Vladimir Spasic",
   "license": "Apache-2.0",
