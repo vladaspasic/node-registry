@@ -1,14 +1,73 @@
----
-layout: apidoc
-title:  "Node Registry API documentation - lib/registry/container-aware.js"
-date:   2014-01-01 00:00:00
-categories: apidocs
-yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
-yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
-projectAssets: ../assets
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title></title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+    <link rel="stylesheet" href="/node-registry/css/main.css">
 
-<div class="container">
+    <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Node Registry API documentation - lib/registry/container-aware.js - Node registry</title>
+<meta property="og:title" content="Node Registry API documentation - lib/registry/container-aware.js" />
+<meta name="description" content="Library for building scalable node.js applications with ease" />
+<meta property="og:description" content="Library for building scalable node.js applications with ease" />
+<link rel="canonical" href="http://vladaspasic.github.io//node-registry/api/files/lib_registry_container-aware.js.html" />
+<meta property="og:url" content="http://vladaspasic.github.io//node-registry/api/files/lib_registry_container-aware.js.html" />
+<meta property="og:site_name" content="Node registry" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-01-01T01:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@VladaSpasic" />
+<meta name="twitter:creator" content="@Vladimir Spasic" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Node Registry API documentation - lib/registry/container-aware.js",
+"datePublished": "2014-01-01T01:00:00+01:00",
+"description": "Library for building scalable node.js applications with ease",
+"url": "http://vladaspasic.github.io//node-registry/api/files/lib_registry_container-aware.js.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+<body class="yui3-skin-sam">
+
+    <header class="navbar navbar-default site-header" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/node-registry/">Node registry</a>
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="">
+          <a class="page-link" href="/node-registry/docs">Docs</a>
+        </li>
+        <li class="">
+          <a class="page-link" href="/node-registry/plugins">Plugins</a>
+        </li>
+        <li>
+          <a class="page-link" href="/node-registry/api">API</a>
+        </li>
+        <li>
+          <a class="page-link" href="https://github.com/vladaspasic/node-registry" target="_blank">Github</a>
+        </li>
+      </ul>
+    </nav>
+</header>
+
+
+    <div class="container">
     <div class="row">
         <div class="col-xs-3">
             <div>
@@ -50,16 +109,16 @@ projectAssets: ../assets
                         
                         /**
                          * Mixin that adds the ability to perform registration and lookup
-                         * of {{#crossLink &quot;Module&quot;}}Modules{{/crossLink}} registered to 
-                         * the underlying {{#crossLink &quot;Container&quot;}}{{/crossLink}}.
+                         * of Modules registered to 
+                         * the underlying .
                          *
                          * @class ContainerAware
                          */
                         module.exports = {
                         
                         	/**
-                        	 * Get the {{#crossLink &quot;Module&quot;}}{{/crossLink}} instance, that has
-                        	 * been registered inside the {{#crossLink &quot;Container&quot;}}{{/crossLink}}.
+                        	 * Get the  instance, that has
+                        	 * been registered inside the .
                         	 *
                         	 * &#x60;&#x60;&#x60;javascript
                         	 * var MyModule = Registry.registerFolder(&#x27;myModule&#x27;);
@@ -67,7 +126,7 @@ projectAssets: ../assets
                         	 * MyModule.method();
                         	 * &#x60;&#x60;&#x60;
                         	 *
-                        	 * If the {{#crossLink &quot;Module&quot;}}{{/crossLink}} does not exist,
+                        	 * If the  does not exist,
                         	 * an Error will be raised.
                         	 *
                         	 * @method get
@@ -87,7 +146,7 @@ projectAssets: ../assets
                         	 * &#x60;&#x60;&#x60;
                         	 *
                         	 * Registry will scan the folder, and load each folder inside it to
-                        	 * create a {{#crossLink &quot;Module&quot;}}{{/crossLink}}.
+                        	 * create a .
                         	 *
                         	 * If an &#x60;initializer.js&#x60; file is located inside the module folder,
                         	 * it will be automatically picked up and registered.
@@ -118,7 +177,7 @@ projectAssets: ../assets
                         	 * Registry.registerModule(&#x27;myModule&#x27;, &#x27;path/to/my/module&#x27;);
                         	 * &#x60;&#x60;&#x60;
                         	 *
-                        	 * Or you can directly extend the {{#crossLink &quot;Module&quot;}}{{/crossLink}} class,
+                        	 * Or you can directly extend the  class,
                         	 * and pass it in the function.
                         	 *
                         	 * &#x60;&#x60;&#x60;javascript
@@ -179,3 +238,12 @@ projectAssets: ../assets
     </div>
 </div>
 
+
+
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/node-registry/assets/javascripts/bootstrap.min.js"></script>
+    <script src="/node-registry/js/apidocs.js"></script>
+    <script src="../assets/vendor/prettify/prettify-min.js"></script>
+    <script>prettyPrint();</script>
+</body>
+</html>

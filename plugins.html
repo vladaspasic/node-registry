@@ -1,9 +1,87 @@
----
-title: Plugins
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
 
-<!-- <h3>Plugins</h3> -->
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Plugins</title>
+  <meta name="description" content="Library for building scalable node.js applications with ease">
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+  <link rel="stylesheet" href="/node-registry/css/main.css">
+
+  <link rel="canonical" href="http://vladaspasic.github.io//node-registry/plugins.html">
+  <link rel="alternate" type="application/rss+xml" title="Node registry" href="/node-registry/feed.xml">
+
+  <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Plugins - Node registry</title>
+<meta property="og:title" content="Plugins" />
+<meta name="description" content="Library for building scalable node.js applications with ease" />
+<meta property="og:description" content="Library for building scalable node.js applications with ease" />
+<link rel="canonical" href="http://vladaspasic.github.io//node-registry/plugins.html" />
+<meta property="og:url" content="http://vladaspasic.github.io//node-registry/plugins.html" />
+<meta property="og:site_name" content="Node registry" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@VladaSpasic" />
+<meta name="twitter:creator" content="@Vladimir Spasic" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "WebPage",
+"headline": "Plugins",
+"description": "Library for building scalable node.js applications with ease",
+"url": "http://vladaspasic.github.io//node-registry/plugins.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+    <!-- Google analytics -->
+<script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','UA-57430955-1','auto');ga('send','pageview');
+</script>
+
+  
+</head>
+
+
+  <body>
+
+    <header class="navbar navbar-default site-header" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/node-registry/">Node registry</a>
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="">
+          <a class="page-link" href="/node-registry/docs">Docs</a>
+        </li>
+        <li class="active">
+          <a class="page-link" href="/node-registry/plugins">Plugins</a>
+        </li>
+        <li>
+          <a class="page-link" href="/node-registry/api">API</a>
+        </li>
+        <li>
+          <a class="page-link" href="https://github.com/vladaspasic/node-registry" target="_blank">Github</a>
+        </li>
+      </ul>
+    </nav>
+</header>
+
+
+    <main class="page-content container" aria-label="Content">
+      <!-- <h3>Plugins</h3> -->
 
 <ul class="nav nav-tabs plugin-tabs">
   <li class="active">
@@ -39,7 +117,16 @@ layout: default
     <p>In order for <code>node-registry</code> to pickup your plugin it needs to identify it as such. Your <code>package.json</code> should contain the following keyword</p>
     <div class="row">
       <div class="col-md-4">
-        {% codeblock template: code/package.md, type: json, title: package.json %}
+        <div class='highlight code-block'>
+        <p class='title'>package.json</p>
+        <pre><code class='json'>{
+  "name": "node-registry-my-plugin-name",
+  "keywords": [
+    "node-registry-plugin"
+  ]
+}
+</code></pre>
+      </div>
       </div>
     </div>
     <h4>Implementing hooks</h4>
@@ -56,12 +143,36 @@ layout: default
         <p>Load hook is invoked when the <b>Registry</b> and it's <b>Container</b> are created. Here you can register your modules into the application container.</p>
       </div>
       <div class="col-md-8">
-        {% codeblock template: code/load.md, type: javascript, title: plugin.js %}
+        <div class='highlight code-block'>
+        <p class='title'>plugin.js</p>
+        <pre><code class='javascript'>module.exports = {
+
+  load(project, environment) {
+    project.registerModule('greeter', {
+      greet() {
+        return environment.get('greeter.message', 'Hello world')
+      }
+    }, 'singleton')
+  }
+
+}
+</code></pre>
+      </div>
       </div>
     </div>
     <div class="row example-row">
       <div class="col-md-8">
-        {% codeblock template: code/initializer.md, type: javascript, title: plugin.js %}
+        <div class='highlight code-block'>
+        <p class='title'>plugin.js</p>
+        <pre><code class='javascript'>module.exports = {
+
+  initializer() {
+    return (container, app, callback) => callback()
+  }
+
+}
+</code></pre>
+      </div>
       </div>
       <div class="col-md-4">
         <h5>Register plugin initializer</h5>
@@ -74,12 +185,40 @@ layout: default
         <p>Only implement this hook if you wish to define a custom <code>server</code> module.</p>
       </div>
       <div class="col-md-8">
-        {% codeblock template: code/server.md, type: javascript, title: plugin.js %}
+        <div class='highlight code-block'>
+        <p class='title'>plugin.js</p>
+        <pre><code class='javascript'>const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.end('Hello world'))
+
+module.exports = {
+
+  server(project, container, environment) {
+    return {
+      port: environment.get('server.port', 8080),
+      listener: app
+    };
+  }
+
+}
+</code></pre>
+      </div>
       </div>
     </div>
     <div class="row example-row">
       <div class="col-md-8">
-        {% codeblock template: code/config-path.md, type: javascript, title: plugin.js %}
+        <div class='highlight code-block'>
+        <p class='title'>plugin.js</p>
+        <pre><code class='javascript'>module.exports = {
+
+  getConfigurationLocation() {
+    returns 'configs'
+  }
+
+}
+</code></pre>
+      </div>
       </div>
       <div class="col-md-4">
         <h5>Configuration</h5>
@@ -91,3 +230,68 @@ layout: default
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.7.0/js/tmpl.min.js"></script>
+
+    </main>
+
+    <footer class="site-footer">
+  <div class="container">
+    <div class="col-sm-4">
+      <!-- <ul class="nav nav-links">
+        <li>
+          <a href="/docs">Docs</a>
+        </li>
+        <li>
+          <a href="/docs/quickstart">Quick start</a>
+        </li>
+      </ul> -->
+    </div>
+    <div class="col-sm-8">
+      <ul class="nav icon-links">
+        
+          <li>
+            <a href="mailto:vladimir.spasic.86@gmail.com">
+               <i class="fa fa-envelope-o" aria-hidden="true"></i>
+
+            </a>
+          </li>
+        
+        
+            <li>
+              <a href="https://github.com/vladaspasic/node-registry">
+                 <i class="fa fa-github" aria-hidden="true"></i>
+
+              </a>
+            </li>
+            
+
+            
+            <li>
+              <a href="https://twitter.com/VladaSpasic">
+                 <i class="fa fa-twitter" aria-hidden="true"></i>
+
+              </a>
+            </li>
+          
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 text-center repo-link">
+        <a href="https://icons8.com">Icon pack by Icons8</a><br/>
+        <a href="https://github.com/vladaspasic/node-registry/blob/master/LICENSE">
+          node-registry is free and open-source under the Apache v2 License.
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/yaml.min.js"></script>  
+<script src="/node-registry/assets/javascripts/bootstrap.min.js"></script>
+<script src="/node-registry/js/main.js"></script>
+
+
+  </body>
+
+</html>

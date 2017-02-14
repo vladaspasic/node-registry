@@ -6,9 +6,15 @@ set -o errexit
 DIR=${PWD}
 REPO="git@github.com:vladaspasic/node-registry.git"
 CLONE_TARGET="${DIR}/repo/lib"
+DATE=`date +%Y-%m-%d`
+
+# YUIDocs settings
 YUIDOCS_THEME="${DIR}/theme/"
 YUIDOCS_HELPERS="${DIR}/theme/helpers.js"
 YUIDOCS_TARGET="${DIR}/api/"
+
+# Output directory
+OUTPUT_DIR="${DIR}/output"
 
 echo "Cloning ${REPO} to ${CLONE_TARGET}...\n"
 git clone ${REPO} --depth 1 ${CLONE_TARGET}
@@ -19,6 +25,20 @@ cd ${CLONE_TARGET}
 npm install yuidocjs
 node_modules/.bin/yuidoc . -o ${YUIDOCS_TARGET} --themedir ${YUIDOCS_THEME} -H ${YUIDOCS_HELPERS}
 
-echo '\nRemoving cloned repository...\n'
+echo "Building jekyll project to: ${OUTPUT_DIR}"
+JEKYLL_ENV=production jekyll build -tVd ${OUTPUT_DIR}
+
+cd ${OUTPUT_DIR}
+git init
+git remote add origin ${REPO}
+git fetch
+git checkout gh-pages
+git add -A
+git commit -am "Github Site build: ${DATE}"
+git pull
+git push
+
+echo '\nRemoving cloned repositories...\n'
 rm -rf ${CLONE_TARGET}
+rm -rf ${OUTPUT_DIR}
 

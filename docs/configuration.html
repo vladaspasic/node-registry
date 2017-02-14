@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Configuration</title>
+  <meta name="description" content="Library for building scalable node.js applications with ease">
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+  <link rel="stylesheet" href="/node-registry/css/main.css">
+
+  <link rel="canonical" href="http://vladaspasic.github.io//node-registry/docs/configuration.html">
+  <link rel="alternate" type="application/rss+xml" title="Node registry" href="/node-registry/feed.xml">
+
+  <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Configuration - Node registry</title>
+<meta property="og:title" content="Configuration" />
+<meta name="description" content="Library for building scalable node.js applications with ease" />
+<meta property="og:description" content="Library for building scalable node.js applications with ease" />
+<link rel="canonical" href="http://vladaspasic.github.io//node-registry/docs/configuration.html" />
+<meta property="og:url" content="http://vladaspasic.github.io//node-registry/docs/configuration.html" />
+<meta property="og:site_name" content="Node registry" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@VladaSpasic" />
+<meta name="twitter:creator" content="@Vladimir Spasic" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "WebPage",
+"headline": "Configuration",
+"description": "Library for building scalable node.js applications with ease",
+"url": "http://vladaspasic.github.io//node-registry/docs/configuration.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+    <!-- Google analytics -->
+<script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','UA-57430955-1','auto');ga('send','pageview');
+</script>
+
+  
+</head>
+
+
+  <body>
+
+    <header class="navbar navbar-default site-header" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/node-registry/">Node registry</a>
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active">
+          <a class="page-link" href="/node-registry/docs">Docs</a>
+        </li>
+        <li class="">
+          <a class="page-link" href="/node-registry/plugins">Plugins</a>
+        </li>
+        <li>
+          <a class="page-link" href="/node-registry/api">API</a>
+        </li>
+        <li>
+          <a class="page-link" href="https://github.com/vladaspasic/node-registry" target="_blank">Github</a>
+        </li>
+      </ul>
+    </nav>
+</header>
+
+
+    <main class="page-content documentation container" aria-label="Content">
+      <div class="row">
+        <div class="col-xs-hidden col-sm-4 col-md-2">
+          <ul class="nav doc-nav" data-spy="affix">
+            <li>
+              <a href="/node-registry/docs/getting-started">Getting started</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/configuration">Configuration</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/modules">Modules</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/initializers">Initializers</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/server">Server</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-10">
+          <h3 id="configuration">Configuration</h3>
+
+<p>When the <strong>Registry</strong> instance is created, it tries scans <code class="highlighter-rouge">configuration</code> directory for config files and for the <code class="highlighter-rouge">.env</code> file if they present in the root application directory. These properties they can be accessed by calling the <code class="highlighter-rouge">Registry.environment.get('key')</code> method.</p>
+
+<p>Configuration files could be written in a <code class="highlighter-rouge">json</code> file, or as a plain <code class="highlighter-rouge">js</code> module that exports a Javascript object or as <code class="highlighter-rouge">yaml</code> file or all three variations together, everything goes.</p>
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="highlight code-block">
+        <p class="title">configuration/config.json</p>
+        <pre><code class="javascript">{
+  "server": {
+    "port": 9999
+  }
+}
+</code></pre>
+      </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="highlight code-block">
+        <p class="title">configuration/config.js</p>
+        <pre><code class="javascript">module.exports = {
+  server: {
+    port: 9999
+  }
+}
+</code></pre>
+      </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="highlight code-block">
+        <p class="title">configuration/config.yaml</p>
+        <pre><code class="yaml">server:
+  port: 9999
+</code></pre>
+      </div>
+  </div>
+</div>
+
+<h4 id="usage">Usage</h4>
+
+<p>You access your config properties using the built in <code class="highlighter-rouge">environment</code> module.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">environment</span> <span class="o">=</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">environment</span>
+<span class="c1">// or with a getter</span>
+<span class="kr">const</span> <span class="nx">environment</span> <span class="o">=</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'environment'</span><span class="p">)</span>
+
+<span class="nx">environment</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'server.port'</span><span class="p">)</span> <span class="c1">// returns 9999</span>
+<span class="nx">environment</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'unknown.property'</span><span class="p">,</span> <span class="s1">'default value'</span><span class="p">)</span> <span class="c1">// returns 'default value'</span>
+<span class="nx">environment</span><span class="p">.</span><span class="nx">getRequired</span><span class="p">(</span><span class="s1">'unknown.property'</span><span class="p">)</span> <span class="c1">// throws an Error as it is not defined</span>
+</code></pre>
+</div>
+
+<h4 id="environment-specific-config-files">Environment specific config files</h4>
+
+<p>You can also write configuration files for specific Node environments, simply name your file as <code class="highlighter-rouge">config-${environment}.${format}</code> and it would be picked up by <strong>Registry</strong>.</p>
+
+<p>If the value of the <code class="highlighter-rouge">NODE_ENV</code> is <code class="highlighter-rouge">production</code>, <strong>Registry</strong> would try to read your <code class="highlighter-rouge">config-production.${format}</code> file, if it exists, and store these values in the <code class="highlighter-rouge">environment</code> module.
+Any other property that you have defined in your default <code class="highlighter-rouge">config</code> file would be overriten by the environment specific one.</p>
+
+<p>Please note that properties declared in your <code class="highlighter-rouge">.env</code> file would have precedence over properties declared in configuration files.</p>
+
+<h4 id="change-the-location-of-your-configuration-files">Change the location of your configuration files</h4>
+
+<p>If you wish to place your configuration some where else in your application, you can do it by either specifying the <code class="highlighter-rouge">NODE_REGISTRY_CONFIG</code> process environment property. You can either place this property in your <code class="highlighter-rouge">.env</code> file or you can pass it as an argument when running the node application, like so:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">NODE_REGISTRY_CONFIG</span><span class="o">=</span>mylocation node index.js
+</code></pre>
+</div>
+
+<div class="row button-navigation">
+  <div class="col-xs-6 text-left">
+    
+      <a class="btn btn-primary prev" href="/node-registry/docs/getting-started">
+         <i class="fa fa-angle-left" aria-hidden="true"></i>
+<span>Getting started</span>
+      </a>
+    
+  </div>
+  <div class="col-xs-6 text-right">
+    
+      <a class="btn btn-primary next" href="/node-registry/docs/modules">
+        <span>Modules</span> <i class="fa fa-angle-right" aria-hidden="true"></i>
+
+      </a>
+        
+  </div>
+</div>
+
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+  <div class="container">
+    <div class="col-sm-4">
+      <!-- <ul class="nav nav-links">
+        <li>
+          <a href="/docs">Docs</a>
+        </li>
+        <li>
+          <a href="/docs/quickstart">Quick start</a>
+        </li>
+      </ul> -->
+    </div>
+    <div class="col-sm-8">
+      <ul class="nav icon-links">
+        
+          <li>
+            <a href="mailto:vladimir.spasic.86@gmail.com">
+               <i class="fa fa-envelope-o" aria-hidden="true"></i>
+
+            </a>
+          </li>
+        
+        
+            <li>
+              <a href="https://github.com/vladaspasic/node-registry">
+                 <i class="fa fa-github" aria-hidden="true"></i>
+
+              </a>
+            </li>
+            
+
+            
+            <li>
+              <a href="https://twitter.com/VladaSpasic">
+                 <i class="fa fa-twitter" aria-hidden="true"></i>
+
+              </a>
+            </li>
+          
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 text-center repo-link">
+        <a href="https://icons8.com">Icon pack by Icons8</a><br/>
+        <a href="https://github.com/vladaspasic/node-registry/blob/master/LICENSE">
+          node-registry is free and open-source under the Apache v2 License.
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/yaml.min.js"></script>  
+<script src="/node-registry/assets/javascripts/bootstrap.min.js"></script>
+<script src="/node-registry/js/main.js"></script>
+
+
+  </body>
+
+</html>

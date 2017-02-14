@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Modules</title>
+  <meta name="description" content="Library for building scalable node.js applications with ease">
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css" />
+  <link rel="stylesheet" href="/node-registry/css/main.css">
+
+  <link rel="canonical" href="http://vladaspasic.github.io//node-registry/docs/modules.html">
+  <link rel="alternate" type="application/rss+xml" title="Node registry" href="/node-registry/feed.xml">
+
+  <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Modules - Node registry</title>
+<meta property="og:title" content="Modules" />
+<meta name="description" content="Library for building scalable node.js applications with ease" />
+<meta property="og:description" content="Library for building scalable node.js applications with ease" />
+<link rel="canonical" href="http://vladaspasic.github.io//node-registry/docs/modules.html" />
+<meta property="og:url" content="http://vladaspasic.github.io//node-registry/docs/modules.html" />
+<meta property="og:site_name" content="Node registry" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@VladaSpasic" />
+<meta name="twitter:creator" content="@Vladimir Spasic" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "WebPage",
+"headline": "Modules",
+"description": "Library for building scalable node.js applications with ease",
+"url": "http://vladaspasic.github.io//node-registry/docs/modules.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+    <!-- Google analytics -->
+<script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='https://www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','UA-57430955-1','auto');ga('send','pageview');
+</script>
+
+  
+</head>
+
+
+  <body>
+
+    <header class="navbar navbar-default site-header" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/node-registry/">Node registry</a>
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active">
+          <a class="page-link" href="/node-registry/docs">Docs</a>
+        </li>
+        <li class="">
+          <a class="page-link" href="/node-registry/plugins">Plugins</a>
+        </li>
+        <li>
+          <a class="page-link" href="/node-registry/api">API</a>
+        </li>
+        <li>
+          <a class="page-link" href="https://github.com/vladaspasic/node-registry" target="_blank">Github</a>
+        </li>
+      </ul>
+    </nav>
+</header>
+
+
+    <main class="page-content documentation container" aria-label="Content">
+      <div class="row">
+        <div class="col-xs-hidden col-sm-4 col-md-2">
+          <ul class="nav doc-nav" data-spy="affix">
+            <li>
+              <a href="/node-registry/docs/getting-started">Getting started</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/configuration">Configuration</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/modules">Modules</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/initializers">Initializers</a>
+            </li>
+            <li>
+              <a href="/node-registry/docs/server">Server</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-10">
+          <h3 id="modules">Modules</h3>
+
+<p>Modules are the building blocks of <strong>Regsitry</strong> and the container manages the state, dependency injections and life cycle of each declared module in your application.</p>
+
+<p>There are mutiple ways how to declare a Module. The easiest way is to place them inside a folder that the <strong>Registry</strong> will scan.</p>
+
+<p>The modules directory structure should look like this:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>- modules/
+    - database/
+        -index.js <span class="c">## Module logic</span>
+        -initializer.js <span class="c">## Initializer for the module</span>
+    - greeter/
+        -index.js
+    - authentication/
+        -index.js
+</code></pre>
+</div>
+
+<p>You can register your folder using the <code class="highlighter-rouge">Registry.registerFolder</code> method anywhere in your project. Registry will scan the folder and register those 3 defined modules inside your directory. It would also register the database module initializer function, that would be run when <strong>Registry</strong> starts the server. More detials about about <code class="highlighter-rouge">initializers</code> can be found <a href="/node-registry/docs/initializers">here</a>.</p>
+
+<p>You can also register you <code class="highlighter-rouge">module</code> using the <code class="highlighter-rouge">Registry.registerModule</code> method.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Registry</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-registry'</span><span class="p">)</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">registerModule</span><span class="p">(</span><span class="s1">'person'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'John Smith'</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<h4 id="injections">Injections</h4>
+
+<p>You can inject other modules by defining the <code class="highlighter-rouge">requires</code> property on your module.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">requires</span><span class="p">:</span> <span class="p">[</span><span class="s1">'database'</span><span class="p">,</span> <span class="s1">'greeter'</span><span class="p">],</span>
+  <span class="nx">checkConnectionAndPrintGreetingMessage</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">database</span><span class="p">.</span><span class="nx">connect</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">greeter</span><span class="p">.</span><span class="nx">greet</span><span class="p">()))</span>
+      <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Ooopps'</span><span class="p">,</span> <span class="nx">error</span><span class="p">))</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h4 id="scopes">Scopes</h4>
+
+<p>Each module must have a scope, scope defines how should this module be treated by the Container and defines the module lifecycle. <strong>Registry</strong> offers 4 different type of scopes:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">proxy</code></li>
+  <li><code class="highlighter-rouge">singleton</code></li>
+  <li><code class="highlighter-rouge">instance</code></li>
+  <li><code class="highlighter-rouge">request</code></li>
+</ul>
+
+<h5 id="proxy">Proxy</h5>
+
+<p>This is the default scope of modules. Container would extend the <code class="highlighter-rouge">Module</code> class with your registered module object. These types of modules would be instantiated only once and that same instance would always be returned from the Container.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Registry</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-registry'</span><span class="p">)</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">registerModule</span><span class="p">(</span><span class="s1">'person'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'John Smith'</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kr">const</span> <span class="nx">person</span> <span class="o">=</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'person'</span><span class="p">)</span>
+<span class="nx">person</span> <span class="o">===</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'person'</span><span class="p">)</span> <span class="c1">// returns true</span>
+</code></pre>
+</div>
+
+<h5 id="singleton">Singleton</h5>
+
+<p>When using the <code class="highlighter-rouge">singleton</code> scope your are telling <strong>Registry</strong> that this module should be loaded as is. Meaning if the module is defined as <code class="highlighter-rouge">function</code>, the same <code class="highlighter-rouge">function</code> would be returned.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Registry</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-registry'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">definition</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="s1">'Singleton module'</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">registerModule</span><span class="p">(</span><span class="s1">'definition'</span><span class="p">,</span> <span class="nx">definition</span><span class="p">,</span> <span class="s1">'singleton'</span><span class="p">)</span>
+
+<span class="nx">definition</span> <span class="o">===</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'definition'</span><span class="p">)</span> <span class="c1">// returns true</span>
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'definition'</span><span class="p">)()</span> <span class="c1">// prints 'Singleton module'</span>
+</code></pre>
+</div>
+
+<h5 id="instance">Instance</h5>
+
+<p>Modules defined with an <code class="highlighter-rouge">instance</code> scope are always instantiated when a lookup is performed in the Container. This means that you would never get a same instance of the <code class="highlighter-rouge">module</code>.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Registry</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-registry'</span><span class="p">)</span>
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">registerModule</span><span class="p">(</span><span class="s1">'person'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'John Smith'</span>
+    <span class="p">}</span>
+<span class="p">},</span> <span class="s1">'instance'</span><span class="p">)</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'person'</span><span class="p">)</span> <span class="o">===</span> <span class="nx">Registry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'person'</span><span class="p">)</span> <span class="c1">// returns false</span>
+</code></pre>
+</div>
+
+<h5 id="request">Request</h5>
+
+<p>Modules with a <code class="highlighter-rouge">request</code> scope are only available when you start the server using the <code class="highlighter-rouge">Registry.createServer</code> method. In each <code class="highlighter-rouge">request</code> scoped module, a request and response objects are injected. Modules are destroyed when the request is finished.</p>
+
+<p>You can use these modules like so:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">Registry</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-registry'</span><span class="p">)</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">registerModule</span><span class="p">(</span><span class="s1">'greeter'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">greet</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello world'</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nx">Registry</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">req</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="s1">'handler'</span><span class="p">).</span><span class="nx">handle</span><span class="p">()</span>
+<span class="p">}).</span><span class="nx">start</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>Please keep in mind that <code class="highlighter-rouge">request</code> scoped Modules could only be accessed via <code class="highlighter-rouge">req.lookup</code> method as they are bind to the incoming <code class="highlighter-rouge">Request</code>. If you try to access that module using <code class="highlighter-rouge">Registry.get</code> method you would get an error.</p>
+
+<h4 id="lifecycle">Lifecycle</h4>
+
+<p>Modules are always lazy loaded inside <strong>Registry</strong>, that means that they would be only created and cached once they are requested.</p>
+
+<p>When a module is created <code class="highlighter-rouge">init</code> method is invoked by the <strong>Container</strong>. In case of <code class="highlighter-rouge">instance</code> scoped Modules, it would be called each time it is being requested, as these types of modules are created each time they are looked up and they are not cached.</p>
+
+<p>For modules defined with a <code class="highlighter-rouge">proxy</code> scope, this method would only be invoked once, while for <code class="highlighter-rouge">request</code> scoped modules it would be called each time it is requested, looked up, per each request.</p>
+
+<p>This hook would never be called for ‘singleton’ scoped Modules.</p>
+
+<p>Besides the <code class="highlighter-rouge">init</code> method, <strong>Registry</strong> calls the <code class="highlighter-rouge">destroy</code> method when this module is removed from the <strong>Container</strong> or when the currently running process terminates. This hook would be called for <code class="highlighter-rouge">request</code> scoped modules, that are instantiated for that request, each time when the requests ends.</p>
+
+<div class="row button-navigation">
+  <div class="col-xs-6 text-left">
+    
+      <a class="btn btn-primary prev" href="/node-registry/docs/configuration">
+         <i class="fa fa-angle-left" aria-hidden="true"></i>
+<span>Configuration</span>
+      </a>
+    
+  </div>
+  <div class="col-xs-6 text-right">
+    
+      <a class="btn btn-primary next" href="/node-registry/docs/initializers">
+        <span>Initializers</span> <i class="fa fa-angle-right" aria-hidden="true"></i>
+
+      </a>
+        
+  </div>
+</div>
+
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+  <div class="container">
+    <div class="col-sm-4">
+      <!-- <ul class="nav nav-links">
+        <li>
+          <a href="/docs">Docs</a>
+        </li>
+        <li>
+          <a href="/docs/quickstart">Quick start</a>
+        </li>
+      </ul> -->
+    </div>
+    <div class="col-sm-8">
+      <ul class="nav icon-links">
+        
+          <li>
+            <a href="mailto:vladimir.spasic.86@gmail.com">
+               <i class="fa fa-envelope-o" aria-hidden="true"></i>
+
+            </a>
+          </li>
+        
+        
+            <li>
+              <a href="https://github.com/vladaspasic/node-registry">
+                 <i class="fa fa-github" aria-hidden="true"></i>
+
+              </a>
+            </li>
+            
+
+            
+            <li>
+              <a href="https://twitter.com/VladaSpasic">
+                 <i class="fa fa-twitter" aria-hidden="true"></i>
+
+              </a>
+            </li>
+          
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 text-center repo-link">
+        <a href="https://icons8.com">Icon pack by Icons8</a><br/>
+        <a href="https://github.com/vladaspasic/node-registry/blob/master/LICENSE">
+          node-registry is free and open-source under the Apache v2 License.
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/yaml.min.js"></script>  
+<script src="/node-registry/assets/javascripts/bootstrap.min.js"></script>
+<script src="/node-registry/js/main.js"></script>
+
+
+  </body>
+
+</html>
