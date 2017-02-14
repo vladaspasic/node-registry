@@ -17,15 +17,26 @@ title: Node registry
 email: vladimir.spasic.86@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   Library for building scalable node.js applications with ease
+author: Vladimir Spasic
 baseurl: "/node-registry"
 url: "http://vladaspasic.github.io/"
+
 twitter:
   url: https://twitter.com/VladaSpasic
   username: VladaSpasic
+
 github:
   url: https://github.com/vladaspasic/node-registry
   repo: node-registry
   username:  vladaspasic
+
+social:
+  name: node-registry
+  links:
+    - https://github.com/vladaspasic/node-registry
+
+webmaster_verifications:
+  google: XHA3vXNBs5aeWfqSbQjZusFILlDh4kJ-SyqGVfIreFs
 
 # Build settings
 markdown: kramdown
@@ -34,6 +45,8 @@ gems:
   - jekyll-feed
   - jekyll-bootstrap-sass
   - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-sitemap
 exclude:
   - theme
   - Gemfile

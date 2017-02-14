@@ -5,7 +5,7 @@ set -o errexit
 
 DIR=${PWD}
 REPO="git@github.com:vladaspasic/node-registry.git"
-CLONE_TARGET="${DIR}/repo/"
+CLONE_TARGET="${DIR}/repo/lib"
 YUIDOCS_THEME="${DIR}/theme/"
 YUIDOCS_HELPERS="${DIR}/theme/helpers.js"
 YUIDOCS_TARGET="${DIR}/api/"
