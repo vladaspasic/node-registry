@@ -1,0 +1,215 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/ordered-configuration.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/ordered-configuration.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /*jslint node: true */
+                        &quot;use strict&quot;;
+                        
+                        const _ = require(&#x27;lodash&#x27;),
+                        	DAG = require(&#x27;dag-map&#x27;);
+                        
+                        /**
+                         * Orders the tasks or configurations for a certain task in an Ordered List.
+                         * 
+                         * Contributions must establish the order by giving each contributed object a unique id,
+                         * by establishing forward and backward dependencies between the values.
+                         *
+                         * @class OrderedConfiguration
+                         * @constructor
+                         */
+                        class OrderedConfiguration {
+                        
+                        	constructor() {
+                        		this.registrations = {};
+                        	}
+                        
+                        	/**
+                        	 * Orders the configuration using Directed acyclic graph
+                        	 * @method order
+                        	 * @return {Array} an ordered Array of the Configuration
+                        	 */
+                        	order() {
+                        		const graph = new DAG();
+                        		const vertices = [];
+                        
+                        		_.each(this.registrations, (configuration) =&gt; {
+                        			graph.addEdges(configuration.name, configuration, configuration.before, configuration.after);
+                        		}, this);
+                        
+                        		graph.topsort((vertex) =&gt; {
+                        			vertices.push(_.omit(vertex.value, &#x27;before&#x27;, &#x27;after&#x27;));
+                        		});
+                        
+                        		return _.filter(vertices, (value) =&gt; {
+                        			return !_.isEmpty(value);
+                        		});
+                        	}
+                        
+                        	/**
+                        	 * Iterates for each ordered registration in the OrderedConfiguraion,
+                        	 * and runs a callback function with a given binding context.
+                        	 * @method each
+                        	 * @param {Function} fn  Function that is invoked for each iteration
+                        	 * @param {Object}   ctx Context for the iterator fn
+                        	 */
+                        	each(fn, ctx) {
+                        		_.each(this.order(), fn, ctx || this);
+                        	}
+                        
+                        	/**
+                        	 * Maps ordered registration in the OrderedConfiguraion,
+                        	 * and runs a callback function with a given binding context.
+                        	 * @method map
+                        	 * @param {Function} fn  Function that is invoked for each iteration
+                        	 * @param {Object}   ctx Context for the iterator fn
+                        	 */
+                        	map(fn, ctx) {
+                        		return _.map(this.order(), fn, ctx || this);
+                        	}
+                        
+                        	/**
+                        	 * Get the configuration Object by its name, or undefined if it is not found
+                        	 * @method get
+                        	 * @param {Object} configuration
+                        	 * @return {Object} the Configuration for the given name
+                        	 */
+                        	get(configuration) {
+                        		const name = extractName(configuration);
+                        
+                        		if (this.registrations.hasOwnProperty(name)) {
+                        			return this.registrations[name];
+                        		}
+                        	}
+                        
+                        	/**
+                        	 * Register a configuration object to be run
+                        	 * @method add
+                        	 * @param {Object} configuration
+                        	 */
+                        	add(configuration) {
+                        		if (configuration === undefined || typeof configuration !== &#x27;object&#x27;) {
+                        			throw new TypeError(&#x27;Configuration must be an object.&#x27;);
+                        		}
+                        
+                        		const name = extractName(configuration);
+                        
+                        		if (!name) {
+                        			throw new Error(&#x27;Configuration must have a name.&#x27;);
+                        		}
+                        
+                        		if (this.has(name)) {
+                        			throw new Error(&#x27;Configuration with name \&#x27;&#x27; + name + &#x27;\&#x27; already exists.&#x27;);
+                        		}
+                        
+                        		this.registrations[name] = configuration;
+                        	}
+                        
+                        	/**
+                        	 * Overrides the specific configuration
+                        	 * @method override
+                        	 * @param {Object} configuration
+                        	 */
+                        	override(configuration) {
+                        		const name = extractName(configuration);
+                        
+                        		if (!this.has(name)) {
+                        			throw new Error(&#x27;Can not override configuration for \&#x27;&#x27; + name + &#x27;\&#x27;, as it does not exists.&#x27;);
+                        		}
+                        
+                        		this.remove(name);
+                        		this.add(configuration);
+                        	}
+                        
+                        	/**
+                        	 * Checks if the configuration exists
+                        	 * @method has
+                        	 * @param {Object} configuration
+                        	 * @return {Boolean}
+                        	 */
+                        	has(configuration) {
+                        		const name = extractName(configuration);
+                        
+                        		if (this.registrations.hasOwnProperty(name)) {
+                        			return true;
+                        		}
+                        
+                        		return false;
+                        	}
+                        
+                        	/**
+                        	 * Removes the specific configuration
+                        	 * @method remove
+                        	 * @param {String|Object} configuration
+                        	 */
+                        	remove(configuration) {
+                        		const name = extractName(configuration);
+                        
+                        		if (!this.has(name)) {
+                        			throw new Error(&#x27;Can not remove configuration for \&#x27;&#x27; + name + &#x27;\&#x27;, as it does not exists.&#x27;);
+                        		}
+                        
+                        		delete this.registrations[name];
+                        	}
+                        }
+                        
+                        function extractName(configuration) {
+                        	if (_.isString(configuration)) {
+                        		return configuration;
+                        	}
+                        
+                        	return configuration.name;
+                        }
+                        
+                        module.exports = OrderedConfiguration;
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

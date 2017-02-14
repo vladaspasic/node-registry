@@ -1,0 +1,260 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/utils.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/utils.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &quot;use strict&quot;;
+                        
+                        const fs = require(&#x27;fs&#x27;);
+                        const path = require(&#x27;path&#x27;);
+                        const _ = require(&#x27;lodash&#x27;);
+                        
+                        /**
+                         * Defines a static, non writable properties for each object,
+                         * using the Object.defineProperty method.
+                         * 
+                         * @param {Object} source  Object which will have the property
+                         * @param {String} name    name of the property
+                         * @param {Object} value   value of the property
+                         * @param {Object} options Options for defining the property
+                         * @return 
+                         */
+                        function defineProperty(source, name, value, options) {
+                        	Object.defineProperty(source, name, _.defaults(options || {}, {
+                        		value: value,
+                        		enumerable: false,
+                        		configurable: true,
+                        		writable: false
+                        	}));
+                        }
+                        
+                        /**
+                         * Gets the value of a property on an object. If the property is a function,
+                         * the function will be invoked with no arguments, as it is being considered
+                         * to be a getter function.
+                         * If the property/function is not defined &#x60;null&#x60; will be returned.
+                         * 
+                         * @param {Object} root The object to retrieve from.
+                         * @param {String} keyName The property key to retrieve
+                         * @return LogicalExpression
+                         */
+                        function get(root, keyName) {
+                        	if (_.isUndefined(root)) {
+                        		throw new TypeError(&#x60;Cannot call get with &#x27;${keyName}&#x27; on an undefined object.&#x60;);
+                        	}
+                        
+                        	if (!_.isString(keyName) || _.isEmpty(keyName)) {
+                        		throw new TypeError(&#x27;The key provided to set must be a string&#x27;);
+                        	}
+                        
+                        	const ctx = root;
+                        
+                        	if (keyName.indexOf(&#x27;.&#x27;) === -1) {
+                        		if (root instanceof Map) {
+                        			root = root.get(keyName);
+                        		} else {
+                        			root = root[keyName];
+                        		}
+                        
+                        		if (typeof root === &#x27;function&#x27; &amp;&amp; root.length === 0) {
+                        			return root.call(ctx);
+                        		}
+                        
+                        		return _.isUndefined(root) ? null : root;
+                        	}
+                        
+                        	const parts = keyName.split(&quot;.&quot;),
+                        		len = parts.length;
+                        
+                        	for (let idx = 0; root !== null &amp;&amp; idx &lt; len; idx++) {
+                        		root = get(root, parts[idx]);
+                        	}
+                        
+                        	return root;
+                        }
+                        
+                        /**
+                         * Check if a file or folder exists with this path location
+                         * 
+                         * @param  {String} path
+                         * @return {Boolean}
+                         */
+                        function pathExists(path) {
+                        	const fn = typeof fs.accessSync === &#x27;function&#x27; ? fs.accessSync : fs.statSync;
+                        
+                        	try {
+                        		fn(path);
+                        		return true;
+                        	} catch (err) {
+                        		return false;
+                        	}
+                        }
+                        
+                        /**
+                         * Read the &#x60;package.json&#x60; file
+                         * 
+                         * @param  {String} root
+                         * @return {Object}
+                         */
+                        function readPackageFile(root) {
+                        	const location = path.resolve(root, &#x27;package.json&#x27;);
+                        
+                        	if(!pathExists(location)) {
+                        		return {};
+                        	}
+                        
+                        	return JSON.parse(fs.readFileSync(location, &#x27;utf8&#x27;));
+                        }
+                        
+                        /**
+                         * Merge the enumerable attributes of a source Object to
+                         * a Target Object deeply.
+                         *
+                         * @param {Object} target
+                         * @param {Object} src
+                         * @return {Object} Merged Object
+                         */
+                        function deepmerge(target, src) {
+                            var array = Array.isArray(src);
+                            var dst = target;
+                        
+                            if (array) {
+                                target = target || [];
+                                dst = dst.concat(target);
+                                src.forEach(function(e, i) {
+                                    if (typeof dst[i] === &#x27;undefined&#x27;) {
+                                        dst[i] = e;
+                                    } else if (typeof e === &#x27;object&#x27;) {
+                                        dst[i] = deepmerge(target[i], e);
+                                    } else {
+                                        if (target.indexOf(e) === -1) {
+                                            dst.push(e);
+                                        }
+                                    }
+                                });
+                            } else {
+                                if (target &amp;&amp; typeof target === &#x27;object&#x27;) {
+                                    Object.keys(target).forEach(function (key) {
+                                        dst[key] = target[key];
+                                    });
+                                }
+                                Object.keys(src).forEach(function (key) {
+                                    if (typeof src[key] !== &#x27;object&#x27; || !src[key]) {
+                                        dst[key] = src[key];
+                                    }
+                                    else {
+                                        if (!target[key]) {
+                                            dst[key] = src[key];
+                                        } else {
+                                            dst[key] = deepmerge(target[key], src[key]);
+                                        }
+                                    }
+                                });
+                            }
+                        
+                            return dst;
+                        }
+                        
+                        /*
+                         * Run the functions in the tasks array in series, each one running once the previous function has completed.
+                         * If any functions in the series pass an error to its callback, no more functions are run,
+                         * and callback is immediately called with the value of the error.
+                         * 
+                         * Otherwise, callback receives an array of results when tasks have completed.
+                         * 
+                         * @param {Array}    tasks
+                         * @param {Function} callback
+                         */
+                        function series(tasks, callback) {
+                        	if (!_.isArray(tasks)) {
+                        		throw new TypeError(&#x27;First argument to series must be an array of tasks.&#x27;);
+                        	}
+                        
+                        	if (_.isEmpty(tasks)) {
+                        		return process.nextTick(callback);
+                        	}
+                        
+                        	const length = tasks.length;
+                        
+                        	function handleTask(i) {
+                        		try {
+                        			tasks[i]((error) =&gt; {
+                        				if (error) {
+                        					return callback(error);
+                        				}
+                        
+                        				if (i &lt; length - 1) {
+                        					return handleTask(i + 1);
+                        				}
+                        
+                        				return callback();
+                        			});
+                        		} catch (error) {
+                        			callback(error);
+                        		}
+                        
+                        	}
+                        
+                        	process.nextTick(() =&gt; {
+                        		handleTask(0);
+                        	});
+                        }
+                        
+                        module.exports = {
+                        	get: get,
+                        	series: series,
+                        	deepmerge: deepmerge,
+                        	pathExists: pathExists,
+                        	readPackageFile: readPackageFile,
+                        	defineProperty: defineProperty
+                        };
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

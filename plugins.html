@@ -1,0 +1,93 @@
+---
+title: Plugins
+layout: default
+---
+
+<!-- <h3>Plugins</h3> -->
+
+<ul class="nav nav-tabs plugin-tabs">
+  <li class="active">
+    <a href="#plugins" data-toggle="tab">Plugins</a>
+  </li>
+  <li>
+    <a href="#create" data-toggle="tab">Create plugins</a>
+  </li>
+</ul>
+
+<div class="tab-content plugin-tabs-content">
+  <div class="tab-pane fade active in" id="plugins">
+    <h3>Registry plugins</h3>
+    <p>You can also use, or write, plugins for <b>Registry</b> that would inject modules into the application container.<br/>
+    Each plugin has access to the <b>Container</b> and it's <code>environment</code> configuration.</p>
+    <hr/>
+    <h3>List of all available plugins</h3>
+
+    <div id="plugin-list" class="row">
+      <h5 class="loading text-center">Loading plugins...</h5>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="create">
+    <h3>Create Registry plugins</h3>
+    <p>You can also help us out in expanding the <b>Registry</b> ecosystem by creating your own plugins.</p>
+    <p>Plugins are nothing more then a standard <code>npm</code> module with specific traits</p>
+    <ol>
+      <li>They must contain a <code>node-registry-plugin</code> keyword in <code>package.json</code></li>
+      <li>They should be prefixed with <code>node-registry-*</code></li>
+      <li>Expose an object with implemented hooks by creating a <code>plugin.js</code> file</li>
+    </ol>
+    <h4>Identify the module as a plugin</h4>
+    <p>In order for <code>node-registry</code> to pickup your plugin it needs to identify it as such. Your <code>package.json</code> should contain the following keyword</p>
+    <div class="row">
+      <div class="col-md-4">
+        {% codeblock template: code/package.md, type: json, title: package.json %}
+      </div>
+    </div>
+    <h4>Implementing hooks</h4>
+    <p>There are only 3 available hooks that you can implement in your plugin.</p>
+    <ol>
+      <li><code>load</code></li>
+      <li><code>initializer</code></li>
+      <li><code>server</code></li>
+      <li><code>getConfigurationLocation</code></li>
+    </ol>
+    <div class="row example-row">
+      <div class="col-md-4">
+        <h5>Load your plugin</h5>
+        <p>Load hook is invoked when the <b>Registry</b> and it's <b>Container</b> are created. Here you can register your modules into the application container.</p>
+      </div>
+      <div class="col-md-8">
+        {% codeblock template: code/load.md, type: javascript, title: plugin.js %}
+      </div>
+    </div>
+    <div class="row example-row">
+      <div class="col-md-8">
+        {% codeblock template: code/initializer.md, type: javascript, title: plugin.js %}
+      </div>
+      <div class="col-md-4">
+        <h5>Register plugin initializer</h5>
+        <p>Implement this hook if you want to register an initializer for your plugin. You can only export a single <code>function</code> where the name would default to your plugin name, or an object with the `initializer` function.</p>
+      </div>
+    </div>
+    <div class="row example-row">
+      <div class="col-md-4">
+        <h5>Server hook</h5>
+        <p>Only implement this hook if you wish to define a custom <code>server</code> module.</p>
+      </div>
+      <div class="col-md-8">
+        {% codeblock template: code/server.md, type: javascript, title: plugin.js %}
+      </div>
+    </div>
+    <div class="row example-row">
+      <div class="col-md-8">
+        {% codeblock template: code/config-path.md, type: javascript, title: plugin.js %}
+      </div>
+      <div class="col-md-4">
+        <h5>Configuration</h5>
+        <p>Each plugin has can have it's own default <code>configuration</code> that can be accessible in the <code>environment</code> module.</p>
+        <p>Default implementation of this hook returns a configuration folder in your plugin directory. You can specify your custom location where the <code>config</code> files are stored.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-JavaScript-Templates/3.7.0/js/tmpl.min.js"></script>

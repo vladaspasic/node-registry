@@ -1,0 +1,249 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/object.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/object.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              &#x27;use strict&#x27;;
+                        
+                        const _ = require(&#x27;lodash&#x27;),
+                        	utils = require(&#x27;./utils&#x27;);
+                        
+                        /**
+                         * Base Object Class for all classes inside the Node Registry.
+                         *
+                         * @class Object
+                         */
+                        const CoreObject = function() {
+                        
+                        };
+                        
+                        function extend(protoProps, staticProps) {
+                        	const parent = this;
+                        	let child, hasFunction = false;
+                        
+                        	if (protoProps &amp;&amp; _.has(protoProps, &#x27;constructor&#x27;)) {
+                        		child = protoProps.constructor;
+                        	} else {
+                        		child = function(){
+                        			if(this.init) {
+                        				this.init.apply(this, arguments);
+                        			} else {
+                        				parent.apply(this, arguments);
+                        			}
+                        		};
+                        	}
+                        
+                        	_.extend(child, parent);
+                        
+                        	const Class = function() {
+                        		this.constructor = child;
+                        	};
+                        
+                        	Class.prototype = parent.prototype;
+                        	child.prototype = new Class();
+                        
+                        	if (protoProps) {
+                        		_.each(protoProps, (value, key) =&gt; {
+                        
+                        			if (&#x27;function&#x27; !== typeof value) {
+                        				protoProps[key] = value;
+                        			} else {
+                        				hasFunction = true;
+                        				protoProps[key] = giveMethodSuper(child.prototype, key, value, parent.prototype);
+                        			}
+                        
+                        		});
+                        
+                        		_.extend(child.prototype, protoProps);
+                        
+                        		if (protoProps.hasOwnProperty(&#x27;toString&#x27;)) {
+                        			child.toString = protoProps.toString;
+                        		}
+                        	}
+                        
+                        	_.each(staticProps || {}, (prop, key) =&gt; {
+                        		utils.defineProperty(child.prototype, key, prop, {
+                        			writable: false,
+                        			configurable: false,
+                        			enumerable: false
+                        		});
+                        	});
+                        
+                        	if (hasFunction) {
+                        		child.prototype._super = superFunction;
+                        	}
+                        
+                        	child.__super__ = parent.prototype;
+                        
+                        	return child;
+                        }
+                        
+                        CoreObject.extend = extend;
+                        
+                        
+                        function giveMethodSuper(obj, key, method, proto) {
+                        	const superMethod = proto[key] || obj[key];
+                        
+                        	if (&#x27;function&#x27; !== typeof superMethod) {
+                        		return method;
+                        	}
+                        
+                        	return wrap(method, superMethod);
+                        }
+                        
+                        function wrap(func, superFunc) {
+                        	function superWrapper() {
+                        		const sup = this &amp;&amp; this.__nextSuper;
+                        		let ret;
+                        
+                        		if(this) {
+                        			this.__nextSuper = superFunc;
+                        		}
+                        
+                        		ret = func.apply(this, arguments);
+                        
+                        		if(this) {
+                        			this.__nextSuper = sup;
+                        		}
+                        
+                        		return ret;
+                        	}
+                        
+                        	return superWrapper;
+                        }
+                        
+                        function superFunction() {
+                        	let ret;
+                        	const func = this.__nextSuper;
+                        
+                        	if (func) {
+                        		this.__nextSuper = null;
+                        		ret = func.apply(this, arguments);
+                        		this.__nextSuper = func;
+                        	}
+                        
+                        	return ret;
+                        }
+                        
+                        /**
+                         * Initializer function for each class, invoked by the CoreObject constructor.
+                         *
+                         * @method init
+                         */
+                        CoreObject.prototype.init = function init() {
+                        
+                        };
+                        
+                        /**
+                         * Extends the current instance with an another object
+                         *
+                         * @method extend
+                         * @param {Object} props
+                         * @return {Object} a new extended Object
+                         */
+                        CoreObject.prototype.extend = function(props) {
+                        	return _.extend(this, props);
+                        };
+                        
+                        /**
+                         * Destroy the Object
+                         *
+                         * @method destroy
+                         */
+                        CoreObject.prototype.destroy = function destroy() {
+                        	if(this.isDestroyed) {
+                        		return;
+                        	}
+                        
+                        	this.isDestroyed = true;
+                        };
+                        
+                        /**
+                         * To string represenatation of the class
+                         *
+                         * @static
+                         * @method toString
+                         * @return {String}
+                         */
+                        CoreObject.toString = function toString() {
+                        	return &#x27;Registry.Object&#x27;;
+                        };
+                        
+                        /**
+                         * Creates a new instance of the class
+                         *
+                         * @method create
+                         * @static
+                         * @param {Object}    props   Defines new properties on the newly created object
+                         * @param {Object}    statics Defines read only values for the object
+                         * @return {Function} a new Object Class function
+                         */
+                        CoreObject.create = function create(props, statics) {
+                        	const C = this.extend(props, statics);
+                        
+                        	return new C();
+                        };
+                        
+                        /**
+                         * Extends the class prototype
+                         *
+                         * @method reopen
+                         * @static
+                         * @param {Object} protoProps new properties for the prototype
+                         */
+                        CoreObject.reopen = function reopen(protoProps) {
+                        	_.extend(this.prototype, protoProps);
+                        };
+                        
+                        module.exports = CoreObject;
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

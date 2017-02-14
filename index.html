@@ -1,0 +1,149 @@
+---
+layout: landing
+---
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-1">
+    <figure class="feature-image">
+      <img src="https://maxcdn.icons8.com/iOS7/PNG/100/Logos/javascript-100.png" title="JavaScript" width="100">
+    </figure>
+    <h4>Framework agnostic</h4>
+    <p>
+      Since Registry is just an IoC you can use any popular node.js framework out there,
+      you can develop new features and modules without rewriting existing code.
+    </p>
+  </div>
+  <div class="col-md-4 col-md-offset-1">
+    <figure class="feature-image">
+      <img src="https://maxcdn.icons8.com/iOS7/PNG/100/Very_Basic/settings-100.png" title="Configuration" width="100">
+    </figure>
+    <h4>Configuration</h4>
+    <p>
+      Easily access runtime variables of your app's configuration from the built in environment module.
+    </p>
+    <p>
+      You can write your configuration files in <code>js</code>, <code>json</code> or <code>yaml</code> formats.
+    </p>
+  </div>
+  <div class="col-md-4 col-md-offset-1">
+    <figure class="feature-image">
+      <img src="https://maxcdn.icons8.com/iOS7/PNG/100/Programming/module-100.png" title="Modularity" width="100px">
+    </figure>
+    <h4>Modularity</h4>
+    <p>
+      Registry is responsible for instantiating, configuring, and assembling your modules and plugins.
+    </p>
+    <p>
+      With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.
+    </p>
+  </div>
+  <div class="col-md-4 col-md-offset-1">
+    <figure class="feature-image">
+      <img src="https://maxcdn.icons8.com/Android_L/PNG/96/Security/realtime_protection-96.png" title="Easy plugin integration" width="100">
+    </figure>
+    <h4>Easy plugin integration</h4>
+    <p>
+      Registry comes with a couple of open source plugins that you can use to create your node.js application in just couple of minutes.
+    </p>
+    <p>
+      Please visit our <a href="{{'plugins'}}">plugins</a> page to list all available plugins.
+    </p>
+  </div>
+</div>
+
+<hr />
+
+<div class="row example-row">
+  <div class="col-xs-12 text-center">
+    <h3>What is Registry?</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <p>Node <b>Registry</b> is a <a href="https://en.wikipedia.org/wiki/Inversion_of_control" target="_blank">IoC (Inversion of Control)</a> Container for <code>node.js</code>. <b>Registry</b> helps you to glue your code together and easily manage your dependencies. Building blocks of the <b>Container</b> are <b>Modules</b>. You can manage your Module dependecy injections, lifecycle and behavior easily with the Registry support. With this approach you can easily decouple your logic into smaller units of code, this allows you the easily test, refactor and manage each specific part of your server logic.</p>
+    <p>The point behind the <b>Registry</b> is to be lightweight and independent. So it could be used with any node.js framework.</p>
+    <p>This library was largy influenced by <a href="http://emberjs.com/" target="_blank">Ember.js</a> and <a href="https://spring.io/" target="_blank">Spring</a>. If you had any experience with these two frameworks, you will notice a lot of similarites and you will get quickly acquainted with <code>node-registry</code>.</p>
+  </div>
+</div>
+
+<hr />
+
+<div class="row example-row">
+  <div class="col-xs-12 text-center">
+    <h3>
+      Quick start<br/>
+      <small>Get your <code>express.js</code> application running using Registry</small>
+    </h3>
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-md-4">
+    <h4>Install dependencies</h4>
+    <p>
+      To easily setup an <code>express.js</code> server a Registry <a href="https://github.com/vladaspasic/node-registry-express">plugin</a> is available. <br/>
+       You can easily configure your app using the properties defined in your config files.
+    </p>
+    <p>
+      Every application needs to have proper logging and for that reason we are going to include another Registry <a href="https://github.com/vladaspasic/node-registry-winston">plugin</a> that uses <code>winston</code> logging library.
+    </p>
+  </div>
+  <div class="col-md-8">
+    {% codeblock template: code/install.md, type: bash, title: %}
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-md-8">
+    {% codeblock template: code/configuration.md, type: yaml, title: configuration/config.yml %}
+  </div>
+  <div class="col-md-4">
+    <h4>Configure your app</h4>
+    <p>
+      You can configure <code>express.js</code> and <code>winston</code> plugins using the configuration files in your applications..
+    </p>
+    <p>
+      To see all available configuration options, please visit the respesctable plugin Github repos. <br/>Checkout our <a href="{{ 'docs/configuration' | relative_url }}">configuration documentation page</a> to learn more how configuration and environment module works.
+    </p>
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-md-4">
+    <h4>Add routes</h4>
+    <p>
+      Registry express plugin enables you to define your routes with ease. Simply create a <code>router.js</code> or <code>routes/index.js</code> file and start writing writing your route rules.
+    </p>
+    <p>
+      To find out more about routes, please visit the <code>node-registry-express</code> <a href="https://github.com/vladaspasic/node-registry-express#routing" target="_blank">Github repo</a>.
+    </p>
+  </div>
+  <div class="col-md-8">
+    {% codeblock template: code/router.md, type: javascript, title: router/index.js %}
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-md-8">
+    {% codeblock template: code/greeter.md, type: javascript, title: modules/greeter/index.js %}
+  </div>
+  <div class="col-md-4">
+    <h4>Create modules</h4>
+    <p>
+      All Registry <code>modules</code> reside in the <code>modules</code> directory in your application root folder. <br/>
+      To create your <code>greeter</code> module you need to create a folder with a module name and put your logic in the <code>index.js</code> file.
+    </p>
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-md-4">
+    <h4>Start the server</h4>
+    <p>
+      After you have declared your routes and registered your modules, you can start up your application using Registry.
+    </p>
+  </div>
+  <div class="col-md-8">
+    {% codeblock template: code/start-server.md, type: javascript, title: index.js %}
+  </div>
+</div>
+<div class="row example-row">
+  <div class="col-xs-12 text-center">
+    <a class="btn btn-primary btn-lg" href="{{ '/docs/getting-started' | relative_url}}">Get started</a>
+  </div>
+</div>

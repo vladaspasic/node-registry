@@ -1,0 +1,113 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - lib/module.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>lib/module.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /*jslint node: true */
+                        &quot;use strict&quot;;
+                        
+                        const EventEmitter = require(&#x27;./event-emitter&#x27;),
+                        	_ = require(&#x27;lodash&#x27;);
+                        
+                        /** 
+                         * Building block for the Registry IoC.
+                         * 
+                         * @class Module
+                         * @extends {EventEmitter}
+                         */
+                        const AbstractModule = EventEmitter.extend({
+                        
+                        	/**
+                        	 * Returns the requirements for this module.
+                        	 * These requirements are injected into the module when
+                        	 * it is being constructed by the registry.
+                        	 * 
+                        	 * @method getRequirements
+                        	 * @return {Array}
+                        	 */
+                        	getRequirements() {
+                        		if (!this.requires) {
+                        			return [];
+                        		} else if (_.isString(this.requires)) {
+                        			return [this.requires];
+                        		} else if (_.isArray(this.requires)) {
+                        			return this.requires;
+                        		}
+                        
+                        		throw new TypeError(&#x27;Module \&#x27;requires\&#x27; property must be a String an Array&#x27;);
+                        	},
+                        
+                        	/**
+                        	 * Returns the Module name
+                        	 * 
+                        	 * @method getName
+                        	 * @return {String}
+                        	 */
+                        	getName() {
+                        		if (!_.isString(this.name)) {
+                        			throw new TypeError(&quot;Module name must be a String, you passed: &quot; + typeof this.name);
+                        		}
+                        
+                        		return this.name;
+                        	},
+                        
+                        	toString() {
+                        		return &#x27;Registry.Module&#x27;;
+                        	}
+                        }, {
+                        	type: &#x27;Module&#x27;
+                        });
+                        
+                        AbstractModule.isModuleConstructor = true;
+                        
+                        module.exports = AbstractModule;
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

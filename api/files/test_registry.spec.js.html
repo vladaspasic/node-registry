@@ -1,0 +1,474 @@
+---
+layout: apidoc
+title:  "Node Registry API documentation - test/registry.spec.js"
+date:   2014-01-01 00:00:00
+categories: apidocs
+yuiGridsUrl: http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css
+yuiSeedUrl: http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js
+projectAssets: ../assets
+---
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+            <div>
+                <div id="sidebar">
+            
+                    <h5>Classes</h5>
+            
+                    <ul id="api-classes" class="nav nav-list">
+                            <li><a href="../classes/Container.html">Container</a></li>
+                            <li><a href="../classes/ContainerAware.html">ContainerAware</a></li>
+                            <li><a href="../classes/Environment.html">Environment</a></li>
+                            <li><a href="../classes/EventEmitter.html">EventEmitter</a></li>
+                            <li><a href="../classes/Holder.html">Holder</a></li>
+                            <li><a href="../classes/Module.html">Module</a></li>
+                            <li><a href="../classes/Object.html">Object</a></li>
+                            <li><a href="../classes/OrderedConfiguration.html">OrderedConfiguration</a></li>
+                            <li><a href="../classes/Plugin.html">Plugin</a></li>
+                            <li><a href="../classes/Project.html">Project</a></li>
+                            <li><a href="../classes/Registry.html">Registry</a></li>
+                            <li><a href="../classes/RequestContainer.html">RequestContainer</a></li>
+                            <li><a href="../classes/Server.html">Server</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <div class="page-header">
+                            <h3>test/registry.spec.js <small>File</small></h3>
+                        </div>
+                        
+                        <div class="file">
+                            <pre class="prettyprint linenums">
+                              /* global describe, afterEach, it */
+                        var chai = require(&#x27;chai&#x27;),
+                        	Registry = require(&#x27;../lib&#x27;);
+                        
+                        var assert = chai.assert,
+                        	expect = chai.expect;
+                        
+                        /**
+                         * Get Module Shortcut
+                         */
+                        var get = function(name) {
+                        	return Registry.get(name);
+                        };
+                        
+                        describe(&#x27;Registry spec&#x27;, function() {
+                        
+                        	it(&#x27;should be able to construct an Object with new&#x27;, function() {
+                        		var Ctor = Registry.Object.extend({
+                        			/**
+                        			 * Description
+                        			 * @method init
+                        			 * @param {} ctorProperty
+                        			 * @return
+                        			 */
+                        			init: function(ctorProperty) {
+                        				this.ctorProperty = ctorProperty;
+                        			},
+                        			/**
+                        			 * Description
+                        			 * @method method
+                        			 * @return MemberExpression
+                        			 */
+                        			method: function() {
+                        				return this.ctorProperty;
+                        			},
+                        			property: &#x27;property&#x27;
+                        		}, {
+                        			staticProperty: &#x27;staticProperty&#x27;
+                        		});
+                        
+                        		assert.doesNotThrow(function() {
+                        			var ctor = new Ctor(&#x27;ctorProperty&#x27;);
+                        
+                        			assert.deepEqual(ctor.property, &#x27;property&#x27;);
+                        			assert.deepEqual(ctor.staticProperty, &#x27;staticProperty&#x27;);
+                        			assert.deepEqual(ctor.ctorProperty, &#x27;ctorProperty&#x27;);
+                        			assert.deepEqual(ctor.method(), &#x27;ctorProperty&#x27;);
+                        		});
+                        	});
+                        
+                        	describe(&#x27;#get&#x27;, function() {
+                        
+                        		it(&#x27;Should return environment module&#x27;, function() {
+                        			var environment = get(&#x27;environment&#x27;);
+                        
+                        			expect(environment).to.be.an(&#x27;object&#x27;);
+                        			assert.deepEqual(environment, get(&#x27;environment&#x27;), &#x27;Objects do not match&#x27;);
+                        
+                        			// Must reload Env properties, as they are cleared after each test
+                        			environment.constructor.loadProjectConfiguration();
+                        
+                        			assert.equal(environment.get(&#x27;NODE_ENV&#x27;), &#x27;test&#x27;);
+                        			assert.equal(environment.get(&#x27;mode&#x27;), &#x27;test&#x27;);
+                        
+                        		});
+                        
+                        		it(&#x27;Should return right module&#x27;, function() {
+                        			Registry.registerFolder(__dirname + &#x27;/modules&#x27;);
+                        
+                        			var db = Registry.get(&#x27;db&#x27;);
+                        
+                        			expect(db).to.be.an(&#x27;object&#x27;);
+                        
+                        			assert.deepEqual(db, Registry.get(&#x27;db&#x27;), &#x27;Objects do not match&#x27;);
+                        		});
+                        
+                        		it(&#x27;Should throw error for missing module&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.get(&#x27;db&#x27;);
+                        			}, &quot;Factory with name &#x27;db&#x27; can not be found.&quot;);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#registerModule&#x27;, function() {
+                        
+                        		it(&#x27;should register module as an Object&#x27;, function() {
+                        			Registry.registerModule(&#x27;module&#x27;, {
+                        				name: &#x27;module&#x27;
+                        			});
+                        
+                        			var module = Registry.get(&#x27;module&#x27;);
+                        
+                        			expect(module).to.have.property(&#x27;name&#x27;).and.equal(&#x27;module&#x27;);
+                        		});
+                        
+                        		it(&#x27;should register module as a location&#x27;, function() {
+                        			Registry.registerModule(&#x27;needed&#x27;, __dirname + &#x27;/modules&#x27;);
+                        
+                        			var module = Registry.get(&#x27;needed&#x27;);
+                        
+                        			expect(module).to.have.property(&#x27;name&#x27;).and.equal(&#x27;needed&#x27;);
+                        		});
+                        
+                        		it(&#x27;should register module as a Module instance&#x27;, function() {
+                        			Registry.registerModule(&#x27;module&#x27;, Registry.Module.extend({
+                        				name: &#x27;module&#x27;
+                        			}));
+                        
+                        			var module = Registry.get(&#x27;module&#x27;);
+                        
+                        			expect(module).to.have.property(&#x27;name&#x27;).and.equal(&#x27;module&#x27;);
+                        		});
+                        
+                        		it(&#x27;should register module with scope &#x60;singleton&#x60;&#x27;, function() {
+                        			Registry.registerModule(&#x27;module&#x27;, Registry.Module.create({
+                        				name: &#x27;module&#x27;,
+                        				scope: &#x27;singleton&#x27;
+                        			}));
+                        
+                        			var module = Registry.get(&#x27;module&#x27;);
+                        
+                        			expect(module).to.have.property(&#x27;name&#x27;).and.equal(&#x27;module&#x27;);
+                        			assert.deepEqual(module, Registry.get(&#x27;module&#x27;), &#x27;Modules are not equal&#x27;);
+                        			assert.deepEqual(Registry.get(&#x27;module&#x27;), Registry.get(&#x27;module&#x27;), &#x27;Modules are not equal&#x27;);
+                        		});
+                        
+                        		it(&#x27;should register module with scope &#x60;instance&#x60;&#x27;, function() {
+                        			Registry.registerModule(&#x27;module&#x27;, {
+                        				name: &#x27;module&#x27;,
+                        				scope: &#x27;instance&#x27;
+                        			});
+                        
+                        			var module = Registry.get(&#x27;module&#x27;);
+                        
+                        			expect(module).to.have.property(&#x27;name&#x27;).and.equal(&#x27;module&#x27;);
+                        			assert.notEqual(module, Registry.get(&#x27;module&#x27;), &#x27;Modules are equal&#x27;);
+                        			assert.notEqual(Registry.get(&#x27;module&#x27;), Registry.get(&#x27;module&#x27;), &#x27;Modules are equal&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw error because name is not a string&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.registerModule({});
+                        			}, TypeError, &#x27;Module name must be a String&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw error because injected module is not registered&#x27;, function() {
+                        			Registry.registerModule(&#x27;db&#x27;, __dirname + &#x27;/modules&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.get(&#x27;db&#x27;);
+                        			}, &quot;Factory with name &#x27;needed&#x27; can not be found.&quot;);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#registerFolder&#x27;, function() {
+                        
+                        		it(&#x27;should scan the directory and register all modules&#x27;, function() {
+                        			Registry.registerFolder(__dirname + &#x27;/modules&#x27;);
+                        
+                        			expect(get(&#x27;db&#x27;)).to.have.property(&#x27;name&#x27;).and.equal(&#x27;db&#x27;);
+                        			expect(get(&#x27;db&#x27;)).to.have.property(&#x27;testing&#x27;).and.equal(&#x27;testing db&#x27;);
+                        			expect(get(&#x27;db&#x27;)).to.have.deep.property(&#x27;needed.name&#x27;, &#x27;needed&#x27;);
+                        			expect(get(&#x27;db&#x27;)).to.have.deep.property(&#x27;needed.property&#x27;, &#x27;testing needed&#x27;);
+                        
+                        
+                        			expect(get(&#x27;needed&#x27;)).to.be.an(&#x27;object&#x27;);
+                        			expect(get(&#x27;parent&#x27;)).to.be.an(&#x27;object&#x27;);
+                        			expect(get(&#x27;testing&#x27;)).to.be.an(&#x27;object&#x27;);
+                        			expect(get(&#x27;child-one&#x27;)).to.be.an(&#x27;object&#x27;);
+                        			expect(get(&#x27;child-two&#x27;)).to.be.an(&#x27;object&#x27;);
+                        		});
+                        
+                        		it(&#x27;should scan the directory and load detect scopes&#x27;, function() {
+                        			Registry.registerFolder(__dirname + &#x27;/modules&#x27;);
+                        
+                        			expect(get(&#x27;instance&#x27;)).to.have.property(&#x27;scope&#x27;).and.equal(&#x27;instance&#x27;);
+                        			expect(get(&#x27;singleton&#x27;)).to.have.property(&#x27;scope&#x27;).and.equal(&#x27;singleton&#x27;);
+                        
+                        			assert.notEqual(get(&#x27;instance&#x27;), get(&#x27;instance&#x27;), &#x27;Instance Modules should not be equal&#x27;);
+                        			assert.deepEqual(get(&#x27;singleton&#x27;), get(&#x27;singleton&#x27;), &#x27;Singleton Modules should be equal&#x27;);
+                        		});
+                        
+                        		it(&#x27;Should throw error&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.registerFolder(__dirname + &#x27;/moduless&#x27;);
+                        			}, Error);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#registerInitializer&#x27;, function() {
+                        
+                        		it(&#x27;should register initializer&#x27;, function() {
+                        			var initializer = {
+                        				name: &#x27;init&#x27;,
+                        				initializer: function() {}
+                        			};
+                        
+                        			Registry.registerInitializer(initializer);
+                        
+                        			assert.ok(Registry.__initializers.has(&#x27;init&#x27;), &#x27;Did not register an initializer&#x27;);
+                        			assert.deepEqual(Registry.__initializers.get(&#x27;init&#x27;), initializer, &#x27;initializers are not the same&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw no initializer function error&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.registerInitializer({});
+                        			}, &#x27;Initializer must contain an initializer method&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.registerInitializer();
+                        			}, &#x27;Initializer must contain an initializer method&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.registerInitializer(&#x27;test&#x27;);
+                        			}, &#x27;Initializer must contain an initializer method&#x27;);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#runInitializers&#x27;, function() {
+                        
+                        		it(&#x27;should invoke callback after all initializers are initialized&#x27;, function(done) {
+                        
+                        			var App = Registry.createServer({
+                        				listener: function(){}
+                        			}), value;
+                        
+                        			Registry.registerInitializer({
+                        				name: &#x27;second&#x27;,
+                        				initializer: function(container, app, callback) {
+                        					assert.deepEqual(container, Registry.__container, &#x27;container is not the same&#x27;);
+                        					assert.deepEqual(app, App, &#x27;Server is not the same.&#x27;);
+                        					assert.typeOf(callback, &#x27;function&#x27;, &#x27;callback is not a function&#x27;);
+                        					assert.deepEqual(value, &#x27;loaded&#x27;, &#x27;initializer ran before the first initializer&#x27;);
+                        
+                        					callback();
+                        				}
+                        			});
+                        
+                        			Registry.registerInitializer({
+                        				name: &#x27;first&#x27;,
+                        				before: &#x27;second&#x27;,
+                        				initializer: function(container, app, callback) {
+                        					value = &#x27;loaded&#x27;;
+                        
+                        					callback();
+                        				}
+                        			});
+                        
+                        			Registry.registerInitializer({
+                        				name: &#x27;thrid&#x27;,
+                        				before: &#x27;nonExisting&#x27;,
+                        				initializer: function(container, app, callback) {
+                        					callback();
+                        				}
+                        			});
+                        
+                        			Registry.runInitializers(done);
+                        		});
+                        
+                        		it(&#x27;should invoke callback with an error&#x27;, function() {
+                        			Registry.createServer({
+                        				listener: function(){}
+                        			});
+                        
+                        			Registry.registerInitializer({
+                        				name: &#x27;initializer&#x27;,
+                        				initializer: function(container, app, callback) {
+                        					callback(new Error(&#x27;initializer error&#x27;));
+                        				}
+                        			});
+                        
+                        			Registry.runInitializers(function(error) {
+                        				assert.instanceOf(error, Error, &#x27;Error is not returned&#x27;);
+                        				expect(error).to.have.property(&#x27;message&#x27;).and.contain(&#x27;initializer error&#x27;);
+                        			});
+                        		});
+                        
+                        		it(&#x27;should throw an error&#x27;, function(done) {
+                        			var error = new Error(&#x27;initializer error&#x27;);
+                        
+                        			Registry.createServer({
+                        				listener: function(){}
+                        			});
+                        
+                        			Registry.registerInitializer({
+                        				name: &#x27;initializer&#x27;,
+                        
+                        				initializer: function() {
+                        					throw error;
+                        				}
+                        			});
+                        
+                        			Registry.runInitializers(function(e) {
+                        				expect(e).equal(error);
+                        				done();
+                        			});
+                        		});
+                        
+                        		it(&#x27;should throw missing callback error&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.runInitializers();
+                        			}, &#x27;You must pass a callback function to this method.&#x27;);
+                        			assert.throw(function() {
+                        				Registry.runInitializers({});
+                        			}, &#x27;You must pass a callback function to this method.&#x27;);
+                        			assert.throw(function() {
+                        				Registry.runInitializers(&#x27;test&#x27;);
+                        			}, &#x27;You must pass a callback function to this method.&#x27;);
+                        			assert.throw(function() {
+                        				Registry.runInitializers(1);
+                        			}, &#x27;You must pass a callback function to this method.&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw missing Server error&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.runInitializers(function() {});
+                        			}, &quot;No Server has been created. Please create one before runing initializers&quot;);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#createServer&#x27;, function() {
+                        
+                        		it(&#x27;should create an Server&#x27;, function() {
+                        
+                        			var listener = function() {};
+                        
+                        			var App = Registry.createServer({
+                        				port: 8080,
+                        				listener: listener
+                        			});
+                        
+                        			expect(App).to.be.an(&#x27;object&#x27;);
+                        			expect(App).to.have.property(&#x27;port&#x27;).and.equal(8080);
+                        			expect(App).to.have.property(&#x27;listener&#x27;).and.equal(listener);
+                        
+                        			assert.equal(App.getPort(), 8080, &quot;Ports are not equal&quot;);
+                        			assert.equal(App.getListener(), listener, &quot;listener is not equal&quot;);
+                        
+                        			assert.deepEqual(App, Registry.get(&#x27;server:main&#x27;), &#x27;Server from the Registry is not equal&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw an error, when trying to crate an Server with no config&#x27;, function() {
+                        			assert.throw(function() {
+                        				Registry.createServer();
+                        			}, &#x27;You must define options or a listener for the Server&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.createServer({});
+                        			}, &#x27;You must define options or a listener for the Server&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.createServer(1);
+                        			}, &#x27;You must define options or a listener for the Server&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.createServer(&#x27;server&#x27;);
+                        			}, &#x27;You must define options or a listener for the Server&#x27;);
+                        
+                        			assert.throw(function() {
+                        				Registry.createServer([]);
+                        			}, &#x27;You must define options or a listener for the Server&#x27;);
+                        		});
+                        
+                        		it(&#x27;should throw an error, when trying to crate another Server&#x27;, function() {
+                        			Registry.createServer(function() {});
+                        
+                        			assert.throw(function() {
+                        				Registry.createServer({});
+                        			}, &#x27;Server is already created.&#x27;);
+                        		});
+                        
+                        	});
+                        
+                        	describe(&#x27;#reset&#x27;, function() {
+                        
+                        		it(&#x27;Should clear container cache&#x27;, function() {
+                        			Registry.registerFolder(__dirname + &#x27;/modules&#x27;);
+                        
+                        			var needed = Registry.get(&#x27;needed&#x27;);
+                        			var db = Registry.get(&#x27;db&#x27;);
+                        
+                        			expect(needed).to.be.an(&#x27;object&#x27;);
+                        			expect(db).to.be.an(&#x27;object&#x27;);
+                        
+                        			assert.deepEqual(db, Registry.get(&#x27;db&#x27;));
+                        			assert.deepEqual(needed, Registry.get(&#x27;needed&#x27;));
+                        
+                        			Registry.reset();
+                        
+                        			assert.throw(function() {
+                        				Registry.get(&#x27;db&#x27;);
+                        			}, &quot;Factory with name &#x27;db&#x27; can not be found.&quot;);
+                        
+                        			assert.throw(function() {
+                        				Registry.get(&#x27;needed&#x27;);
+                        			}, &quot;Factory with name &#x27;needed&#x27; can not be found.&quot;);
+                        		});
+                        
+                        	});
+                        
+                        	afterEach(function() {
+                        		Registry.isRunning = false;
+                        		Registry.__container.registrations.clear();
+                        		Registry.__container.cache.clear();
+                        		Registry.__container.factoryCache.clear();
+                        		Registry.__container.resolveCache.clear();
+                        		Registry.__container._options.clear();
+                        		Registry.__container.children = [];
+                        
+                        		Registry.reset();
+                        	});
+                        
+                        });
+                        
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
